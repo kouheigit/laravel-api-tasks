@@ -5,15 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Task::query();
+        if($request->filled('states')){
+            $query->status($request->states);
+            $tasks = $query->status($request->status);
+            return response()->json($tasks);
+        }
     }
 
     /**
