@@ -15,11 +15,12 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $query = Task::query();
-        if($request->filled('states')){
-            $query->status($request->states);
-            $tasks = $query->status($request->status);
-            return response()->json($tasks);
+
+        if ($request->filled('status')) {
+            $query->status($request->status);
         }
+
+        return response()->json($query->get());
     }
 
     /**
