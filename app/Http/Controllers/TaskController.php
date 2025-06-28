@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TaskResource;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Requests\StoreTaskRequest;
@@ -19,8 +20,10 @@ class TaskController extends Controller
         if ($request->filled('status')) {
             $query->status($request->status);
         }
-        //追加した奴↓
-        return response()->json($query->paginate(10));
+
+        $tasks = $query->paginate(10);
+
+        return TaskResource::collection($tasks);
     }
 
     /**
