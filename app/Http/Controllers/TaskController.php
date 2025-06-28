@@ -19,8 +19,8 @@ class TaskController extends Controller
         if ($request->filled('status')) {
             $query->status($request->status);
         }
-
-        return response()->json($query->get());
+        //追加した奴↓
+        return response()->json($query->paginate(10));
     }
 
     /**
