@@ -1,0 +1,17 @@
+Table users {
+  id int [pk]
+  name varchar
+}
+
+Table categories {
+  id int [pk]
+  name varchar
+}
+
+Table tasks {
+  id int [pk]
+  title varchar
+  status varchar
+  category_id int [ref: > categories.id]
+  user_id int [ref: > users.id]
+}
