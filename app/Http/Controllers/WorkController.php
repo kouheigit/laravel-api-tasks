@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreWorkRequest;
+use App\Models\Work;
+use App\Http\Resources\WorkResource;
 
 class WorkController extends Controller
 {
@@ -17,9 +20,14 @@ class WorkController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreWorkRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['user_id'] = auth()->id();//ログインユーザーを自動紐付け
+
+        $work = Work::create($validated);
+
+        return new WorkResource($work);
     }
 
     /**
