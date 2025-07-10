@@ -10,4 +10,8 @@ class Work extends Model
     {
         return $this->belongsTo(Genre::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

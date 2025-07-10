@@ -15,7 +15,13 @@ class WorkResource extends JsonResource
     public function toArray(Request $request): array
     {
         return[
-
+            'id' => $this->id,
+            'title' => $this->title,
+            'content' => $this->content,
+            'status' => $this->status,
+            'due_date' => $this->due_date,
+            'genre' => $this->genre?->name,    // genreリレーションがあれば
+            'user' => $this->user?->name,      // userリレーションがあれば
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }
