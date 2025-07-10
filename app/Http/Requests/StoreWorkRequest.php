@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreWorkRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreWorkRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,12 @@ class StoreWorkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>'required|string|max:255',
+            'content'=>'required|string',
+            'status'=>['required',new Enum(WorkStatus::class)],
+            'due_date'=>'required|date|after_or_equal:today',
+            'genre_id'=>'nullable|exists:genres,id',
         ];
     }
 }
+
