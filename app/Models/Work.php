@@ -7,6 +7,11 @@ use App\Enums\WorkStatus;
 
 class Work extends Model
 {
+
+    protected  $casts = [
+        'status'=>WorkStatus::class,
+    ];
+
     public function genre()
     {
         return $this->belongsTo(Genre::class);
