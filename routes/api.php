@@ -8,5 +8,6 @@ use App\Http\Controllers\TaskController;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
-
+//追加した
+Route::apiResource('works', WorkController::class);
 Route::apiResource('tasks', TaskController::class);
