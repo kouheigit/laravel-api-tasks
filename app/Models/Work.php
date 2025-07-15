@@ -7,6 +7,14 @@ use App\Enums\WorkStatus;
 
 class Work extends Model
 {
+    protected $fillable = [
+        'title',
+        'content',
+        'status',
+        'due_date',
+        'genre_id',
+        'user_id',
+    ];
 
     protected  $casts = [
         'status'=>WorkStatus::class,
