@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\WorkStatus;
+use Carbon\Carbon;
 
 class Work extends Model
 {
@@ -27,5 +28,9 @@ class Work extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function isOverdue(): bool
+    {
+        return Carbon::parse($this->due_date)->isPast();
     }
 }
