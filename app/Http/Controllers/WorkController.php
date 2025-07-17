@@ -12,9 +12,13 @@ class WorkController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = Work::query();
+        if($request->query('sort')==='priority'){
+            $query->orderBy('priority','desc');
+        }
+        return WorkResource::collection($query->get());
     }
 
     /**

@@ -15,6 +15,7 @@ class Work extends Model
         'due_date',
         'genre_id',
         'user_id',
+        'priority',
     ];
 
     protected  $casts = [

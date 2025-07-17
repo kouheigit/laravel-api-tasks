@@ -21,6 +21,7 @@ class WorkResource extends JsonResource
             'status' => $this->status,
             'is_overdue' => $this->isOverdue(),
             'due_date' => $this->due_date,
+            'priority' => $this->priority,
             'genre' => $this->genre?->name,    // genreリレーションがあれば
             'user' => $this->user?->name,      // userリレーションがあれば
             'created_at' => $this->created_at->toDateTimeString(),
