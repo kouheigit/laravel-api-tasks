@@ -19,6 +19,7 @@ class WorkResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'status' => $this->status,
+            'is_overdue' => $this->isOverdue(),
             'due_date' => $this->due_date,
             'genre' => $this->genre?->name,    // genreリレーションがあれば
             'user' => $this->user?->name,      // userリレーションがあれば

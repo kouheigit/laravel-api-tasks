@@ -33,4 +33,8 @@ class Work extends Model
     {
         return Carbon::parse($this->due_date)->isPast();
     }
+    public function scopeOverdue($query)
+    {
+        return $query->whereDate('due_date', '<', now());
+    }
 }
