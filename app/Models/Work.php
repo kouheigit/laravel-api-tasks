@@ -25,14 +25,17 @@ class Work extends Model
     {
         return $this->belongsTo(Genre::class);
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function isOverdue(): bool
     {
         return Carbon::parse($this->due_date)->isPast();
     }
+
     public function scopeOverdue($query)
     {
         return $query->whereDate('due_date', '<', now());
