@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\WorkController;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\GenreController;
 use App\Models\User;
 
+Route::middleware('auth:sanctum')->get('/genres', [GenreController::class, 'index']);
 //仮追記
 Route::post('/login', function (Request $request) {
     $user = User::where('email', $request->email)->first();
