@@ -11,4 +11,8 @@ class Genre extends Model
     {
         return $this->hasMany(Work::class);
     }
+    public function getTaskCountAttribute()
+    {
+        return $this->works->count();
+    }
 }
