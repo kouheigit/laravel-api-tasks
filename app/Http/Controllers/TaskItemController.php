@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTaskItemRequest;
+use App\Http\Resources\TaskItemResource;
+use App\Models\TaskItem;
 
 class TaskItemController extends Controller
 {
@@ -19,7 +22,10 @@ class TaskItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validated();
+        $validated['user_id'] = auth()->id();
+        $taskItem = TaskItem::create($validated);
+        return new TaskItemResource($taskItem);
     }
 
     /**
