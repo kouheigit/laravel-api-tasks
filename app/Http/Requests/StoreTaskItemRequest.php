@@ -11,7 +11,7 @@ class StoreTaskItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class StoreTaskItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>'required|string|max:255',
+            'content'=>'required|string',
+            'status'=>['required,new Enum(TaskStatus::class)'],
+            'due_date'=>'required|date|after_or_equal:today',
+            'priority'=>'integer|min:1|max:5',
+            'task_category_id'=>'nullable|exists:task_categories,id',
         ];
     }
 }
