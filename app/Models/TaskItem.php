@@ -28,5 +28,12 @@ class TaskItem extends Model
     {
         return $this->belongsTo(TaskCategory::class, 'task_category_id');
     }
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function isOverdue():bool
+    {
+        return $this->due_data->isPast() && $this->status !== TaskStatus::Done;
+    }
 }
