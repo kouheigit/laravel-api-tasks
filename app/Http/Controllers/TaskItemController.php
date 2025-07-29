@@ -20,7 +20,7 @@ class TaskItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskItemRequest $request)
     {
         $validated = $request->validated();
         $validated['user_id'] = auth()->id();
