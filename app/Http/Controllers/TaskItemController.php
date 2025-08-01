@@ -2,24 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
+use App\Models\TaskItem;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTaskItemRequest;
 use App\Http\Resources\TaskItemResource;
-use App\Models\TaskItem;
+use Illuminate\Session\Store;
+
 
 class TaskItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = TaskItem::query();
+
+        if ($request->filled('sort')) {
+            $sortField = $request->input('sort');
+
+        if (in_array($sortField, ['priority', 'due_date', 'created_at'])) {
+            $query->orderBy($sortField, 'asc');
+        }
+    }
+        $query->where('user_id',auth()->id());
+
+        $taskItems = $query->paginate(10);
+
+        return TaskItemResource::collection($taskItems);
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreTaskItemRequest $request)
     {
         $validated = $request->validated();
@@ -31,24 +45,28 @@ class TaskItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(TaskItem $taskItem)
     {
-        //
+        $this->authorize('view',$taskItem);
+        return new TaskItem($taskItem);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreTaskItemRequest $request,TaskItem $taskItem)
     {
-        //
+        $this->authorize('update', $taskItem);
+        $validated = $request->validated();
+        $taskItem->update($validated);
+
+        return new TaskItemResource($taskItem);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(TaskItem $taskItem)
     {
-        //
+       $this->authorize('delete', $taskItem);
+        $taskItem->delete();
+        return response()->json(['message'=>'削除しました。'],200);
     }
 }
