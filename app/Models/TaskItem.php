@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Enums\TaskStatus;
+use App\Models\Category;
 use Carbon\Carbon;
 
 class TaskItem extends Model
@@ -26,14 +27,19 @@ class TaskItem extends Model
     //新規追加
     public function category()
     {
-        return $this->belongsTo(TaskCategory::class, 'task_category_id');
+        return $this->belongsTo(Category::class, 'task_category_id'); // ← 外部キーを category_id にする
     }
+    /*
+    public function category()
+    {
+        return $this->belongsTo(TaskCategory::class, 'task_category_id');
+    }*/
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    public function isOverdue():bool
+    public function isOverdue(): bool
     {
-        return $this->due_data->isPast() && $this->status !== TaskStatus::Done;
+        return $this->due_date->isPast() && $this->status !== TaskStatus::Done;
     }
 }
