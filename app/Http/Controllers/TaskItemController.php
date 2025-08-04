@@ -48,7 +48,7 @@ class TaskItemController extends Controller
     public function show(TaskItem $taskItem)
     {
         $this->authorize('view',$taskItem);
-        return new TaskItem($taskItem);
+        return new TaskItemResource($taskItem);
     }
 
     /**
