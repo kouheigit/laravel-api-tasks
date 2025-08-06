@@ -22,7 +22,6 @@ class ReviewResource extends JsonResource
             'due_date'   => $this->due_date->toDateString(),
             'priority'=>$this->priority,
             'created_at' => $this->created_at->toDateTimeString(),
-
         ];
     }
 }
