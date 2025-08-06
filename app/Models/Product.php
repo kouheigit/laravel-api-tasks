@@ -7,7 +7,11 @@ use App\Models\Review;
 
 class Product extends Model
 {
-    public function reviews(){
+    protected $fillable = [
+        'name',
+    ];
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
 }
