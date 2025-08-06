@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ReviewStatus;
+use App\Enums\WorkStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreReviewRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class StoreReviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +25,12 @@ class StoreReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>'required|string|max:255',
+            'content'=>'required|string',
+            'status'=>['required',new Enum(ReviewStatus::class)],
+            'due_date'=>'required|date|after_or_equal:today',
+            'product_id'=>'nullable|exists:products,id',
+
         ];
     }
 }
