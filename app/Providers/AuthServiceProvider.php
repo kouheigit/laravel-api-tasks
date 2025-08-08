@@ -12,7 +12,7 @@ class AuthServiceProvider extends ServiceProvider
 
     protected $policies = [
         TaskItem::class=>TaskItemPolicy::class,
-        Review::class=>ReviewPolicy::class,//←追加した
+        Review::class=>ReviewPolicy::class,
     ];
 
     /**
