@@ -38,6 +38,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('reviews', ReviewController::class);
+});
 
 
 /*
