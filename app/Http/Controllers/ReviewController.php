@@ -27,7 +27,7 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreReviewRequest $request)
     {
         $validated = $request->validate();
         $validated['user_id'] = auth()->id();
@@ -41,7 +41,8 @@ class ReviewController extends Controller
      */
     public function show(Review $review)
     {
-        //
+        return new ReviewResource($review);
+        // return new ReviewResource($review);
     }
 
     /**
@@ -49,7 +50,10 @@ class ReviewController extends Controller
      */
     public function update(Request $request, Review $review)
     {
-        //
+        $validated = $request->validated();
+        $review->update($validated);
+
+        return new ReviewResource($review);
     }
 
     /**
@@ -57,6 +61,7 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
-        //
+        $review->delete();
+        return response()->json(['message'=>'削除しました']);
     }
 }
