@@ -4,15 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreReviewRequest;
+use App\Http\Resources\ReviewResource;
 
 class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct()
+    {
+        $this->authorizeResource(Review::class, 'review');
+    }
+
     public function index()
     {
-        //
+        $reviews = Review::with('product')->paginate(10);
+        return ReviewResource::collection($reviews);
     }
 
     /**
@@ -20,7 +29,7 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
