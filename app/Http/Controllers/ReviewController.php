@@ -29,7 +29,11 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate();
+        $validated['user_id'] = auth()->id();
 
+        $review = Review::create($validated);
+        return new ReviewResource($review);
     }
 
     /**
