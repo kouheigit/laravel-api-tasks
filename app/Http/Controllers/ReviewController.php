@@ -6,9 +6,11 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreReviewRequest;
 use App\Http\Resources\ReviewResource;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ReviewController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */

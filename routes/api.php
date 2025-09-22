@@ -7,6 +7,8 @@ use App\Http\Controllers\WorkController;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\TaskItemController;
+use App\Http\Controllers\TaskItemV2Controller;
+use App\Http\Controllers\ReviewController;
 use App\Models\User;
 
 Route::middleware('auth:sanctum')->get('/genres', [GenreController::class, 'index']);
@@ -35,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // 必要であれば他の保護APIもここへ
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('task-items', TaskItemController::class);
+    Route::apiResource('task-item-v2s', TaskItemV2Controller::class);
 
 });
 
