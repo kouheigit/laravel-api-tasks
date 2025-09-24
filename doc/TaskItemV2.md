@@ -47,7 +47,8 @@ php artisan migrate | cat
 
 1) ユーザー登録（未登録の場合）
 ```bash
-curl -X POST http://localhost:8061/api/register \
+curl -sS -i http://localhost:8061/api/register \
+  -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "登録太郎",
