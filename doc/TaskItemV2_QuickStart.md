@@ -4,25 +4,37 @@
 
 ## 前提
 - 認証: auth:sanctum
-- ベースURL例: http://localhost:8000
+- ベースURL例: http://localhost:8061
 
 ## 1) マイグレーション
 ```bash
 php artisan migrate | cat
 ```
 
-## 2) ログインしてトークン取得
+## 2) ユーザー登録（未登録の場合）
 ```bash
-curl -X POST http://localhost:8000/api/login \
+curl -X POST http://localhost:8061/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "登録太郎",
+    "email": "you@example.com",
+    "password": "your-password",
+    "password_confirmation": "your-password"
+  }'
+```
+
+## 3) ログインしてトークン取得
+```bash
+curl -X POST http://localhost:8061/api/login \
   -H "Content-Type: application/json" \
   -d '{"email":"you@example.com","password":"your-password"}'
 ```
 - 返却: { "token": "xxxxx" }
 - 以降は全APIで -H "Authorization: Bearer xxxxx" を付与
 
-## 3) 作成 (POST /api/task-item-v2s)
+## 4) 作成 (POST /api/task-item-v2s)
 ```bash
-curl -X POST http://localhost:8000/api/task-item-v2s \
+curl -X POST http://localhost:8061/api/task-item-v2s \
   -H "Authorization: Bearer xxxxx" \
   -H "Content-Type: application/json" \
   -d '{
@@ -36,21 +48,21 @@ curl -X POST http://localhost:8000/api/task-item-v2s \
 ```
 必須: title, content, status(App\\Enums\\TaskStatus), due_date(今日以降)
 
-## 4) 一覧 (GET /api/task-item-v2s)
+## 5) 一覧 (GET /api/task-item-v2s)
 ```bash
-curl "http://localhost:8000/api/task-item-v2s?sort=due_date&page=1" \
+curl "http://localhost:8061/api/task-item-v2s?sort=due_date&page=1" \
   -H "Authorization: Bearer xxxxx"
 ```
 
-## 5) 詳細 (GET /api/task-item-v2s/{id})
+## 6) 詳細 (GET /api/task-item-v2s/{id})
 ```bash
-curl http://localhost:8000/api/task-item-v2s/1 \
+curl http://localhost:8061/api/task-item-v2s/1 \
   -H "Authorization: Bearer xxxxx"
 ```
 
-## 6) 更新 (PUT /api/task-item-v2s/{id})
+## 7) 更新 (PUT /api/task-item-v2s/{id})
 ```bash
-curl -X PUT http://localhost:8000/api/task-item-v2s/1 \
+curl -X PUT http://localhost:8061/api/task-item-v2s/1 \
   -H "Authorization: Bearer xxxxx" \
   -H "Content-Type: application/json" \
   -d '{
@@ -59,9 +71,9 @@ curl -X PUT http://localhost:8000/api/task-item-v2s/1 \
   }'
 ```
 
-## 7) 削除 (DELETE /api/task-item-v2s/{id})
+## 8) 削除 (DELETE /api/task-item-v2s/{id})
 ```bash
-curl -X DELETE http://localhost:8000/api/task-item-v2s/1 \
+curl -X DELETE http://localhost:8061/api/task-item-v2s/1 \
   -H "Authorization: Bearer xxxxx"
 ```
 

@@ -45,20 +45,32 @@ php artisan migrate | cat
 
 ## 認証（Sanctum）
 
-1) ログインしてトークンを取得
+1) ユーザー登録（未登録の場合）
 ```bash
-curl -X POST http://localhost:8000/api/login \
+curl -X POST http://localhost:8061/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "登録太郎",
+    "email": "you@example.com",
+    "password": "your-password",
+    "password_confirmation": "your-password"
+  }'
+```
+
+2) ログインしてトークンを取得
+```bash
+curl -X POST http://localhost:8061/api/login \
   -H "Content-Type: application/json" \
   -d '{"email":"you@example.com","password":"your-password"}'
 ```
-2) 以降は `Authorization: Bearer <token>` を付与
+3) 以降は `Authorization: Bearer <token>` を付与
 
 ## エンドポイント仕様
 
 ### 一覧: GET /api/task-item-v2s
 - クエリ: `?page=1`、`?sort=priority|due_date|created_at`
 ```bash
-curl "http://localhost:8000/api/task-item-v2s?sort=due_date&page=1" \
+curl "http://localhost:8061/api/task-item-v2s?sort=due_date&page=1" \
   -H "Authorization: Bearer <token>"
 ```
 
@@ -71,7 +83,7 @@ curl "http://localhost:8000/api/task-item-v2s?sort=due_date&page=1" \
   - priority: integer|min:1|max:5
   - task_category_v2_id: nullable|exists:task_category_v2s,id
 ```bash
-curl -X POST http://localhost:8000/api/task-item-v2s \
+curl -X POST http://localhost:8061/api/task-item-v2s \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -86,14 +98,14 @@ curl -X POST http://localhost:8000/api/task-item-v2s \
 
 ### 取得: GET /api/task-item-v2s/{id}
 ```bash
-curl http://localhost:8000/api/task-item-v2s/1 \
+curl http://localhost:8061/api/task-item-v2s/1 \
   -H "Authorization: Bearer <token>"
 ```
 
 ### 更新: PUT /api/task-item-v2s/{id}
 - 任意項目のみ送信可（指定時に検証）
 ```bash
-curl -X PUT http://localhost:8000/api/task-item-v2s/1 \
+curl -X PUT http://localhost:8061/api/task-item-v2s/1 \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{
@@ -104,7 +116,7 @@ curl -X PUT http://localhost:8000/api/task-item-v2s/1 \
 
 ### 削除: DELETE /api/task-item-v2s/{id}
 ```bash
-curl -X DELETE http://localhost:8000/api/task-item-v2s/1 \
+curl -X DELETE http://localhost:8061/api/task-item-v2s/1 \
   -H "Authorization: Bearer <token>"
 ```
 

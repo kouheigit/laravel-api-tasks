@@ -10,6 +10,7 @@ use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\TaskItemV2Controller;
 use App\Http\Controllers\ReviewController;
 use App\Models\User;
+use Illuminate\Validation\Rules;
 
 Route::middleware('auth:sanctum')->get('/genres', [GenreController::class, 'index']);
 //仮追記
@@ -23,6 +24,23 @@ Route::post('/login', function (Request $request) {
     $token = $user->createToken('api-token')->plainTextToken;
 
     return response()->json(['token' => $token]);
+});
+
+// Register endpoint
+Route::post('/register', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => ['required', 'confirmed', Rules::password()->defaults()],
+    ]);
+
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+    ]);
+
+    return response()->json(['message' => 'User registered successfully'], 201);
 });
 
 
