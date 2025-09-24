@@ -10,7 +10,7 @@ use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\TaskItemV2Controller;
 use App\Http\Controllers\ReviewController;
 use App\Models\User;
-use Illuminate\Validation\Rules;
+// use Illuminate\Validation\Rules; // not used
 
 Route::middleware('auth:sanctum')->get('/genres', [GenreController::class, 'index']);
 //仮追記
@@ -31,7 +31,7 @@ Route::post('/register', function (Request $request) {
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
-        'password' => ['required', 'confirmed', Rules::password()->defaults()],
+        'password' => 'required|string|min:8|confirmed',
     ]);
 
     $user = User::create([
