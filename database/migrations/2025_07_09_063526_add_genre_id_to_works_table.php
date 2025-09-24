@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('works', function (Blueprint $table) {
-            $table->foreignId('genre_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('set null');
         });
     }
 

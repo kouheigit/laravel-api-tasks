@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('status');
-            $table->foreignId('genre_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();$table->date('due_date');
+            $table->unsignedBigInteger('genre_id')->nullable();
+            $table->date('due_date');
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
@@ -32,15 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('works', function (Blueprint $table) {
-            $table->dropForeign(['genre_id']);
-            $table->foreignId('genre_id')
-                ->nullable()
-                ->constrained()
-                ->onDelete('cascade'); // 元に戻す場合など
-        });
-        /*
-        Schema::dropIfExists('works');*/
-
+        Schema::dropIfExists('works');
     }
 };
