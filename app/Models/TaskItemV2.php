@@ -10,6 +10,9 @@ class TaskItemV2 extends Model
 {
     use SoftDeletes;
 
+    // デフォルトのテーブル名推論だと "task_item_v2_s" になるため明示指定
+    protected $table = 'task_item_v2s';
+
     protected $fillable = [
         'title',
         'content',
