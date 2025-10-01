@@ -22,7 +22,12 @@ class StoreTaskNoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>'required|string|max:255',
+            'content'=>'required|string',
+            'status' => 'required|in:Todo,InProgress,Done', // NoteStatus に対応
+            'due_date'=>'required|date|after_or_equal:today',
+            'priority'=>'integer|min:1|max:5',
+            'task_group_id'=>'nullable|exists:task_groups,id',
         ];
     }
 }
