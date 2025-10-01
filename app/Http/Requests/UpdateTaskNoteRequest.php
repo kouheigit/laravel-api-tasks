@@ -21,8 +21,14 @@ class UpdateTaskNoteRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+            'title'=>'sometimes|string|max:255',
+            'content'=>'sometimes|string',
+            'status' => 'sometimes|in:Todo,InProgress,Done',
+            'due_date'=>'sometimes|date|after_or_equal:today',
+            'priority' => 'sometimes|integer|min:1|max:5',
+            'task_group_id' => 'nullable|exists:task_groups,id',
         ];
     }
 }
