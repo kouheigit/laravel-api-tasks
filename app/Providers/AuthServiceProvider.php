@@ -11,6 +11,7 @@ class AuthServiceProvider extends ServiceProvider
 {
 
     protected $policies = [
+        TaskNote::class => TaskNotePolicy::class,
         TaskItem::class=>TaskItemPolicy::class,
         Review::class=>ReviewPolicy::class,
     ];
