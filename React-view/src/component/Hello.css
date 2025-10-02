@@ -1,0 +1,60 @@
+.hello-component {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 30px;
+  border-radius: 15px;
+  margin: 20px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.hello-component h2 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+.hello-component p {
+  color: #34495e;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.hello-info {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.hello-info p {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.hello-info p:last-child {
+  margin-bottom: 0;
+  font-weight: 500;
+  color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .hello-component {
+    padding: 20px;
+    margin: 15px 0;
+  }
+  
+  .hello-component h2 {
+    font-size: 2rem;
+  }
+  
+  .hello-component p {
+    font-size: 1rem;
+  }
+}

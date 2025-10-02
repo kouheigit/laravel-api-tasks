@@ -91,6 +91,45 @@
   font-style: italic;
 }
 
+.navigation-section {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.hello-link {
+  display: inline-block;
+  background: #4CAF50;
+  color: white;
+  padding: 15px 30px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+}
+
+.hello-link:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+}
+
+.url-info {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+.url-info code {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #fff;
+}
+
 @media (max-width: 768px) {
   .App-header h1 {
     font-size: 2rem;
@@ -107,5 +146,14 @@
   
   .message-section input {
     width: 250px;
+  }
+  
+  .hello-link {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+  
+  .url-info {
+    font-size: 0.8rem;
   }
 }
