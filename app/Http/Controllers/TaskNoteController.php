@@ -7,9 +7,11 @@ use App\Models\TaskNote;
 use App\Http\Resources\TaskNoteResource;
 use App\Http\Requests\StoreTaskNoteRequest;
 use App\Http\Requests\UpdateTaskNoteRequest;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TaskNoteController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
@@ -40,7 +42,7 @@ class TaskNoteController extends Controller
      */
     public function show(TaskNote $taskNote)
     {
-        $this->authorize('views',$taskNote);
+        $this->authorize('view',$taskNote);
         return new TaskNoteResource($taskNote);
     }
 
@@ -49,8 +51,8 @@ class TaskNoteController extends Controller
      */
     public function update(UpdateTaskNoteRequest $request, TaskNote $taskNote)
     {
-        $this->autorize('update',$taskNote);
-        $taskNote->update($request->validate());
+        $this->authorize('update',$taskNote);
+        $taskNote->update($request->validated());
         return new TaskNoteResource($taskNote);
     }
 

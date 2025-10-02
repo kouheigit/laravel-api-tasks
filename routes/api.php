@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\TaskItemV2Controller;
+use App\Http\Controllers\TaskNoteController;
 use App\Http\Controllers\ReviewController;
 use App\Models\User;
 // use Illuminate\Validation\Rules; // not used
@@ -61,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('reviews', ReviewController::class);
+    Route::apiResource('task-notes', TaskNoteController::class);
 });
 
 
