@@ -15,19 +15,8 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\BookController;
 // use Illuminate\Validation\Rules; // not used
 
-Route::middleware('auth:sanctum')->get('/genres', [GenreController::class, 'index']);
-//仮追記
-Route::post('/login', function (Request $request) {
-    $user = User::where('email', $request->email)->first();
-
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json(['message' => 'Invalid credentials'], 401);
-    }
-
-    $token = $user->createToken('api-token')->plainTextToken;
-
-    return response()->json(['token' => $token]);
-});
+// 非認証ルート
+Route::post('/login', [UserAuthController::class, 'login']);
 
 // Register endpoint
 Route::post('/register', function (Request $request) {
@@ -47,32 +36,29 @@ Route::post('/register', function (Request $request) {
 });
 
 
+// 認証が必要なルート
 Route::middleware('auth:sanctum')->group(function () {
+    // ユーザー認証関連
+    Route::get('/me', [UserAuthController::class, 'me']);
+    Route::post('/logout', [UserAuthController::class, 'logout']);
+    
+    // 書籍管理
+    Route::apiResource('books', BookController::class);
+    
+    // その他の既存API
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
-    // ✅ worksルートをauth付きにする
     Route::apiResource('works', WorkController::class);
-
-    // 必要であれば他の保護APIもここへ
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('task-items', TaskItemController::class);
     Route::apiResource('task-item-v2s', TaskItemV2Controller::class);
-
-});
-
-Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('reviews', ReviewController::class);
     Route::apiResource('task-notes', TaskNoteController::class);
 });
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/me', [UserAuthController::class, 'me']);
-    Route::post('/logout', [UserAuthController::class, 'logout']);
-    Route::apiResource('books', BookController::class);
-});
 
-Route::post('/login', [UserAuthController::class, 'login']);
+// 非認証でもアクセス可能なルート
+Route::get('/genres', [GenreController::class, 'index']);
 /*
  * use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;

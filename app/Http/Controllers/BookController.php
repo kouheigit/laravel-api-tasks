@@ -13,24 +13,24 @@ class BookController extends Controller
     {
         return Book::paginate(10);
     }
-    public function store(Request $req)
+    public function store(Request $request)
     {
-        $data = $req->validate([
-            'title'=>'request|string',
-            'author'=>'request|string',
+        $data = $request->validate([
+            'title' => 'required|string',
+            'author' => 'required|string',
         ]);
         $book = Book::create($data);
-        return response()->json($book,201);
+        return response()->json($book, 201);
     }
     public function show(Book $book)
     {
         return response()->json($book);
     }
-    public function update(Request $req, Book $book)
+    public function update(Request $request, Book $book)
     {
-        $data = $req->validate([
-            'title'=>'string',
-            'author'=>'string',
+        $data = $request->validate([
+            'title' => 'string',
+            'author' => 'string',
         ]);
         $book->update($data);
         return response()->json($book);

@@ -9,14 +9,14 @@ class UserAuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->only('email','password');
+        $credentials = $request->only('email', 'password');
 
-        if(!Auth::attempt($credentials)){
-            return response()->json(['message'=>'認証に失敗しました'],401);
-
-            $user = Auth::user();
-            return response()->json($user);
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => '認証に失敗しました'], 401);
         }
+
+        $user = Auth::user();
+        return response()->json($user);
     }
     public function logout(Request $request)
     {
