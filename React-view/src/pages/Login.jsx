@@ -6,11 +6,15 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
+    if (isLoading) return; // 重複送信防止
+    
+    setIsLoading(true);
     console.log('Attempting login with:', { email, password });
     
     try {
@@ -20,6 +24,8 @@ export default function Login() {
       console.error('Login failed:', err);
       console.error('Error response:', err.response);
       setError(`ログインに失敗しました: ${err.response?.data?.message || err.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,21 +105,22 @@ export default function Login() {
           
           <button
             type="submit"
+            disabled={isLoading}
             style={{
               width: '100%',
               padding: '12px',
-              backgroundColor: '#2196F3',
+              backgroundColor: isLoading ? '#ccc' : '#2196F3',
               color: 'white',
               border: 'none',
               borderRadius: '5px',
               fontSize: '16px',
-              cursor: 'pointer',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
               transition: 'background-color 0.3s'
             }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#1976D2'}
-            onMouseOut={(e) => e.target.style.backgroundColor = '#2196F3'}
+            onMouseOver={(e) => !isLoading && (e.target.style.backgroundColor = '#1976D2')}
+            onMouseOut={(e) => !isLoading && (e.target.style.backgroundColor = '#2196F3')}
           >
-            ログイン
+            {isLoading ? 'ログイン中...' : 'ログイン'}
           </button>
         </form>
       </div>

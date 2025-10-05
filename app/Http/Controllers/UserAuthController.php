@@ -16,7 +16,12 @@ class UserAuthController extends Controller
         }
 
         $user = Auth::user();
-        return response()->json($user);
+        $token = $user->createToken('api-token')->plainTextToken;
+        
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ]);
     }
     public function logout(Request $request)
     {

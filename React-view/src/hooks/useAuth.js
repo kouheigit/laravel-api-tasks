@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import api from '../api/axios';
-
-// CSRFトークン用のaxiosインスタンス
-const csrfApi = axios.create({
-  baseURL: 'http://localhost:8061',
-  withCredentials: true,
-});
 
 export function useAuth() {
   const [user, setUser] = useState(null);
@@ -17,7 +10,8 @@ export function useAuth() {
     try {
       const res = await api.get('/me');
       setUser(res.data);
-    } catch {
+    } catch (error) {
+      console.log('User not authenticated:', error.response?.status);
       setUser(null);
     } finally {
       setLoading(false);
@@ -31,12 +25,16 @@ export function useAuth() {
   // ログイン
   const login = async (email, password) => {
     try {
-      // CSRFトークンを取得
-      await csrfApi.get('/sanctum/csrf-cookie');
-      
-      // ログイン実行
+      // トークンベース認証を使用
       const res = await api.post('/login', { email, password });
-      setUser(res.data);
+      
+      // トークンを保存
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+      
+      // ユーザー情報を設定
+      setUser(res.data.user || res.data);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -45,8 +43,14 @@ export function useAuth() {
 
   // ログアウト
   const logout = async () => {
-    await api.post('/logout');
-    setUser(null);
+    try {
+      await api.post('/logout');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('token');
+      setUser(null);
+    }
   };
 
   return { user, loading, login, logout };
