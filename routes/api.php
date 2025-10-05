@@ -11,6 +11,8 @@ use App\Http\Controllers\TaskItemV2Controller;
 use App\Http\Controllers\TaskNoteController;
 use App\Http\Controllers\ReviewController;
 use App\Models\User;
+use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\BookController;
 // use Illuminate\Validation\Rules; // not used
 
 Route::middleware('auth:sanctum')->get('/genres', [GenreController::class, 'index']);
@@ -64,8 +66,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('reviews', ReviewController::class);
     Route::apiResource('task-notes', TaskNoteController::class);
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/me', [UserAuthController::class, 'me']);
+    Route::post('/logout', [UserAuthController::class, 'logout']);
+    Route::apiResource('books', BookController::class);
+});
 
-
+Route::post('/login', [UserAuthController::class, 'login']);
 /*
  * use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
