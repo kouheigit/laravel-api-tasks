@@ -1,9 +1,16 @@
 // API Service for Laravel Backend
-import config from '../../config';
+import config from '../config';
 
 class ApiService {
   constructor() {
     this.baseURL = config.apiUrl;
+  }
+
+  getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return token
+      ? { Authorization: `Bearer ${token}` }
+      : {};
   }
 
   async request(endpoint, options = {}) {
@@ -12,6 +19,7 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        ...this.getAuthHeaders(),
       },
     };
 
@@ -26,11 +34,21 @@ class ApiService {
 
     try {
       const response = await fetch(url, mergedOptions);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (response.status === 204) {
+        return null;
       }
-      
+      if (!response.ok) {
+        let payload;
+        try {
+          payload = await response.json();
+        } catch (_) {
+          payload = { message: await response.text() };
+        }
+        const error = new Error(payload.message || `HTTP ${response.status}`);
+        error.status = response.status;
+        error.payload = payload;
+        throw error;
+      }
       return await response.json();
     } catch (error) {
       console.error('API request failed:', error);
@@ -38,12 +56,12 @@ class ApiService {
     }
   }
 
-  // GET request
-  async get(endpoint) {
-    return this.request(endpoint, { method: 'GET' });
+  // Generic methods
+  async get(endpoint, params) {
+    const query = params ? `?${new URLSearchParams(params).toString()}` : '';
+    return this.request(`${endpoint}${query}`, { method: 'GET' });
   }
 
-  // POST request
   async post(endpoint, data) {
     return this.request(endpoint, {
       method: 'POST',
@@ -51,7 +69,6 @@ class ApiService {
     });
   }
 
-  // PUT request
   async put(endpoint, data) {
     return this.request(endpoint, {
       method: 'PUT',
@@ -59,30 +76,37 @@ class ApiService {
     });
   }
 
-  // DELETE request
   async delete(endpoint) {
     return this.request(endpoint, { method: 'DELETE' });
   }
 
-  // Example: Get tasks from Laravel API
-  async getTasks() {
-    return this.get('/tasks');
+  // Tasks (existing examples)
+  async getTasks() { return this.get('/tasks'); }
+  async createTask(taskData) { return this.post('/tasks', taskData); }
+  async updateTask(id, taskData) { return this.put(`/tasks/${id}`, taskData); }
+  async deleteTask(id) { return this.delete(`/tasks/${id}`); }
+
+  // TaskNotes
+  async getTaskNotes({ sort = 'created_at', page = 1 } = {}) {
+    return this.get('/task-notes', { sort, page });
   }
 
-  // Example: Create a new task
-  async createTask(taskData) {
-    return this.post('/tasks', taskData);
+  async getTaskNote(id) {
+    return this.get(`/task-notes/${id}`);
   }
 
-  // Example: Update a task
-  async updateTask(id, taskData) {
-    return this.put(`/tasks/${id}`, taskData);
+  async createTaskNote(data) {
+    return this.post('/task-notes', data);
   }
 
-  // Example: Delete a task
-  async deleteTask(id) {
-    return this.delete(`/tasks/${id}`);
+  async updateTaskNote(id, data) {
+    return this.put(`/task-notes/${id}`, data);
+  }
+
+  async deleteTaskNote(id) {
+    return this.delete(`/task-notes/${id}`);
   }
 }
 
-export default new ApiService();
+const apiInstance = new ApiService();
+export default apiInstance;

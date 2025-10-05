@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useRoutes, Link } from 'react-router-dom';
 import Hello from './component/Hello';
 import HelloPage from './component/HelloPage';
+import TaskNoteList from './component/TaskNoteList';
+import TaskNoteForm from './component/TaskNoteForm';
+import TaskNoteDetail from './component/TaskNoteDetail';
 
 const App = () => {
   const [count, setCount] = useState(0);
@@ -136,7 +139,12 @@ const App = () => {
     {
       path: "/hello",
       element: <HelloPage />
-    }
+    },
+    // TaskNote routes
+    { path: "/task-notes", element: <TaskNoteList /> },
+    { path: "/task-notes/new", element: <TaskNoteForm /> },
+    { path: "/task-notes/:id", element: <TaskNoteDetail /> },
+    { path: "/task-notes/:id/edit", element: <TaskNoteForm /> }
   ]);
 
   return (
