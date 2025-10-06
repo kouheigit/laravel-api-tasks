@@ -25,15 +25,18 @@ const App = () => {
     );
   }
 
+  const token = localStorage.getItem('token');
+  const isAuthenticated = !!user || !!token;
+
   return (
     <Routes>
-      <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-      <Route path="/" element={user ? <BookList /> : <Navigate to="/login" />} />
-      <Route path="/hello" element={user ? <HelloPage /> : <Navigate to="/login" />} />
-      <Route path="/task-notes" element={user ? <TaskNoteList /> : <Navigate to="/login" />} />
-      <Route path="/task-notes/new" element={user ? <TaskNoteForm /> : <Navigate to="/login" />} />
-      <Route path="/task-notes/:id" element={user ? <TaskNoteDetail /> : <Navigate to="/login" />} />
-      <Route path="/task-notes/:id/edit" element={user ? <TaskNoteForm /> : <Navigate to="/login" />} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+      <Route path="/" element={isAuthenticated ? <BookList /> : <Navigate to="/login" />} />
+      <Route path="/hello" element={isAuthenticated ? <HelloPage /> : <Navigate to="/login" />} />
+      <Route path="/task-notes" element={isAuthenticated ? <TaskNoteList /> : <Navigate to="/login" />} />
+      <Route path="/task-notes/new" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
+      <Route path="/task-notes/:id" element={isAuthenticated ? <TaskNoteDetail /> : <Navigate to="/login" />} />
+      <Route path="/task-notes/:id/edit" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
     </Routes>
   );
 };
