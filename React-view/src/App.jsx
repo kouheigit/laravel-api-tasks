@@ -7,6 +7,7 @@ import HelloPage from './component/HelloPage';
 import Todo from './practice/Todo';
 import Todo1 from './practice/Todo1';
 import Todo2 from './practice/Todo2';
+import Todo3 from './practice/Todo3';
 import TaskNoteList from './component/TaskNoteList';
 import TaskNoteForm from './component/TaskNoteForm';
 import TaskNoteDetail from './component/TaskNoteDetail';
@@ -38,6 +39,7 @@ const App = () => {
       <Route path="/practice/todo" element={<Todo />} />
       <Route path="/practice/todo1" element={<Todo1 />} />
       <Route path="/practice/todo2" element={<Todo2 />} />
+      <Route path="/practice/todo3" element={<Todo3 />} />
       <Route path="/hello" element={isAuthenticated ? <HelloPage /> : <Navigate to="/login" />} />
       <Route path="/task-notes" element={isAuthenticated ? <TaskNoteList /> : <Navigate to="/login" />} />
       <Route path="/task-notes/new" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
