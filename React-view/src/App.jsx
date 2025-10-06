@@ -4,6 +4,7 @@ import { useAuth } from './hooks/useAuth';
 import Login from './pages/Login';
 import BookList from './pages/BookList';
 import HelloPage from './component/HelloPage';
+import Todo from './practice/Todo';
 import TaskNoteList from './component/TaskNoteList';
 import TaskNoteForm from './component/TaskNoteForm';
 import TaskNoteDetail from './component/TaskNoteDetail';
@@ -32,6 +33,7 @@ const App = () => {
     <Routes>
       <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
       <Route path="/" element={isAuthenticated ? <BookList /> : <Navigate to="/login" />} />
+      <Route path="/practice/todo" element={<Todo />} />
       <Route path="/hello" element={isAuthenticated ? <HelloPage /> : <Navigate to="/login" />} />
       <Route path="/task-notes" element={isAuthenticated ? <TaskNoteList /> : <Navigate to="/login" />} />
       <Route path="/task-notes/new" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
