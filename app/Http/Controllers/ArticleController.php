@@ -28,8 +28,6 @@ class ArticleController extends Controller
     {
         $article = Auth::user()->articles()->create($request->validated());
         return new ArticleResource($article);
-
-
     }
 
     /**
