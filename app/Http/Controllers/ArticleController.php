@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
+
 use App\Models\Article;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
+use App\Http\Resources\ArticleResource;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -12,7 +17,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        return ArticleResource::collection(Article::with('writer')->latest()->paginate(10));
+
     }
 
     /**
@@ -20,7 +26,10 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $article = Auth::user()->articles()->create($request->validated());
+        return new ArticleResource($article);
+
+
     }
 
     /**
@@ -28,7 +37,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        return new ArticleResource($article->load('writer'));
     }
 
     /**
@@ -36,7 +45,9 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        $this->authorize('update',$article);
+        $article->update($request->validated());
+        return new ArticleResource($article);
     }
 
     /**
@@ -44,6 +55,8 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $this->autorize('delete',$article);
+        $article->delete();
+        return response()->json(['message'=>'Delete']);
     }
 }
