@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useNavigate, Link } from 'react-router-dom';
+import api from '../api/axios';
 
-export default function Login() {
-  const { login } = useAuth();
+export default function Signup() {
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,19 +13,26 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    if (isLoading) return; // 重複送信防止
-    
     setIsLoading(true);
-    console.log('Attempting login with:', { email, password });
-    
+
     try {
-      await login(email, password);
-      console.log('Login successful');
+      const res = await api.post('/signup', { name, email, password });
+      
+      // トークンをlocalStorageに保存
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+      
+      // ログインページへリダイレクト
+      navigate('/login', { replace: true });
     } catch (err) {
-      console.error('Login failed:', err);
-      console.error('Error response:', err.response);
-      setError(`ログインに失敗しました: ${err.response?.data?.message || err.message}`);
+      console.error('Signup failed:', err);
+      setError(
+        err.response?.data?.message || 
+        err.response?.data?.errors 
+          ? Object.values(err.response.data.errors).flat().join(', ')
+          : 'ユーザー登録に失敗しました'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +59,7 @@ export default function Login() {
           marginBottom: '30px',
           color: '#333'
         }}>
-          ログイン
+          新規ユーザー登録
         </h1>
         
         {error && (
@@ -61,7 +69,8 @@ export default function Login() {
             padding: '10px',
             borderRadius: '5px',
             marginBottom: '20px',
-            textAlign: 'center'
+            textAlign: 'center',
+            fontSize: '14px'
           }}>
             {error}
           </div>
@@ -69,11 +78,35 @@ export default function Login() {
         
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>
+              名前
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="山田太郎"
+              required
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid #ddd',
+                borderRadius: '5px',
+                fontSize: '16px',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>
+              メールアドレス
+            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="メールアドレス"
+              placeholder="example@example.com"
               required
               style={{
                 width: '100%',
@@ -87,12 +120,16 @@ export default function Login() {
           </div>
           
           <div style={{ marginBottom: '30px' }}>
+            <label style={{ display: 'block', marginBottom: '5px', color: '#666', fontSize: '14px' }}>
+              パスワード（8文字以上）
+            </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="パスワード"
               required
+              minLength={8}
               style={{
                 width: '100%',
                 padding: '12px',
@@ -110,7 +147,7 @@ export default function Login() {
             style={{
               width: '100%',
               padding: '12px',
-              backgroundColor: isLoading ? '#ccc' : '#2196F3',
+              backgroundColor: isLoading ? '#ccc' : '#4CAF50',
               color: 'white',
               border: 'none',
               borderRadius: '5px',
@@ -119,22 +156,22 @@ export default function Login() {
               transition: 'background-color 0.3s',
               marginBottom: '15px'
             }}
-            onMouseOver={(e) => !isLoading && (e.target.style.backgroundColor = '#1976D2')}
-            onMouseOut={(e) => !isLoading && (e.target.style.backgroundColor = '#2196F3')}
+            onMouseOver={(e) => !isLoading && (e.target.style.backgroundColor = '#45a049')}
+            onMouseOut={(e) => !isLoading && (e.target.style.backgroundColor = '#4CAF50')}
           >
-            {isLoading ? 'ログイン中...' : 'ログイン'}
+            {isLoading ? '登録中...' : '登録'}
           </button>
           
           <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <Link 
-              to="/signup" 
+              to="/login" 
               style={{ 
-                color: '#4CAF50', 
+                color: '#2196F3', 
                 textDecoration: 'none',
                 fontSize: '14px'
               }}
             >
-              アカウントをお持ちでない方はこちら
+              すでにアカウントをお持ちの方はこちら
             </Link>
           </div>
         </form>
@@ -142,3 +179,4 @@ export default function Login() {
     </div>
   );
 }
+

@@ -18,7 +18,7 @@ use App\Http\Controllers\BookController;
 // 非認証ルート
 Route::post('/login', [UserAuthController::class, 'login']);
 
-// Register endpoint
+// Register endpoint (password_confirmation required)
 Route::post('/register', function (Request $request) {
     $validated = $request->validate([
         'name' => 'required|string|max:255',
@@ -33,6 +33,29 @@ Route::post('/register', function (Request $request) {
     ]);
 
     return response()->json(['message' => 'User registered successfully'], 201);
+});
+
+// Signup endpoint (simpler, no password_confirmation required)
+Route::post('/signup', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8',
+    ]);
+
+    $user = User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+    ]);
+
+    $token = $user->createToken('api-token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'User created successfully',
+        'user' => $user,
+        'token' => $token
+    ], 201);
 });
 
 
