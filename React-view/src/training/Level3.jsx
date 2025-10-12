@@ -10,6 +10,9 @@ function Level3(){
         setTodos([...todos,{text:input,completed:false}]);
         setInputs('');
     }
+    const toggleComplete = (index) => {
+        const newTodos = [...todos];
+    }
     /*
      const toggleComplete = (index) => {
         const newTodos = [...todos];
