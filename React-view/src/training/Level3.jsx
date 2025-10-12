@@ -1,18 +1,19 @@
-import React,{　useState　} from 'react';
+import React, { useState } from 'react';
+
 function Level3(){
 
     const[todos,setTodos] = useState([]);
-    const[inputs,setInputs] = useState('');
+    const[input,setInput] = useState('');
     const[filter,setFilter] = useState('all');
 
     const addTodo = () =>{
-        if(input.trim()==='')retrun;
+        if(input.trim()==='') return;
         setTodos([...todos,{text:input,completed:false}]);
-        setInputs('');
+        setInput('');
     }
     const toggleComplete = (index) => {
         const newTodos = [...todos];
-        newTodos[index].cpmpleted = !newTodos[index].completed;
+        newTodos[index].completed = !newTodos[index].completed;
         setTodos(newTodos);
      }
      /*
@@ -55,6 +56,15 @@ function Level3(){
                     </li>
                 ))}
             </ul>
+            <ul>
+                {todos.map((todo,index)=>(
+                    <li key={index}>
+                        {todo.text}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
+
+export default Level3;

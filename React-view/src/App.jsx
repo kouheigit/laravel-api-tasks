@@ -12,6 +12,7 @@ import Todo3 from './practice/Todo3';
 import Todo4 from './practice/Todo4';
 import Todo5 from './practice/Todo5';
 import TodoApp from './newpractice/TodoApp';
+import Level3 from './training/Level3';
 import TaskNoteList from './component/TaskNoteList';
 import TaskNoteForm from './component/TaskNoteForm';
 import TaskNoteDetail from './component/TaskNoteDetail';
@@ -80,7 +81,7 @@ const App = () => {
 
   if (loading) {
     return (
-          <div style={{ 
+          <div style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -100,7 +101,7 @@ const App = () => {
       <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
       <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
       <Route path="/" element={isAuthenticated ? <BookList /> : <Navigate to="/login" />} />
-      
+
       {/* Practice Todos */}
       <Route path="/practice/todo" element={<Todo />} />
       <Route path="/practice/todo1" element={<Todo1 />} />
@@ -108,7 +109,7 @@ const App = () => {
       <Route path="/practice/todo3" element={<Todo3 />} />
       <Route path="/practice/todo4" element={<Todo4 />} />
       <Route path="/practice/todo5" element={<Todo5 />} />
-      
+
       {/* New Practice - Level 1-10 */}
       <Route path="/newpractice/todoapp" element={<TodoApp />} />
       <Route path="/newpractice/level02" element={<Level02 />} />
@@ -120,7 +121,7 @@ const App = () => {
       <Route path="/newpractice/level08" element={<Level08 />} />
       <Route path="/newpractice/level09" element={<Level09 />} />
       <Route path="/newpractice/level10" element={<Level10 />} />
-      
+
       {/* Level 11-20 */}
       <Route path="/newpractice/level11" element={<Level11 />} />
       <Route path="/newpractice/level12" element={<Level12 />} />
@@ -132,7 +133,7 @@ const App = () => {
       <Route path="/newpractice/level18" element={<Level18 />} />
       <Route path="/newpractice/level19" element={<Level19 />} />
       <Route path="/newpractice/level20" element={<Level20 />} />
-      
+
       {/* Level 21-30 */}
       <Route path="/newpractice/level21" element={<Level21 />} />
       <Route path="/newpractice/level22" element={<Level22 />} />
@@ -144,7 +145,7 @@ const App = () => {
       <Route path="/newpractice/level28" element={<Level28 />} />
       <Route path="/newpractice/level29" element={<Level29 />} />
       <Route path="/newpractice/level30" element={<Level30 />} />
-      
+
       {/* Level 31-40 */}
       <Route path="/newpractice/level31" element={<Level31 />} />
       <Route path="/newpractice/level32" element={<Level32 />} />
@@ -156,7 +157,7 @@ const App = () => {
       <Route path="/newpractice/level38" element={<Level38 />} />
       <Route path="/newpractice/level39" element={<Level39 />} />
       <Route path="/newpractice/level40" element={<Level40 />} />
-      
+
       {/* Level 41-50 */}
       <Route path="/newpractice/level41" element={<Level41 />} />
       <Route path="/newpractice/level42" element={<Level42 />} />
@@ -168,13 +169,14 @@ const App = () => {
       <Route path="/newpractice/level48" element={<Level48 />} />
       <Route path="/newpractice/level49" element={<Level49 />} />
       <Route path="/newpractice/level50" element={<Level50 />} />
-      
+
       {/* Other Pages */}
       <Route path="/hello" element={isAuthenticated ? <HelloPage /> : <Navigate to="/login" />} />
       <Route path="/task-notes" element={isAuthenticated ? <TaskNoteList /> : <Navigate to="/login" />} />
       <Route path="/task-notes/new" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
       <Route path="/task-notes/:id" element={isAuthenticated ? <TaskNoteDetail /> : <Navigate to="/login" />} />
       <Route path="/task-notes/:id/edit" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
+        <Route path="/training/Level3" element={<Level3/>} />
     </Routes>
   );
 };
