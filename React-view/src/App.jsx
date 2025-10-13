@@ -13,6 +13,7 @@ import Todo4 from './practice/Todo4';
 import Todo5 from './practice/Todo5';
 import TodoApp from './newpractice/TodoApp';
 import Level3 from './training/Level3';
+import Level4 from './training/Level4';
 import TaskNoteList from './component/TaskNoteList';
 import TaskNoteForm from './component/TaskNoteForm';
 import TaskNoteDetail from './component/TaskNoteDetail';
@@ -177,6 +178,7 @@ const App = () => {
       <Route path="/task-notes/:id" element={isAuthenticated ? <TaskNoteDetail /> : <Navigate to="/login" />} />
       <Route path="/task-notes/:id/edit" element={isAuthenticated ? <TaskNoteForm /> : <Navigate to="/login" />} />
         <Route path="/training/Level3" element={<Level3/>} />
+        <Route path="/training/Level4" element={<Level4/>} />
     </Routes>
   );
 };

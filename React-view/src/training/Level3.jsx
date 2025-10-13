@@ -16,20 +16,11 @@ function Level3(){
         newTodos[index].completed = !newTodos[index].completed;
         setTodos(newTodos);
      }
-     /*
-       const deleteTodo = (index) => {
-        setTodos(todos.filter((_, i) => i !== index));
-    };
-      */
+
     const deleteTodo =(index) =>{
         setTodos(todos.filter((_,i)=>i!==index));
     }
-    /*
-    const filteredTodos = todos.filter(todo => {
-        if (filter === 'active') return !todo.completed;
-        if (filter === 'completed') return todo.completed;
-        return true;
-    });*/
+
     const filteredTodos = todos.filter(todo=>{
         if(filter ==='active') return!todo.completed;
         if(filter ==='completed')return todo.completed;
