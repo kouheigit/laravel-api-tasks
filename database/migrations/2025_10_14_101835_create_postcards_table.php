@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('postcards', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('headline',150);
+            $table->taxt('message');
+            $table->foreignId('scribe_account_id')->constrained()->cascadeOnDelete();
         });
     }
 
