@@ -8,6 +8,7 @@ class Postcard extends Model
 {
     use HasFactory;
     protected $fillable = ['headline','message','scribe_account_id'];
+
     public function scribeAccount()
     {
         return $this->belongsTo(ScribeAccount::class);
