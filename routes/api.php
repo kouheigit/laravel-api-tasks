@@ -17,6 +17,7 @@ use App\Http\Controllers\BookController;
 
 // 非認証ルート
 Route::post('/login', [UserAuthController::class, 'login']);
+require base_path('routes/api_v2.php');
 
 // Register endpoint (password_confirmation required)
 Route::post('/register', function (Request $request) {
@@ -64,10 +65,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // ユーザー認証関連
     Route::get('/me', [UserAuthController::class, 'me']);
     Route::post('/logout', [UserAuthController::class, 'logout']);
-    
+
     // 書籍管理
     Route::apiResource('books', BookController::class);
-    
+
     // その他の既存API
     Route::get('/user', function (Request $request) {
         return $request->user();

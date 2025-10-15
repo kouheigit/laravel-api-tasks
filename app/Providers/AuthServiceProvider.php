@@ -6,12 +6,14 @@ use App\Models\TaskItem;
 use App\Models\TaskNote;
 use App\Models\Review;
 use App\Models\Article;
+use App\Models\Postcard;
 use App\Policies\ReviewPolicy;
 use App\Policies\TaskItemPolicy;
 use App\Policies\TaskNotePolicy;
 use App\Policies\ArticlePolicy;
 use App\Policies\PostcardPolicyV2;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
