@@ -10,6 +10,7 @@ use App\Policies\ReviewPolicy;
 use App\Policies\TaskItemPolicy;
 use App\Policies\TaskNotePolicy;
 use App\Policies\ArticlePolicy;
+use App\Policies\PostcardPolicyV2;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         TaskItem::class=>TaskItemPolicy::class,
         Review::class=>ReviewPolicy::class,
         Article::class =>ArticlePolicy::class,
+
     ];
 
     /**
@@ -27,6 +29,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Gate::policy(Postcard::class,PostcardPolicyV2::class);
     }
 }
