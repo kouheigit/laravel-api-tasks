@@ -3,24 +3,24 @@
 namespace App\Policies;
 
 use App\Models\Postcard;
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\ScribeAccount;
+
 
 class PostcardPolicyV2
 {
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Postcard $postcard): bool
+    public function update(ScribeAccount $user, Postcard $postcard): bool
     {
-        return false;
+        return $user->id === $postcard->scribe_account_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Postcard $postcard): bool
+    public function delete(ScribeAccount $user, Postcard $postcard): bool
     {
-        return false;
+        return $user->id === $postcard->scribe_account_id;
     }
 }
