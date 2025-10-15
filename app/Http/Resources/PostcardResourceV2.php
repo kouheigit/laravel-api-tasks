@@ -14,6 +14,15 @@ class PostcardResourceV2 extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+          'id'=>$this->id,
+          'headline'=>$this->headline,
+          'message'=>$this->message,
+          'scribe'=>[
+              'id'=>$this->scribeAccount->id,
+              'name'=>$this->scribeAccount->name,
+          ],
+            'created'=>$this->created_at?->format('Y-m-d H:i'),
+        ];
     }
 }
