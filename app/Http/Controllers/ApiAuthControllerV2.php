@@ -28,7 +28,7 @@ class ApiAuthControllerV2 extends Controller
 
     }
     public function signin(Request $request){
-        $validated = $request->validated([
+        $validated = $request->validate([
            'email'=>['required','email'],
            'password'=>['required','string'],
         ]);
