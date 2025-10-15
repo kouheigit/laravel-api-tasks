@@ -11,7 +11,7 @@ class UpdatePostcardRequestV2 extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,13 @@ class UpdatePostcardRequestV2 extends FormRequest
      */
     public function rules(): array
     {
+        /*
+         *     'headline' => ['sometimes','required','string','max:150'],
+            'message'  => ['sometimes','required','string','max:1000'],
+         */
         return [
-            //
+            'headline'=>['sometimes','required','string','max:150'],
+            'message'=>['sometimes','required','string','max:1000'],
         ];
     }
 }
