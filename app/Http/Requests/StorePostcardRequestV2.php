@@ -11,7 +11,7 @@ class StorePostcardRequestV2 extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StorePostcardRequestV2 extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'headline'=>['required','string','max:150'],
+            'message'=>['required','string','max:1000'],
         ];
     }
 }
