@@ -25,10 +25,23 @@ function Level3S(){
 
     return view(
         <div>
-            <inoput type="text" value={input} onChange{(e)=>setInputs(e.target.value)}/>
+            <input type="text" value={input} onChange{(e)=>setInputs(e.target.value)}/>
             <button onClick={addTodo}>追加</button>
-
-
+            <ul>
+                {filteredTodos.map((todo, index) => (
+                    <li key={index}>
+                        <input
+                            type="checkbox"
+                            checked={todo.completed}
+                            onChange={() => toggleComplete(todos.indexOf(todo))}
+                        />
+                        <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                            {todo.text}
+                        </span>
+                        <button onClick={() => deleteTodo(todos.indexOf(todo))}>削除</button>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
