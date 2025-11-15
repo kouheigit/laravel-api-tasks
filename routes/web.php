@@ -36,3 +36,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('articles', ArticleController::class);
 });
 
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
