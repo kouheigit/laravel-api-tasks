@@ -55,4 +55,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TaskItem::class);
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'writer_id');
+    }
 }
