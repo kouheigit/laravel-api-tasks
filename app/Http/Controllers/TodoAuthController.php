@@ -11,5 +11,8 @@ class TodoAuthController extends Controller
     {
         return view('todo.login');
     }
-  
+    public function login(Request $reqest)
+    {
+        
+    }
 }
