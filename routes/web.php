@@ -10,8 +10,23 @@ use App\Http\Controllers\TodoAuthController;
 Route::get('/', function () {
     return view('welcome');
 });
+// TodoUser ログイン画面
+Route::get('/todo/login', [TodoAuthController::class, 'showLoginForm'])
+    ->name('todo.login');
 
+// ログイン処理
+Route::post('/todo/login', [TodoAuthController::class, 'login']);
 
+// ログアウト
+Route::post('/todo/logout', [TodoAuthController::class, 'logout'])
+    ->name('todo.logout');
+
+// ログイン後のページ（TodoUser 専用）
+Route::middleware('auth:todo')->group(function () {
+    Route::get('/todo/dashboard', function () {
+        return view('todo.dashboard');
+    })->name('todo.dashboard');
+});
 
 
 
