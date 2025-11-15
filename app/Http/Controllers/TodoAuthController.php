@@ -17,7 +17,7 @@ class TodoAuthController extends Controller
            'email'=>['required','email'],
            'password'=>['required'],
         ]);
-        if(Auth::guard('todo')->attempt($credentials,$request->bloolean('remember'))){
+        if(Auth::guard('todo')->attempt($credentials,$request->boolean('remember'))){
             $request->session()->regenerate();
             return redirect()->route('todo.dashbord');
         }
