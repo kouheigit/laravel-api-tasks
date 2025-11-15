@@ -19,7 +19,7 @@ class TodoAuthController extends Controller
         ]);
         if(Auth::guard('todo')->attempt($credentials,$request->boolean('remember'))){
             $request->session()->regenerate();
-            return redirect()->route('todo.dashbord');
+            return redirect()->route('todo.dashboard');
         }
         return back()->withErrors([
            'email'=>'メールアドレスまたはパスワードが正しくありません。'
@@ -28,7 +28,7 @@ class TodoAuthController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
+        Auth::guard('todo')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
