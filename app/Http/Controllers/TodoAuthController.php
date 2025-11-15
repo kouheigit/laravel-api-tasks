@@ -13,6 +13,10 @@ class TodoAuthController extends Controller
     }
     public function login(Request $reqest)
     {
+
+    }
+    public function logout(Request $request)
+    {
         
     }
 }
