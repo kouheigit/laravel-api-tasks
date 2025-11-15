@@ -4,10 +4,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\ApiAuthControllerV2;
 use App\Http\Controllers\PostcardControllerV2;
+use App\Http\Controllers\TodoAuthController;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
+
 
 
 // SanctumのCSRFトークンルート
