@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'todo'=>[
+          'driver'=>'session',
+          'provider'=>'todousers',
+        ],
     ],
 
     /*
@@ -64,6 +68,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+        'todousers' => [
+                'driver' => 'eloquent',
+                'model' => App\Models\TodoUser::class,
+            ],
 
         // 'users' => [
         //     'driver' => 'database',
