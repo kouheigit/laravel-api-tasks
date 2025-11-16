@@ -11,6 +11,7 @@ class TodoAuthController extends Controller
     {
         return view('todo.login');
     }
+    //ログイン
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -26,6 +27,7 @@ class TodoAuthController extends Controller
         ]);
 
     }
+    //ログアウト
     public function logout(Request $request)
     {
         Auth::guard('todo')->logout();
