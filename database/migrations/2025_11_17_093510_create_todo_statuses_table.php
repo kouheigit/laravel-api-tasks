@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('todo_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique(); // not_started / in_progress / completed
+            $table->string('label');// 未着手 / 進行中 / 完了
             $table->timestamps();
         });
     }
