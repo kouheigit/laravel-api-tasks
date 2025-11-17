@@ -25,7 +25,6 @@ return new class extends Migration
             $table->foreignId('todo_priority_id')->constrained('todo_priorities');
             $table->timestamps();
 
-
         });
     }
 
