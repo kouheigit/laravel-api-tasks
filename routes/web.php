@@ -5,6 +5,7 @@ use App\Http\Controllers\TaskItemController;
 use App\Http\Controllers\ApiAuthControllerV2;
 use App\Http\Controllers\PostcardControllerV2;
 use App\Http\Controllers\TodoAuthController;
+use App\Http\Controllers\TodoController;
 
 
 Route::get('/', function () {
@@ -31,7 +32,10 @@ Route::middleware('auth:todo')->group(function () {
     })->name('todo.dashboard');
 
     // Todo の CRUD ルート一式
-    Route::resource('todos', TodoController::class);
+  /*  Route::get('/todo/index', [TodoController::class,'index'])
+        ->name('todo.index');*/
+
+    Route::resource('todo', TodoController::class);
 });
 
 // ログイン後のページ（TodoUser 専用）
@@ -39,6 +43,8 @@ Route::middleware('auth:todo')->group(function () {
     Route::get('/todo/dashboard', function () {
         return view('todo.dashboard');
     })->name('todo.dashboard');
+
+
 });
 
 
