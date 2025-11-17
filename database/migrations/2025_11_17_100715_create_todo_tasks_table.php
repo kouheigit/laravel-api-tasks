@@ -13,7 +13,19 @@ return new class extends Migration
     {
         Schema::create('todo_tasks', function (Blueprint $table) {
             $table->id();
+            //ユーザー
+            $table->foreignId('todo_user_id')->constrained('todo_users');
+            // タスク内容
+            $table->string('titile');
+            $table->text('description')->nullable();
+            $table->dateTime('due_date')->nullable();
+
+            //ステータス
+
+
             $table->timestamps();
+
+        
         });
     }
 
