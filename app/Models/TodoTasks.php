@@ -19,21 +19,28 @@ class TodoTasks extends Model
         'todo_priority_id',
     ];
 
+    /**
+     * タスクを所有しているユーザー
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(TodoUser::class, 'todo_user_id');
     }
 
-
+    /**
+     * このタスクのステータス（未着手 / 進行中 / 完了）
+     */
     public function status(): BelongsTo
     {
         return $this->belongsTo(TodoStatus::class, 'todo_status_id');
     }
 
-
+    /**
+     * このタスクの優先度（低 / 中 / 高）
+     */
     public function priority(): BelongsTo
     {
         return $this->belongsTo(TodoPriority::class, 'todo_priority_id');
     }
-    
+
 }
