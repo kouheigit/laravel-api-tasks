@@ -2,7 +2,7 @@
 <body>
 <header>
     <nav>
-        <a href="{{ route('todo.index') }}">一覧</a>
+        {{--<a href="{{ route('todo.index') }}">一覧</a>--}}
     </nav>
 </header>
 <main>
