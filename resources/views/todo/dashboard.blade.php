@@ -1,3 +1,5 @@
+@extends('layout')
+@section('content')
 <h1>TodoUser　ダッシュボード</h1>
 <p>
     {{Auth::guard('todo')->user()->name }}さんでログイン中
@@ -6,5 +8,6 @@
     @csrf
     <button type="submit">ログアウト</button>
 </form>
+@endsection
 
 
