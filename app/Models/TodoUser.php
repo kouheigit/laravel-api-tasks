@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class TodoUser extends Authenticatable
@@ -27,5 +28,9 @@ class TodoUser extends Authenticatable
         return [
             'password' => 'hashed',
         ];
+    }
+    public function task(): HasMany
+    {
+        return $this->hasMany(TodoTask::class,'todo_user_id');
     }
 }
