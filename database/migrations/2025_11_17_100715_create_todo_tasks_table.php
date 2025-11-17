@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('titile');
             $table->text('description')->nullable();
             $table->dateTime('due_date')->nullable();
-
             //ステータス
-
-
+            $table->foreignId('todo_status_id')->constrained('todo_statuses');
+            // 優先度（todo_priorities）
+            $table->foreignId('todo_priority_id')->constrained('todo_priorities');
             $table->timestamps();
 
-        
+
         });
     }
 
