@@ -21,6 +21,19 @@ Route::post('/todo/login', [TodoAuthController::class, 'login']);
 Route::post('/todo/logout', [TodoAuthController::class, 'logout'])
     ->name('todo.logout');
 
+
+//ログイン後に使用できる
+Route::middleware('auth:todo')->group(function () {
+
+    // ダッシュボード
+    Route::get('/todo/dashboard', function () {
+        return view('todo.dashboard');
+    })->name('todo.dashboard');
+
+    // Todo の CRUD ルート一式
+    Route::resource('todos', TodoController::class);
+});
+
 // ログイン後のページ（TodoUser 専用）
 Route::middleware('auth:todo')->group(function () {
     Route::get('/todo/dashboard', function () {
