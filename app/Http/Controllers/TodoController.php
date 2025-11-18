@@ -21,8 +21,6 @@ class TodoController extends Controller
             ->where('todo_user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->paginate(20);
-
-        dd($todos->toArray());
         return view('todo.index',compact('todos'));
     }
 
