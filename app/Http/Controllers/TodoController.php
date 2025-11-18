@@ -29,7 +29,7 @@ class TodoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-
+    //createメソッド
     public function create()
     {
         return view('todo.create'compact('todos.create'));
