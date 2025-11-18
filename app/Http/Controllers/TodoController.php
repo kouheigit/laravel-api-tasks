@@ -10,7 +10,7 @@ class TodoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Reqeuest $reqeuest)
+    public function index(Request $request)
     {
         return view('todo.index');
     }
