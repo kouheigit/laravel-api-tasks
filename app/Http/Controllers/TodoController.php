@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\TodoTask;
+use App\Models\TodoTasks;
 
 
 class TodoController extends Controller
@@ -17,11 +17,12 @@ class TodoController extends Controller
         //user情報の取得
         $user = Auth::guard('todo')->user();
         // ★ N+1 を避けるために status と priority を with() で一括ロード
-        $todos = TodoTask::with(['status:id,label', 'priority:id,label'])
+        $todos = TodoTasks::with(['status:id,label', 'priority:id,label'])
             ->where('todo_user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->paginate(20);
-        dd('todos');
+
+        dd($todos->toArray());
         return view('todo.index',compact('todos'));
     }
 
