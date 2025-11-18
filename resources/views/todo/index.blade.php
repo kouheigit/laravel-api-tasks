@@ -21,6 +21,7 @@
             <hr>
 
             {{-- =======================リレーション：status / priority ※ with(['status:id,label','priority:id,label']) 必須======================= --}}
+            {{--超重要、行の真ん中のstatus、priorityは参照してるテーブルを表示してる--}}
             <p><strong>ステータス名：</strong>
                 {{ $todo->status->label }}（ID: {{ $todo->status->id }}）
             </p>

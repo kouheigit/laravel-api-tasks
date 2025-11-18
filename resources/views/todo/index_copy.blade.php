@@ -19,7 +19,7 @@
             <p><strong>優先度ID：</strong> {{ $todo->todo_priority_id }}</p>
 
             <hr>
-
+            {{--超重要、行の真ん中のstatus、priorityは参照してるテーブルを表示してる--}}
             {{-- =======================リレーション：status / priority ※ with(['status:id,label','priority:id,label']) 必須======================= --}}
             <p><strong>ステータス名：</strong>
                 {{ $todo->status->label }}（ID: {{ $todo->status->id }}）
