@@ -25,3 +25,6 @@ Thumbs.db
 
 # Todo fields reference file
 resources/views/todo/available_fields.md
+
+# Todo index copy (ignore)
+resources/views/todo/index_copy.blade.php

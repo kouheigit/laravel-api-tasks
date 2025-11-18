@@ -35,39 +35,7 @@
             <p><strong>ユーザーID：</strong> {{ $todo->user->id }}</p>
             <p><strong>ユーザー名：</strong> {{ $todo->user->name }}</p>
             <p><strong>ユーザーメール：</strong> {{ $todo->user->email }}</p>
-
             <hr>
-
-            {{-- =======================
-                日付（RAW）
-            ======================= --}}
-            <p><strong>作成日時RAW：</strong> {{ $todo->created_at }}</p>
-            <p><strong>更新日時RAW：</strong> {{ $todo->updated_at }}</p>
-            <p><strong>期限日時RAW：</strong> {{ $todo->due_date }}</p>
-
-            <hr>
-
-            {{-- =======================
-                日付：フォーマット済み
-            ======================= --}}
-            <p><strong>作成日時：</strong> {{ $todo->created_at->format('Y-m-d H:i:s') }}</p>
-            <p><strong>作成日（日本語）：</strong> {{ $todo->created_at->format('Y年m月d日') }}</p>
-            <p><strong>更新日時：</strong> {{ $todo->updated_at->format('Y-m-d H:i:s') }}</p>
-            <p><strong>期限日時：</strong>
-                {{ $todo->due_date?->format('Y-m-d H:i:s') ?? '未設定' }}
-            </p>
-            <p><strong>期限日（日本語）：</strong>
-                {{ $todo->due_date?->format('Y年m月d日') ?? '未設定' }}
-            </p>
-
-            <hr>
-
-            {{-- =======================
-                相対日時（diffForHumans）
-            ======================= --}}
-            <p><strong>作成から：</strong> {{ $todo->created_at->diffForHumans() }}</p>
-            <p><strong>更新から：</strong> {{ $todo->updated_at->diffForHumans() }}</p>
-
         </div>
     @endforeach
 
