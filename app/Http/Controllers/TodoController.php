@@ -32,7 +32,7 @@ class TodoController extends Controller
 
     public function create()
     {
-        $test = 0;
+        return view('todo.create'compact('todos.create'));
     }
 
     /**
