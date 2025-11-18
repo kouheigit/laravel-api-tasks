@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\TodoPriorities;
+use App\Models\TodoPriority;
 use App\Models\TodoStatus;
 use App\Models\TodoTasks;
 use App\Models\TodoUser;
@@ -46,7 +46,7 @@ class TodoDummySeeder extends Seeder
             ['name' => 'medium', 'label' => '中', 'sort_order' => 2],
             ['name' => 'high', 'label' => '高', 'sort_order' => 3],
         ])->mapWithKeys(function ($priority) {
-            $record = TodoPriorities::firstOrCreate(
+            $record = TodoPriority::firstOrCreate(
                 ['name' => $priority['name']],
                 [
                     'label' => $priority['label'],

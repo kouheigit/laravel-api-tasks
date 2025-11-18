@@ -4,49 +4,82 @@
     <h1>test</h1>
     <h1>Todoインデックスブレード</h1>
     @foreach($todos as $todo)
+        <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 6px;">
 
+            {{-- =======================
+                基本情報
+            ======================= --}}
+            <p><strong>タスクID：</strong> {{ $todo->id }}</p>
+            <p><strong>ユーザーID：</strong> {{ $todo->todo_user_id }}</p>
+            <p><strong>タイトル：</strong> {{ $todo->title }}</p>
+            <p><strong>内容：</strong> {{ $todo->description }}</p>
+            <p><strong>期限日時（RAW）：</strong> {{ $todo->due_date }}</p>
 
-         {{ $todo->todo_user_id }}
-         {{ $todo->id }}   {{--タスクID--}}
-         {{ $todo->todo_user_id }} {{-- ユーザーID--}}
-         {{ $todo->title }} {{-- タイトル--}}
-         {{ $todo->description }} {{-- 説明（nullable）--}}
-         {{ $todo->due_date }} {{-- 期限日時（nullable）--}}
+            <hr>
 
-         {{ $todo->due_date }} {{-- 期限日時（nullable）--}}
-         {{-- =======================基本情報======================= --}}
-         タイトル：{{ $todo->title }}
-         内容：{{ $todo->description }}
+            {{-- =======================
+                ID カラム（task 本体）
+            ======================= --}}
+            <p><strong>ステータスID：</strong> {{ $todo->todo_status_id }}</p>
+            <p><strong>優先度ID：</strong> {{ $todo->todo_priority_id }}</p>
 
-         {{-- ======================= ID カラム（task 本体）======================= --}}
-         ステータスID：{{ $todo->todo_status_id }}
-         優先度ID：{{ $todo->todo_priority_id }}
+            <hr>
 
-         {{-- =======================リレーション値（status / priority）
-             ※ with(['status:id,label','priority:id,label']) で読み込み済み======================= --}}
-         ステータス名：{{ $todo->status->label }}（ID: {{ $todo->status->id }}）
-         優先度名：{{ $todo->priority->label }}（ID: {{ $todo->priority->id }}）
+            {{-- =======================
+                リレーション：status / priority
+                ※ with(['status:id,label','priority:id,label']) 必須
+            ======================= --}}
+            <p><strong>ステータス名：</strong>
+                {{ $todo->status->label }}（ID: {{ $todo->status->id }}）
+            </p>
 
-         {{-- =======================ユーザー情報（user リレーション）※ with('user') を使わないと N+1 が起きる======================= --}}
-         ユーザーID：{{ $todo->user->id }}
-         ユーザー名：{{ $todo->user->name }}
-         ユーザーメール：{{ $todo->user->email }}
+            <p><strong>優先度名：</strong>
+                {{ $todo->priority->label }}（ID: {{ $todo->priority->id }}）
+            </p>
 
-         {{-- =======================日付・日時（RAW 値）======================= --}}
-         作成日時RAW：{{ $todo->created_at }}
-         更新日時RAW：{{ $todo->updated_at }}
-         期限日時RAW：{{ $todo->due_date }}
+            <hr>
 
-         {{-- =======================日付フォーマット済み======================= --}}
-         作成日時：{{ $todo->created_at->format('Y-m-d H:i:s') }}
-         作成日（日本語）：{{ $todo->created_at->format('Y年m月d日') }}
-         更新日時：{{ $todo->updated_at->format('Y-m-d H:i:s') }}
-         期限日時：{{ $todo->due_date?->format('Y-m-d H:i:s') ?? '未設定' }}
-         期限日（日本語）：{{ $todo->due_date?->format('Y年m月d日') ?? '未設定' }}
+            {{-- =======================
+                リレーション：user
+                ※ with('user') を使わないと N+1 発生
+            ======================= --}}
+            <p><strong>ユーザーID：</strong> {{ $todo->user->id }}</p>
+            <p><strong>ユーザー名：</strong> {{ $todo->user->name }}</p>
+            <p><strong>ユーザーメール：</strong> {{ $todo->user->email }}</p>
 
-         {{-- =======================相対日時（diffForHumans）======================= --}}
-         作成から：{{ $todo->created_at->diffForHumans() }}
-         更新から：{{ $todo->updated_at->diffForHumans() }}
+            <hr>
+
+            {{-- =======================
+                日付（RAW）
+            ======================= --}}
+            <p><strong>作成日時RAW：</strong> {{ $todo->created_at }}</p>
+            <p><strong>更新日時RAW：</strong> {{ $todo->updated_at }}</p>
+            <p><strong>期限日時RAW：</strong> {{ $todo->due_date }}</p>
+
+            <hr>
+
+            {{-- =======================
+                日付：フォーマット済み
+            ======================= --}}
+            <p><strong>作成日時：</strong> {{ $todo->created_at->format('Y-m-d H:i:s') }}</p>
+            <p><strong>作成日（日本語）：</strong> {{ $todo->created_at->format('Y年m月d日') }}</p>
+            <p><strong>更新日時：</strong> {{ $todo->updated_at->format('Y-m-d H:i:s') }}</p>
+            <p><strong>期限日時：</strong>
+                {{ $todo->due_date?->format('Y-m-d H:i:s') ?? '未設定' }}
+            </p>
+            <p><strong>期限日（日本語）：</strong>
+                {{ $todo->due_date?->format('Y年m月d日') ?? '未設定' }}
+            </p>
+
+            <hr>
+
+            {{-- =======================
+                相対日時（diffForHumans）
+            ======================= --}}
+            <p><strong>作成から：</strong> {{ $todo->created_at->diffForHumans() }}</p>
+            <p><strong>更新から：</strong> {{ $todo->updated_at->diffForHumans() }}</p>
+
+        </div>
     @endforeach
 
 

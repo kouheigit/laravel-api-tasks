@@ -19,6 +19,12 @@ class TodoTasks extends Model
         'todo_priority_id',
     ];
 
+    protected $casts = [
+        'due_date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     /**
      * タスクを所有しているユーザー
      */
