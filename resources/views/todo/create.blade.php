@@ -6,6 +6,10 @@
     </p>
     <form method="POST" action="{{route('todo.store')}}">
         @csrf
+        <div>
+            <label>タイトル：</label><br>
+            <input type="text" name="title" value="{{ old('title') }}">
+        </div>
         <button type="submit">登録する</button>
     </form>
 @endsection
