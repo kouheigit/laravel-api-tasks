@@ -47,37 +47,15 @@ class TodoController extends Controller
     {
         $user = Auth::guard('todo')->user();
 
-
-        /*
-        $user = Auth::guard('todo')->user();
-
-        $request->validate([
-            'title'             => ['required', 'string', 'max:255'],
-            'description'       => ['nullable', 'string'],
-            'todo_status_id'    => ['required', 'exists:todo_statuses,id'],
-            'todo_priority_id'  => ['required', 'exists:todo_priorities,id'],
-        ]);
-
         TodoTask::create([
-            'todo_user_id'      => $user->id,                 // ★ ログイン中ユーザーに紐づけ
-            'title'             => $request->title,
-            'description'       => $request->description,
-            'todo_status_id'    => $request->todo_status_id,  // ★ select で選んだID
+           'todo_user_id'=>$user->id,
+            'title'=>$request->title,
+            'description'=>$request->description,
+            'todo_status_id'    => $request->todo_status_id,
             'todo_priority_id'  => $request->todo_priority_id,
         ]);
-
-        return redirect()->route('todo.index');*/
-
+        return redirect()->route('todo.index');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
