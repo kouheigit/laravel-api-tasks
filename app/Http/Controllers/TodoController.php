@@ -47,7 +47,7 @@ class TodoController extends Controller
     {
         $user = Auth::guard('todo')->user();
 
-        TodoTask::create([
+        TodoTasks::create([
            'todo_user_id'=>$user->id,
             'title'=>$request->title,
             'description'=>$request->description,
