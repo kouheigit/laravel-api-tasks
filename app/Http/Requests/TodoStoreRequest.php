@@ -23,7 +23,7 @@ class TodoStoreRequest extends FormRequest
     {
         return [
             'title'=>['required','string','max:255'],
-            'description'=>['nullable','string'],
+            'description'=>['required','nullable','string'],
             'todo_status_id'=>['required','exists:todo_statuses,id'],
             'todo_priority_id'  => ['required', 'exists:todo_priorities,id'],
         ];
@@ -32,6 +32,7 @@ class TodoStoreRequest extends FormRequest
     {
         return [
             'title.required' => 'タイトルは必須です。',
+            'description.required' => '内容は必須です。',
             'todo_status_id.required' => 'ステータスを選択してください。',
             'todo_status_id.exists' => '選択したステータスが不正です。',
             'todo_priority_id.required' => '優先度を選択してください。',
