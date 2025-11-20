@@ -37,8 +37,17 @@
             <p><strong>ユーザー名：</strong> {{ $todo->user->name }}</p>
             <p><strong>ユーザーメール：</strong> {{ $todo->user->email }}</p>
             <hr>
-        </div>
-    @endforeach
 
+            <form action="{{route('todo.destroy',$todo->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" style="color: white; background:red; padding:8px 12px;">
+                    削除する
+                </button>
+            </form>
+        </div>
+
+    @endforeach
+@endsection
 
 
