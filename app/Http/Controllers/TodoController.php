@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TodoTasks;
 use App\Models\TodoStatus;
 use App\Models\TodoPriority;
-
+use App\Http\Requests\TodoStoreRequest;
 
 class TodoController extends Controller
 {
@@ -43,7 +43,7 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TodoStoreRequest $request)
     {
         $user = Auth::guard('todo')->user();
 
