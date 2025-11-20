@@ -11,7 +11,7 @@ class TodoStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,16 @@ class TodoStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>['required','string','max:255'],
+            'description'=>['nullable','string'],
+            'todo_status_id'=>['required','exists:todo_statuses,id'],
+            'todo_priority_id'  => ['required', 'exists:todo_priorities,id'],
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+
         ];
     }
 }
