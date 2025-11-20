@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TodoTasks;
+use App\Models\TodoStatus;
 use App\Models\TodoPriority;
 
 
@@ -32,7 +33,11 @@ class TodoController extends Controller
     //createメソッド
     public function create()
     {
-        return view('todo.create');
+        // ステータスと優先度のマスタ（お手本）を取得
+        $statuses = TodoStatus::orderBy('id')->get();
+        $priorities = TodoPriority::orderBy('id')->get();
+
+        return view('todo.create',compact('statuses','priorities'));
     }
 
     /**
