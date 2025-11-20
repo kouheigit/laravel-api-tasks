@@ -7,14 +7,20 @@
     <form method="POST" action="{{route('todo.store')}}">
         @csrf
         <div>
+            <label>ステータス:</label><br>
+            <select name="todo_status_id">
+                @foreach($statuses as $status)
+                    <option value="{{$status->id }}">
+                        {{$status->label}}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+      
+
+        <div>
             <label>タイトル：</label><br>
             <input type="text" name="title" value="{{ old('title') }}">
-        </div>
-        <div>
-            <p><strong>ステータス:ID</strong></p>
-            {{--
-            <p><strong>ステータスID：</strong> {{ $todo->todo_status_id }}</p>
-            <p><strong>優先度ID：</strong> {{ $todo->todo_priority_id }}</p>--}}
         </div>
         <div>
             <label>内容：</label>
