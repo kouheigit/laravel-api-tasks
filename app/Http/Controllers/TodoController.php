@@ -77,7 +77,6 @@ class TodoController extends Controller
      */
     public function destroy(string $todo)
     {
-        $user = Auth::guard('todo')->user();
-        dd($todo);
+      
     }
 }
