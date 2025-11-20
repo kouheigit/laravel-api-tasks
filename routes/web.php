@@ -37,8 +37,8 @@ Route::middleware('auth:todo')->group(function () {
     Route::post('/todo/store', [TodoController::class, 'store'])
         ->name('todo.store');
 
-    Route::get('/todo/delete', [TodoController::class, 'delete'])
-        ->name('todo.delete');
+    Route::get('/todo/destroy', [TodoController::class, 'destroy'])
+        ->name('todo. destroy');
 
     Route::resource('todo', TodoController::class);
 });
