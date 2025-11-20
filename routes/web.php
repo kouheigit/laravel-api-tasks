@@ -31,6 +31,12 @@ Route::middleware('auth:todo')->group(function () {
         return view('todo.dashboard');
     })->name('todo.dashboard');
 
+    Route::get('/todo/create', [TodoController::class, 'create'])
+        ->name('todo.create');
+
+    Route::post('/todo/store', [TodoController::class, 'store'])
+        ->name('todo.store');
+
     // Todo の CRUD ルート一式
   /*  Route::get('/todo/index', [TodoController::class,'index'])
         ->name('todo.index');*/
