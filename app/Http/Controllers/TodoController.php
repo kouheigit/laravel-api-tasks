@@ -45,7 +45,11 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::guard('todo')->user();
+
+
+
+       
     }
 
     /**
