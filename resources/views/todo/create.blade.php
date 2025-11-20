@@ -16,14 +16,25 @@
                 @endforeach
             </select>
         </div>
-     
 
+        {{-- 優先度 --}}
+        <div>
+            <label>優先度:</label>
+            <select name="todo_priority_id">
+                @foreach($priorities as $priority)
+                    <option value="{{$priority->id }}">
+                        {{$priority->label}}
+                    </option>
+                    @endforeach
+            </select>
+        </div>
         <div>
             <label>タイトル：</label><br>
             <input type="text" name="title" value="{{ old('title') }}">
         </div>
         <div>
             <label>内容：</label>
+            <br>
             <textarea name="description">{{ old('description') }}</textarea>
         </div>
         <button type="submit">登録する</button>
