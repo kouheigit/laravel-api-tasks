@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TodoTasks;
 use App\Models\TodoStatus;
 use App\Models\TodoPriority;
+use App\Models\TodoUser;
 use App\Http\Requests\TodoStoreRequest;
 
 class TodoController extends Controller
