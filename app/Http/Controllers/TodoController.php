@@ -30,6 +30,10 @@ class TodoController extends Controller
     {
         return view('todo.registration');
     }
+    public function registrationcreate(Request $request)
+    {
+        return redirect()->route('todo.index');
+    }
 
     /**
      * Show the form for creating a new resource.
