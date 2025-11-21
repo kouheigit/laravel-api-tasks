@@ -7,15 +7,18 @@
     <form method="POST" action="{{route('todo.store')}}">
         @csrf
         <div>
-            <label>ステータス:</label><br>
-            <select name="todo_status_id">
-                @foreach($statuses as $status)
-                    <option value="{{$status->id }}">
-                        {{$status->label}}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+            {{-- ステータス --}}
+            <div>
+                <label>ステータス：</label><br>
+                <select name="todo_status_id">
+                    @foreach ($statuses as $status)
+                        <option value="{{ $status->id }}"
+                            @selected(old('todo_status_id', $todo->todo_status_id) == $status->id)>
+                            {{ $status->label }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
         {{-- 優先度 --}}
         <div>
@@ -23,20 +26,22 @@
             <select name="todo_priority_id">
                 @foreach($priorities as $priority)
                     <option value="{{$priority->id }}">
-                        {{$priority->label}}
+                        @selected(old('todo_priority_id', $todo->todo_priority_id) == $priority->id)>
                     </option>
                 @endforeach
             </select>
         </div>
+
         <div>
             <label>タイトル：</label><br>
-            <input type="text" name="title" value="{{ old('title') }}">
+            <input type="text" name="title" value="{{ old('title',$todo->title) }}">
         </div>
         <div>
             <label>内容：</label>
             <br>
-            <textarea name="description">{{ old('description') }}</textarea>
+            <textarea name="description">{{ old('description',$todo->description) }}</textarea>
         </div>
-        <button type="submit">登録する</button>
+            <button type="submit">登録する</button>
+        </div>
     </form>
 @endsection

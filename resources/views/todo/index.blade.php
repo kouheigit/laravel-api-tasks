@@ -37,6 +37,7 @@
             <p><strong>ユーザー名：</strong> {{ $todo->user->name }}</p>
             <p><strong>ユーザーメール：</strong> {{ $todo->user->email }}</p>
             <hr>
+            <a href="{{ route('todo.edit', $todo->id) }}">編集</a>
 
             <form action="{{route('todo.destroy',$todo->id) }}" method="POST">
                 @csrf
