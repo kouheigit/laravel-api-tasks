@@ -22,6 +22,8 @@ Route::post('/todo/login', [TodoAuthController::class, 'login']);
 Route::post('/todo/logout', [TodoAuthController::class, 'logout'])
     ->name('todo.logout');
 
+Route::get('/todo/registration', [TodoController::class, 'registration'])
+    ->name('todo.registration');
 
 //ログイン後に使用できる
 Route::middleware('auth:todo')->group(function () {
