@@ -12,7 +12,8 @@
         @yield('content')
     </div>
 </main>
-<footer>フッター</footer>
+<footer>
+</footer>
 </body>
 </html>
 
