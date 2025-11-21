@@ -26,6 +26,10 @@ class TodoController extends Controller
 
         return view('todo.index',compact('todos'));
     }
+    public function Registration(Request $request)
+    {
+
+    }
 
     /**
      * Show the form for creating a new resource.
