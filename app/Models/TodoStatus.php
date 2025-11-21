@@ -16,6 +16,6 @@ class TodoStatus extends Model
 
     public function tasks(): HasMany
     {
-        return $this->hasMany(TodoTask::class,'todo_status_id');
+        return $this->hasMany(TodoTasks::class,'todo_status_id');
     }
 }

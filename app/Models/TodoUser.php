@@ -32,6 +32,6 @@ class TodoUser extends Authenticatable
     }
     public function task(): HasMany
     {
-        return $this->hasMany(TodoTask::class,'todo_user_id');
+        return $this->hasMany(TodoTasks::class,'todo_user_id');
     }
 }
