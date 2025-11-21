@@ -33,7 +33,13 @@ class TodoController extends Controller
     }
     public function registrationStore(Request $request)
     {
+        TodoUser::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'password'=>$request->password,
+        ]);
         return redirect()->route('todo.index');
+
     }
 
     /**
