@@ -61,15 +61,33 @@ class TodoController extends Controller
      */
     public function edit(TodoTasks $todo)
     {
-        return view('todo.edit');
+        // ステータスと優先度のマスタ（お手本）を取得
+        $statuses = TodoStatus::orderBy('id')->get();
+        $priorities = TodoPriority::orderBy('id')->get();
+
+        return view('todo.edit', compact('todo', 'statuses', 'priorities'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TodoStoreRequest $request, TodoTasks $todo)
     {
-        //
+        $user = Auth::guard('todo')->user();
+
+        // 認可チェック：自分のタスクのみ更新可能
+        if ($todo->todo_user_id !== $user->id) {
+            abort(403);
+        }
+
+        $todo->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'todo_status_id' => $request->todo_status_id,
+            'todo_priority_id' => $request->todo_priority_id,
+        ]);
+
+        return redirect()->route('todo.index');
     }
 
     /**

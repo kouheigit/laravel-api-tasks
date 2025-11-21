@@ -4,8 +4,9 @@
     <p>
         {{Auth::guard('todo')->user()->name }}さんでログイン中
     </p>
-    <form method="POST" action="{{route('todo.store')}}">
+    <form method="POST" action="{{route('todo.update', $todo)}}">
         @csrf
+        @method('PUT')
         <div>
             {{-- ステータス --}}
             <div>
@@ -25,8 +26,9 @@
             <label>優先度:</label>
             <select name="todo_priority_id">
                 @foreach($priorities as $priority)
-                    <option value="{{$priority->id }}">
+                    <option value="{{$priority->id }}"
                         @selected(old('todo_priority_id', $todo->todo_priority_id) == $priority->id)>
+                        {{ $priority->label }}
                     </option>
                 @endforeach
             </select>
@@ -41,7 +43,7 @@
             <br>
             <textarea name="description">{{ old('description',$todo->description) }}</textarea>
         </div>
-            <button type="submit">登録する</button>
+            <button type="submit">更新する</button>
         </div>
     </form>
 @endsection
