@@ -26,9 +26,9 @@ class TodoController extends Controller
 
         return view('todo.index',compact('todos'));
     }
-    public function Registration(Request $request)
+    public function registration(Request $request)
     {
-
+        return view('todo.registration');
     }
 
     /**
