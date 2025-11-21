@@ -31,7 +31,7 @@ class TodoController extends Controller
     {
         return view('todo.registration');
     }
-    public function registrationcreate(Request $request)
+    public function registrationStore(Request $request)
     {
         return redirect()->route('todo.index');
     }
