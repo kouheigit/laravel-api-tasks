@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\TodoTasks;
 use App\Models\TodoStatus;
 use App\Models\TodoPriority;
@@ -33,11 +34,18 @@ class TodoController extends Controller
     }
     public function registrationStore(Request $request)
     {
-        TodoUser::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>$request->password,
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:todo_users,email'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
+
+        TodoUser::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
         return redirect()->route('todo.index');
 
     }
