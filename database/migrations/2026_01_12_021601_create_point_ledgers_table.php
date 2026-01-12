@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('point_ledgers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->integer('delta');
             $table->string('type');
             $table->string('operation_key')->unique();
             $table->string('grant');
             $table->string('memo')->nullable();
             $table->string('use');
-            $table->index(['user_id','created_at']);
             $table->timestamps();
+
+            $table->index(['user_id','created_at']);
         });
     }
 
