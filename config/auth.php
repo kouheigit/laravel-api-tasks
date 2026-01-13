@@ -45,6 +45,12 @@ return [
           'driver'=>'session',
           'provider'=>'todousers',
         ],
+        //member
+        'member'=>
+        [
+          'driver'=>'session',
+          'provider'=>'members'
+        ],
     ],
 
     /*
@@ -73,6 +79,11 @@ return [
                 'driver' => 'eloquent',
                 'model' => App\Models\TodoUser::class,
             ],
+
+        'members' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Member::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
