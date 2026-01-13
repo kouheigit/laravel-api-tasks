@@ -27,6 +27,7 @@ Route::get('/todo/registration', [TodoController::class, 'registration'])
 Route::post('/todo/registration', [TodoController::class, 'registrationStore'])
     ->name('todo.registration.store');
 
+
 Route::prefix('member')->name('member.')->group(function () {
     Route::get('login', [MemberAuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [MemberAuthController::class, 'login'])->name('login.post');
@@ -35,6 +36,7 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::middleware('auth:member')->group(function () {
         Route::get('dashboard', fn() => view('member.dashboard'))->name('dashboard');
     });
+});
 
 
 
