@@ -42,11 +42,11 @@ Route::prefix('member')->name('member.')->group(function () {
 
 //admin
 Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('login', [MemberLoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [MemberLoginController::class, 'login']);
-    Route::post('logout', [MemberLoginController::class, 'logout'])->name('logout');
-    Route::get('registration', [MemberLoginController::class, 'registration'])->name('registration');
-    Route::post('registration', [MemberLoginController::class, 'registrationStore'])->name('registration.store');
+    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminLoginController::class, 'login']);
+    Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
+    Route::get('registration', [AdminLoginController::class, 'registration'])->name('registration');
+    Route::post('registration', [AdminLoginController::class, 'registrationStore'])->name('registration.store');
     Route::middleware('auth:member')->group(function () {
         Route::get('dashboard', fn() => view('member.dashboard'))->name('dashboard');
     });
