@@ -1,4 +1,4 @@
-@extends('todo.layout')
+@extends('admin.layout')
 @section('content')
 <h1>Admin　ダッシュボード</h1>
 <p>

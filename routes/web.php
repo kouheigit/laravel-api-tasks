@@ -49,7 +49,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('registration', [AdminLoginController::class, 'registration'])->name('registration');
     Route::post('registration', [AdminLoginController::class, 'registrationStore'])->name('registration.store');
     Route::middleware('auth:member')->group(function () {
-        Route::get('dashboard', fn() => view('member.dashboard'))->name('dashboard');
+        Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('index', fn() => view('admin.index'))->name('index');
     });
 });
 

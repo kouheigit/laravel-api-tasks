@@ -44,7 +44,7 @@
 
         <div class="mt-4 text-center">
             <p class="text-sm text-gray-600">未登録の場合は
-                <a href="{{ route('member.registration') }}" class="text-blue-600 hover:text-blue-800 font-medium underline">こちらから登録</a>
+                <a href="{{ route('admin.registration') }}" class="text-blue-600 hover:text-blue-800 font-medium underline">こちらから登録</a>
             </p>
         </div>
     </div>
