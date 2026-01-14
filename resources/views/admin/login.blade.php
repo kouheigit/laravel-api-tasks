@@ -12,7 +12,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">Member ログイン</h2>
+        <h2 class="text-2xl font-bold mb-4 text-gray-800">Admin ログイン</h2>
 
         @if($errors->any())
             <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded">
