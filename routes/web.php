@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiAuthControllerV2;
 use App\Http\Controllers\PostcardControllerV2;
 use App\Http\Controllers\TodoAuthController;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
 

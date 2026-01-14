@@ -2,8 +2,8 @@
 <body>
 <header>
     <nav>
-        <a href="{{ route('member.dashboard') }}">ダッシュボード</a>
-        <a href="{{ route('member.index') }}">一覧</a>
+        <a href="{{ route('admin.dashboard') }}">ダッシュボード</a>
+        <a href="{{ route('admin.index') }}">一覧</a>
     </nav>
 </header>
 <main>
