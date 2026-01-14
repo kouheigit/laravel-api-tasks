@@ -33,6 +33,7 @@ class AdminLoginController extends Controller
     }
     public function logout(Request $request)
     {
+        //adminガード
         Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
