@@ -47,6 +47,7 @@ class AdminLoginController extends Controller
 
     public function registrationStore(Request $request)
     {
+        //バリデーション
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:members,email'],
