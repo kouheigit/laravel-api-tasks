@@ -40,6 +40,17 @@ Route::prefix('member')->name('member.')->group(function () {
     });
 });
 
+//admin
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('login', [MemberLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [MemberLoginController::class, 'login']);
+    Route::post('logout', [MemberLoginController::class, 'logout'])->name('logout');
+    Route::get('registration', [MemberLoginController::class, 'registration'])->name('registration');
+    Route::post('registration', [MemberLoginController::class, 'registrationStore'])->name('registration.store');
+    Route::middleware('auth:member')->group(function () {
+        Route::get('dashboard', fn() => view('member.dashboard'))->name('dashboard');
+    });
+});
 
 
 
