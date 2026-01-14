@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiAuthControllerV2;
 use App\Http\Controllers\PostcardControllerV2;
 use App\Http\Controllers\TodoAuthController;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\Auth\MemberLoginController;
 
 
 Route::get('/', function () {
@@ -29,10 +30,11 @@ Route::post('/todo/registration', [TodoController::class, 'registrationStore'])
 
 
 Route::prefix('member')->name('member.')->group(function () {
-    Route::get('login', [MemberAuthController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [MemberAuthController::class, 'login'])->name('login.post');
-    Route::post('logout', [MemberAuthController::class, 'logout'])->name('logout');
-
+    Route::get('login', [MemberLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [MemberLoginController::class, 'login']);
+    Route::post('logout', [MemberLoginController::class, 'logout'])->name('logout');
+    Route::get('registration', [MemberLoginController::class, 'registration'])->name('registration');
+    Route::post('registration', [MemberLoginController::class, 'registrationStore'])->name('registration.store');
     Route::middleware('auth:member')->group(function () {
         Route::get('dashboard', fn() => view('member.dashboard'))->name('dashboard');
     });
