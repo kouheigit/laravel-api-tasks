@@ -13,7 +13,7 @@ class AdminLoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('member.login');
+        return view('admin.login');
     }
 
     public function login(Request $request)
@@ -23,9 +23,9 @@ class AdminLoginController extends Controller
             'password'=>['required'],
         ]);
 
-        if(Auth::guard('member')->attempt($credentials,$request->boolean('remember'))){
+        if(Auth::guard('admin')->attempt($credentials,$request->boolean('remember'))){
             $request->session()->regenerate();
-            return redirect()->route('member.dashboard');
+            return redirect()->route('admin.dashboard');
         }
         return back()->withErrors([
             'email'=>'メールアドレスまたはパスワードが正しくありません。'
@@ -33,7 +33,7 @@ class AdminLoginController extends Controller
     }
     public function logout(Request $request)
     {
-        Auth::guard('member')->logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -42,7 +42,7 @@ class AdminLoginController extends Controller
 
     public function registration(Request $request)
     {
-        return view('member.registration');
+        return view('admin.registration');
     }
 
     public function registrationStore(Request $request)
@@ -59,6 +59,6 @@ class AdminLoginController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('member.login');
+        return redirect()->route('admin.login');
     }
 }
