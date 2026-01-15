@@ -8,8 +8,8 @@
 <form method="POST" action="{{ route('pointleader.use')  }}">
     @csrf
     <input type="hidden" name="id" value=1>
-    <input type="number" name="delta">
     <input type="hidden" name="type" value=1>
+    <input type="number" name="delta">
     <input type="text" name="memo">
     <button type="submit">付与する</button>
 </form>
