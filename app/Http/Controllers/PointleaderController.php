@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PointleaderController extends Controller
 {
-    //ポイント使用メソット(member等が使用できる)
-    public function use(Request $request)
+    //管理者であるuserメソットのみ使用できる
+    public function grant(Request $request)
     {
-        //
+       //
     }
-    //ポイント使用メソット(ポイント付与できるUserのみが利用できる)
+    //ポイント使用メソット(user以外のmemberだけ利用できるメソット)
     public function get(Request $request)
     {
-        //
+        $user = Auth::user();
     }
 }
