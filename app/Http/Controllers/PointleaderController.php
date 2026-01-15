@@ -11,10 +11,10 @@ class PointleaderController extends Controller
     {
        //
     }
-    //ポイント使用メソット(user以外のmemberだけ利用できるメソット)
+    //ポイント使用メソット(memberだけ利用できるメソット)
     public function use(Request $request)
     {
-        $member = Auth::guard('member')->user();
-        //$user
+
+        /*operation_key	UNIQUE（冪等）はバックエンドの方で*/
     }
 }
