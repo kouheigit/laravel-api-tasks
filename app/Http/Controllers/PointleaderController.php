@@ -12,8 +12,9 @@ class PointleaderController extends Controller
        //
     }
     //ポイント使用メソット(user以外のmemberだけ利用できるメソット)
-    public function get(Request $request)
+    public function use(Request $request)
     {
-        $user = Auth::user();
+        $member = Auth::guard('member')->user();
+        //$user
     }
 }

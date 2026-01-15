@@ -4,6 +4,17 @@
 <p>
     {{Auth::guard('member')->user()->name }}さんでログイン中
 </p>
+
+<form method="POST" action="{{ route('pointleader.use')  }}">
+    @csrf
+    <input type="hidden" name="test" value=1>
+    <input type="number" name="points">
+    <input type="text" name="memo">
+    <button type="submit">付与する</button>
+</form>
+
+
+
 <form method="POST" action="{{route('member.logout')}}">
     @csrf
     <button type="submit">ログアウト</button>

@@ -7,6 +7,7 @@ use App\Http\Controllers\PostcardControllerV2;
 use App\Http\Controllers\TodoAuthController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\PointleaderController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
 
@@ -16,6 +17,8 @@ Route::get('/', function () {
 // TodoUser ログイン画面
 Route::get('/todo/login', [TodoAuthController::class, 'showLoginForm'])
     ->name('todo.login');
+
+
 
 // ログイン処理
 Route::post('/todo/login', [TodoAuthController::class, 'login']);
@@ -39,6 +42,10 @@ Route::prefix('member')->name('member.')->group(function () {
     Route::middleware('auth:member')->group(function () {
         Route::get('dashboard', fn() => view('member.dashboard'))->name('dashboard');
     });
+});
+
+Route::prefix('pointleader')->name('pointleader.')->group(function () {
+    Route::post('use', [PointleaderController::class, 'use'])->name('use');
 });
 
 //admin
@@ -82,8 +89,6 @@ Route::middleware('auth:todo')->group(function () {
     Route::get('/todo/dashboard', function () {
         return view('todo.dashboard');
     })->name('todo.dashboard');
-
-
 });
 
 
