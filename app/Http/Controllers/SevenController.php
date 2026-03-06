@@ -13,7 +13,9 @@ class SevenController extends Controller
     {
         $message = 'テスト';
         $message1 = 'テスト1';
-        return view('Seven.index',compact('message','message1'));
+        $selectedNumber = session('number');
+
+        return view('Seven.index', compact('message', 'message1', 'selectedNumber'));
     }
 
     /**
@@ -30,9 +32,11 @@ class SevenController extends Controller
     public function store(Request $request)
     {
         /*
-        $number = $request->input('number');
+        $number = $request->input('number'); // 今は常に「1」が来る想定
+        $current = $request->session()->get('number', '');
+        $next = $current.$number;
 
-        return 'SevenController@store で受け取った値: ' . $number;*/
+        return redirect()->route('seven.index')->with('number', $next);*/
     }
 
     /**
