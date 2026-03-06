@@ -11,7 +11,9 @@ class SevenController extends Controller
      */
     public function index()
     {
-        //
+        $message = 'テスト';
+        $message1 = 'テスト1';
+        return view('Seven.index',compact('message','message1'));
     }
 
     /**

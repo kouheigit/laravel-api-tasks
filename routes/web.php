@@ -9,6 +9,7 @@ use App\Http\Controllers\TodoController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\PointleaderController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\SevenController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
 
@@ -142,3 +143,6 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+// Seven: シンプルに "hello" を表示するテスト用
+Route::get('/seven', [SevenController::class, 'index'])->name('seven.index');
