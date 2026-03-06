@@ -29,7 +29,10 @@ class SevenController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /*
+        $number = $request->input('number');
+
+        return 'SevenController@store で受け取った値: ' . $number;*/
     }
 
     /**

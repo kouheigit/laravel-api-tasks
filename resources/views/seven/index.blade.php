@@ -8,6 +8,12 @@
     hello
     {{ $message }}
     {{ $message1 }}
+{{--
+    <form method="POST" action="{{ route('seven.store') }}">
+        @csrf
+        <button type="submit" name="number" value="1">1</button>
+    </form>
+    --}}
 </body>
 </html>
 
