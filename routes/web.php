@@ -8,6 +8,7 @@ use App\Http\Controllers\TodoAuthController;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\PointleaderController;
+use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
 
@@ -59,6 +60,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', fn() => view('admin.dashboard'))->name('dashboard');
         Route::get('index', fn() => view('admin.index'))->name('index');
     });
+});
+
+// トレーニングモード
+Route::prefix('training')->name('training.')->group(function () {
+    Route::get('/', [TrainingController::class, 'index'])->name('top'); // TRN-00
+
+    Route::get('/normal', [TrainingController::class, 'normalScenarios'])->name('normal.scenarios'); // TRN-N-01
+    Route::get('/public', [TrainingController::class, 'publicScenarios'])->name('public.scenarios'); // TRN-P-01
+
+    Route::post('/start/{scenario}', [TrainingController::class, 'start'])->name('start'); // TRN-N-02 / TRN-P-02〜
+    Route::post('/finish/{result}', [TrainingController::class, 'finish'])->name('finish'); // TRN-N-03 / TRN-P-05〜TRN-R-01
 });
 
 
