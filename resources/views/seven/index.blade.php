@@ -6,13 +6,14 @@
     <link rel="stylesheet" href="{{ asset('css/seven.css') }}">
 </head>
 <body>
-<div>
-    <button data-value="中華まん">中華まん</button>
-    <button data-value="ffドリンク">ffドリンク</button>
-</div>
-
     <div class="calculator">
-        <textarea class="display" id="display" readonly>0</textarea>
+        <div class="display-wrap">
+            <textarea class="display" id="display" readonly>0</textarea>
+            <div class="display-bottom-buttons">
+                <button data-value="中華まん">中華まん</button>
+                <button data-value="ffドリンク">ffドリンク</button>
+            </div>
+        </div>
         <div class="buttons">
             <button class="clear" data-value="C">C</button>
             <button data-value="7">7</button>
@@ -29,18 +30,18 @@
             <button data-value="責任者解除">責任者解除</button>
         </div>
         <div class="age">
-            <button data-value="12">12</button>
-            <button data-value="19">19</button>
-            <button data-value="29">29</button>
-            <button data-value="49">49</button>
-            <button data-value="50">50</button>
+            <button data-value="1">12</button>
+            <button data-value="2">19</button>
+            <button data-value="3">29</button>
+            <button data-value="4">49</button>
+            <button data-value="5">50</button>
         </div>
         <div class="age-w">
-            <button data-value="12">12</button>
-            <button data-value="19">19</button>
-            <button data-value="29">29</button>
-            <button data-value="49">49</button>
-            <button data-value="50">50</button>
+            <button data-value="6">12</button>
+            <button data-value="7">19</button>
+            <button data-value="8">29</button>
+            <button data-value="9">49</button>
+            <button data-value="10">50</button>
             <button data-value="リピート">登録/リピート</button>
         </div>
     </div>
