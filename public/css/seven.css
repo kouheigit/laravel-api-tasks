@@ -37,3 +37,41 @@
     display: flex;
     gap: 0.5rem;
 }
+
+/* 四角の中：数値入力欄（レジボタンでここに反映） */
+.calculator .display-unlock-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 16px 20px;
+    box-sizing: border-box;
+}
+.calculator .display-unlock-header {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+.calculator .display-unlock-input {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 14px;
+    font-size: 16px;
+    line-height: 1.4;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.calculator .display-unlock-input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+/* 責任者解除後：計算表示エリア */
+.calculator .display-calc-area {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.calculator .display-calc-area .display {
+    flex: 1;
+}

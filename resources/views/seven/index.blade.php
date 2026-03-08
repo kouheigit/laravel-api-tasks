@@ -8,10 +8,18 @@
 <body>
     <div class="calculator">
         <div class="display-wrap">
-            <textarea class="display" id="display" readonly>0</textarea>
-            <div class="display-bottom-buttons">
-                <button data-value="中華まん">中華まん</button>
-                <button data-value="ffドリンク">ffドリンク</button>
+            <!-- 最初：四角の中に長い入力欄（レジボタンでここに反映） -->
+            <div class="display-unlock-row" id="displayUnlockRow">
+                <div class="display-unlock-header">責任者解除</div>
+                <input type="text" class="display-unlock-input" id="unlockInput" placeholder="数値を入力" inputmode="numeric" autocomplete="off" readonly>
+            </div>
+            <!-- 責任者解除後：計算表示エリア -->
+            <div class="display-calc-area" id="displayCalcArea" style="display: none;">
+                <textarea class="display" id="display" readonly>0</textarea>
+                <div class="display-bottom-buttons">
+                    <button data-value="中華まん">中華まん</button>
+                    <button data-value="ffドリンク">ffドリンク</button>
+                </div>
             </div>
         </div>
         <div class="buttons">
@@ -30,6 +38,7 @@
             <button data-value="責任者解除">責任者解除</button>
         </div>
         <div class="age">
+            <!--客層ボタン男-->
             <button data-value="1">12</button>
             <button data-value="2">19</button>
             <button data-value="3">29</button>
@@ -37,15 +46,15 @@
             <button data-value="5">50</button>
         </div>
         <div class="age-w">
+            <!--客層ボタン女-->
             <button data-value="6">12</button>
             <button data-value="7">19</button>
             <button data-value="8">29</button>
             <button data-value="9">49</button>
             <button data-value="10">50</button>
-            <button data-value="リピート">登録/リピート</button>
         </div>
+        <button data-value="リピート">登録/リピート</button>
     </div>
-
 
     <script src="{{ asset('js/seven.js') }}"></script>
     {{--

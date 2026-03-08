@@ -11,11 +11,15 @@ class SevenController extends Controller
      */
     public function index()
     {
+
+        return view('Seven.index');
+        /*
         $message = 'テスト';
         $message1 = 'テスト1';
         $selectedNumber = session('number');
 
-        return view('Seven.index', compact('message', 'message1', 'selectedNumber'));
+        return view('Seven.index', compact('message', 'message1', 'selectedNumber'));*/
+
     }
 
     /**

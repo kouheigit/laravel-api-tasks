@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     let current = '0';
-    let selectedAge = null; // .age のボタンで受け取った値（ディスプレイには出さない）
+    let selectedAge = null;
+    let isUnlockMode = true; // 最初は数値入力モード（責任者解除で計算画面へ）
+
+    var displayUnlockRow = document.getElementById('displayUnlockRow');
+    var displayCalcArea = document.getElementById('displayCalcArea');
+    var unlockInput = document.getElementById('unlockInput');
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -9,20 +14,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function updateUnlockInput(appendValue) {
+        if (!unlockInput) return;
+        if (appendValue === 'C') {
+            unlockInput.value = '';
+            return;
+        }
+        unlockInput.value += appendValue;
+    }
+
     // .age 内のボタン：値だけ受け取り、ディスプレイには表示しない
     document.querySelectorAll('.age button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             selectedAge = this.getAttribute('data-value');
-            // ディスプレイは更新しない
         });
     });
 
-    // .buttons 内のボタン：従来どおりディスプレイに表示
+    // .buttons 内のボタン
     document.querySelectorAll('.buttons button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             const value = this.getAttribute('data-value');
 
-            // 「テスト」ボタン用：押すたびに「テスト」「テストテスト」…と連結
+            // 責任者解除：下のボタン欄で押したら計算画面に切り替え
+            if (value === '責任者解除') {
+                if (isUnlockMode && displayUnlockRow && displayCalcArea) {
+                    isUnlockMode = false;
+                    displayUnlockRow.style.display = 'none';
+                    displayCalcArea.style.display = 'flex';
+                } else if (!isUnlockMode) {
+                    // 計算画面では責任者解除は何もしない（またはロック戻しにすることも可）
+                }
+                return;
+            }
+
+            // 数値入力モード：レジのボタンを入力欄に反映
+            if (isUnlockMode) {
+                if (value === 'C') {
+                    updateUnlockInput('C');
+                } else if (/^[0-9]+$/.test(value) || value === '00') {
+                    updateUnlockInput(value);
+                }
+                return;
+            }
+
+            // 計算モード：従来どおりディスプレイに表示
             if (value === 'テスト') {
                 if (current === '0' || current === 'Error') {
                     current = 'テスト';
@@ -48,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 } catch (e) {
                     current = 'Error';
                 }
-
                 updateDisplay();
                 return;
             }
@@ -61,7 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         current += value;
                     }
                 } else if (value === '0') {
-                    // 0レジ：0を続けて打つと 0 → 00 → 000 … と連番
                     current += value;
                 } else {
                     current = value;
