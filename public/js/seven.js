@@ -50,14 +50,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateDisplayFromRegisterItems() {
-        const display = document.getElementById('display');
-        if (!display) return;
-        var lines = [];
+        var tbody = document.getElementById('displayTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
         Object.keys(registerItems).forEach(function (productId) {
             var item = registerItems[productId];
-            lines.push(item.product_name + ' ' + item.price + ' ' + item.quantity);
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td class="display-table-td-name">' + escapeHtml(item.product_name) + '</td>' +
+                '<td class="display-table-td-price">' + escapeHtml(String(item.price)) + '</td>' +
+                '<td class="display-table-td-qty">' + escapeHtml(String(item.quantity)) + '</td>';
+            tbody.appendChild(tr);
         });
-        display.value = lines.join('\n');
+    }
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
     }
 
     function updateUnlockInput(appendValue) {

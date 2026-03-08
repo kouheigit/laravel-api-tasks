@@ -76,6 +76,61 @@
     flex: 1;
 }
 
+/* レジディスプレイ：表形式 */
+.calculator .display-table-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    border-bottom: 1px solid #ccc;
+}
+.calculator .display-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    table-layout: fixed;
+}
+.calculator .display-table thead {
+    position: sticky;
+    top: 0;
+    background: #333;
+    color: #fff;
+    z-index: 1;
+}
+.calculator .display-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+}
+.calculator .display-table-th-name {
+    width: 50%;
+}
+.calculator .display-table-th-price {
+    width: 25%;
+    text-align: right;
+}
+.calculator .display-table-th-qty {
+    width: 25%;
+    text-align: right;
+}
+.calculator .display-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+}
+.calculator .display-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+.calculator .display-table td {
+    padding: 8px 12px;
+    vertical-align: middle;
+}
+.calculator .display-table-td-name {
+    text-align: left;
+    word-break: break-all;
+}
+.calculator .display-table-td-price,
+.calculator .display-table-td-qty {
+    text-align: right;
+}
+
 /* 画像あり商品一覧（登録/リピートの下） */
 .seven-products-with-image {
     display: flex;

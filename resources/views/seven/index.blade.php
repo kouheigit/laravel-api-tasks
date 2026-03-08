@@ -14,9 +14,21 @@
                 <div class="display-unlock-header">責任者解除</div>
                 <input type="text" class="display-unlock-input" id="unlockInput" placeholder="数値を入力" inputmode="numeric" autocomplete="off" readonly>
             </div>
-            <!-- 責任者解除後：計算表示エリア -->
+            <!-- 責任者解除後：計算表示エリア（表形式） -->
             <div class="display-calc-area" id="displayCalcArea" style="display: none;">
-                <textarea class="display" id="display" readonly></textarea>
+                <div class="display-table-wrap">
+                    <table class="display-table">
+                        <thead>
+                            <tr>
+                                <th class="display-table-th-name">商品名</th>
+                                <th class="display-table-th-price">値段</th>
+                                <th class="display-table-th-qty">数量</th>
+                            </tr>
+                        </thead>
+                        <tbody id="displayTableBody">
+                        </tbody>
+                    </table>
+                </div>
                 <div class="display-bottom-buttons">
                     <button data-value="中華まん">中華まん</button>
                     <button data-value="ffドリンク">ffドリンク</button>
