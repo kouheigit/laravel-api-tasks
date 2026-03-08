@@ -16,7 +16,7 @@
             </div>
             <!-- 責任者解除後：計算表示エリア -->
             <div class="display-calc-area" id="displayCalcArea" style="display: none;">
-                <textarea class="display" id="display" readonly>0</textarea>
+                <textarea class="display" id="display" readonly></textarea>
                 <div class="display-bottom-buttons">
                     <button data-value="中華まん">中華まん</button>
                     <button data-value="ffドリンク">ffドリンク</button>
@@ -66,7 +66,7 @@
                         $filename = basename($raw);
                         $imgPath = 'sevenimg/' . $filename;
                     @endphp
-                    <div class="seven-product-item">
+                    <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
                         <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
                     </div>
                 @endif

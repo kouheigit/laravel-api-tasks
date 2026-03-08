@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SevenProduct;
 use App\Models\SevenRegister;
+use App\Models\SevenRegisterItem;
 use Illuminate\Http\Request;
 
 class SevenController extends Controller
@@ -34,6 +35,46 @@ class SevenController extends Controller
 
         return response()->json([
             'register_id' => $register->id,
+        ]);
+    }
+
+    /**
+     * 会計に商品を1件追加（同一商品の場合は数量を加算）。非同期用。
+     */
+    public function addRegisterItem(Request $request)
+    {
+        $validated = $request->validate([
+            'register_id' => ['required', 'integer', 'exists:seven_registers,id'],
+            'product_id' => ['required', 'integer', 'exists:seven_products,id'],
+            'product_name' => ['required', 'string', 'max:255'],
+            'price' => ['required', 'integer', 'min:0'],
+        ]);
+
+        $item = SevenRegisterItem::where('register_id', $validated['register_id'])
+            ->where('product_id', $validated['product_id'])
+            ->first();
+
+        if ($item) {
+            $item->quantity += 1;
+            $item->subtotal = $item->price * $item->quantity;
+            $item->save();
+        } else {
+            $item = SevenRegisterItem::create([
+                'register_id' => $validated['register_id'],
+                'product_id' => $validated['product_id'],
+                'product_name' => $validated['product_name'],
+                'price' => $validated['price'],
+                'quantity' => 1,
+                'subtotal' => $validated['price'],
+            ]);
+        }
+
+        return response()->json([
+            'product_id' => $item->product_id,
+            'product_name' => $item->product_name,
+            'price' => $item->price,
+            'quantity' => $item->quantity,
+            'subtotal' => $item->subtotal,
         ]);
     }
 

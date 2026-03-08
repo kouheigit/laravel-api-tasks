@@ -148,3 +148,4 @@ Route::middleware([
 Route::get('/seven', [SevenController::class, 'index'])->name('seven.index');
 Route::post('/seven', [SevenController::class, 'store'])->name('seven.store');
 Route::post('/seven/register', [SevenController::class, 'startRegister'])->name('seven.register');
+Route::post('/seven/register/items', [SevenController::class, 'addRegisterItem'])->name('seven.register.items');
