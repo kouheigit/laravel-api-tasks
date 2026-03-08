@@ -13,21 +13,17 @@
 
         <div class="buttons">
             <button class="clear" data-value="C">C</button>
-            <button data-value="責任者解除">責任者解除</button>
-
             <button data-value="7">7</button>
             <button data-value="8">8</button>
             <button data-value="9">9</button>
-            <button class="operator" data-value="+">+</button>
-
             <button data-value="4">4</button>
             <button data-value="5">5</button>
             <button data-value="6">6</button>
-
             <button data-value="1">1</button>
             <button data-value="2">2</button>
             <button data-value="3">3</button>
             <button class="zero" data-value="0">0</button>
+            <button data-value="責任者解除">責任者解除</button>
         </div>
     </div>
 
