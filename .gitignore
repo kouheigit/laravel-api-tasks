@@ -28,3 +28,6 @@ resources/views/todo/available_fields.md
 
 # Todo index copy (ignore)
 resources/views/todo/index_copy.blade.php
+
+# Ignored old migrations
+ignore_migrations/
