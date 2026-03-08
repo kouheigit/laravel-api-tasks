@@ -8,7 +8,7 @@
 <body>
 <div>
     <button data-value="中華まん">中華まん</button>
-    <button data-value="ホットスナック">8</button>
+    <button data-value="ffドリンク">ffドリンク</button>
 </div>
 
     <div class="calculator">
