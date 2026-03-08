@@ -67,7 +67,6 @@
                     @endphp
                     <div class="seven-product-item">
                         <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
-                        <span>{{ $product->name }}</span>
                     </div>
                 @endif
             @endforeach
