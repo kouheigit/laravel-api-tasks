@@ -75,3 +75,27 @@
 .calculator .display-calc-area .display {
     flex: 1;
 }
+
+/* 画像あり商品一覧（登録/リピートの下） */
+.seven-products-with-image {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    max-width: 560px;
+}
+.seven-product-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+.seven-product-img {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: contain;
+}
+.seven-product-item span {
+    font-size: 0.75rem;
+    text-align: center;
+}

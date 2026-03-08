@@ -56,16 +56,25 @@
         <button data-value="リピート">登録/リピート</button>
     </div>
 
-    <script src="{{ asset('js/seven.js') }}"></script>
-    {{--
-    <form method="POST" action="{{ route('seven.store') }}">
-        @csrf
-        <button type="submit" name="number" value="1">1</button>
-    </form>
+    @if(isset($sevenProducts))
+        <div class="seven-products-with-image">
+            @foreach($sevenProducts as $product)
+                @if($product->image_path !== null && $product->image_path !== '')
+                    @php
+                        $raw = trim($product->image_path, " \t\n\r\"'\/");
+                        $filename = basename($raw);
+                        $imgPath = 'sevenimg/' . $filename;
+                    @endphp
+                    <div class="seven-product-item">
+                        <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
+                        <span>{{ $product->name }}</span>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    @endif
 
-    @if(!is_null($selectedNumber))
-        <p>{{ $selectedNumber }}</p>
-    @endif--}}
+    <script src="{{ asset('js/seven.js') }}"></script>
 </body>
 </html>
 
