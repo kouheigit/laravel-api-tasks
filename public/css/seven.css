@@ -81,7 +81,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 1rem;
+    margin-top: 2.5rem;
     max-width: 560px;
 }
 .seven-product-item {
@@ -91,11 +91,11 @@
     gap: 0.25rem;
 }
 .seven-product-img {
-    max-width: 80px;
-    max-height: 80px;
+    max-width: 140px;
+    max-height: 140px;
     object-fit: contain;
 }
 .seven-product-item span {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     text-align: center;
 }
