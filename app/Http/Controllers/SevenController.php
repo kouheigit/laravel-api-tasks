@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SevenProduct;
+use App\Models\SevenRegister;
 use Illuminate\Http\Request;
 
 class SevenController extends Controller
@@ -13,8 +14,27 @@ class SevenController extends Controller
     public function index()
     {
         $sevenProducts = SevenProduct::orderBy('id')->get();
-
         return view('Seven.index', compact('sevenProducts'));
+    }
+
+    /**
+     * 責任者番号を送信し、新規会計（seven_register）を作成。非同期用。
+     */
+    public function startRegister(Request $request)
+    {
+        $validated = $request->validate([
+            'responsible_number' => ['required', 'integer'],
+        ]);
+
+        $register = SevenRegister::create([
+            'customer_type' => 0,
+            'total_amount' => 0,
+            'responsible_number' => $validated['responsible_number'],
+        ]);
+
+        return response()->json([
+            'register_id' => $register->id,
+        ]);
     }
 
     /**

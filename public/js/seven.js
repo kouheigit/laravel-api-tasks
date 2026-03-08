@@ -35,14 +35,43 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             const value = this.getAttribute('data-value');
 
-            // 責任者解除：下のボタン欄で押したら計算画面に切り替え
+            // 責任者解除：下のボタン欄で押したら責任者番号を送信し、計算画面に切り替え
             if (value === '責任者解除') {
                 if (isUnlockMode && displayUnlockRow && displayCalcArea) {
-                    isUnlockMode = false;
-                    displayUnlockRow.style.display = 'none';
-                    displayCalcArea.style.display = 'flex';
+                    var numStr = unlockInput ? unlockInput.value.trim() : '';
+                    var responsibleNumber = numStr === '' ? 0 : parseInt(numStr, 10);
+                    if (isNaN(responsibleNumber)) responsibleNumber = 0;
+
+                    var csrfToken = document.querySelector('meta[name="csrf-token"]');
+                    var headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    };
+                    if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+
+                    fetch('/seven/register', {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify({ responsible_number: responsibleNumber }),
+                        credentials: 'same-origin'
+                    })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                        if (data.register_id) {
+                            try { sessionStorage.setItem('seven_register_id', data.register_id); } catch (e) {}
+                        }
+                        isUnlockMode = false;
+                        displayUnlockRow.style.display = 'none';
+                        displayCalcArea.style.display = 'flex';
+                    })
+                    .catch(function () {
+                        isUnlockMode = false;
+                        displayUnlockRow.style.display = 'none';
+                        displayCalcArea.style.display = 'flex';
+                    });
                 } else if (!isUnlockMode) {
-                    // 計算画面では責任者解除は何もしない（またはロック戻しにすることも可）
+                    // 計算画面では責任者解除は何もしない
                 }
                 return;
             }

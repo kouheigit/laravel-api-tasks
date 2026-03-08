@@ -94,6 +94,10 @@
     max-width: 140px;
     max-height: 140px;
     object-fit: contain;
+    transition: transform 0.2s ease;
+}
+.seven-product-img:hover {
+    transform: scale(1.15);
 }
 .seven-product-item span {
     font-size: 0.8rem;

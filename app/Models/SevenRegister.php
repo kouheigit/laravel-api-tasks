@@ -15,6 +15,7 @@ class SevenRegister extends Model
     protected $fillable = [
         'customer_type',
         'total_amount',
+        'responsible_number',
     ];
 
     protected $casts = [
