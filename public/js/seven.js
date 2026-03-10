@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let registerItems = {}; // product_id -> { product_name, price, quantity }（入力欄表示・seven_register_items 連動用）
     let lastClickedProduct = null; // 最後に押されたメニュー（登録/リピート用）
     let multiplyCount = null; // ✖️ボタンで指定した個数（1〜9）
+    let isMultiplyInputMode = false; // ✖️押下後に次の数字入力を待機しているかどうか
 
     // ボタン押下時のポチッという音
     function playClickSound() {
@@ -43,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var displayUnlockRow = document.getElementById('displayUnlockRow');
     var displayCalcArea = document.getElementById('displayCalcArea');
     var unlockInput = document.getElementById('unlockInput');
-    var qtyPanel = document.getElementById('qtyPanel');
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -130,32 +130,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ✖️個数パネルのボタン（1〜9）
-    document.querySelectorAll('.qty-panel-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var v = parseInt(this.getAttribute('data-qty'), 10);
-            if (!isNaN(v) && v >= 1 && v <= 9) {
-                multiplyCount = v;
-            } else {
-                multiplyCount = null;
-            }
-            if (qtyPanel) qtyPanel.style.display = 'none';
-        });
-    });
-
     // .buttons 内のボタン
     document.querySelectorAll('.buttons button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             playClickSound();
             const value = this.getAttribute('data-value');
 
-            // ✖️ボタン：個数パネルを表示（計算モードのみ）
+            // ✖️ボタン：次の数字入力を個数として解釈（計算モードのみ）
             if (value === 'x') {
                 if (isUnlockMode) return;
                 multiplyCount = null;
-                if (qtyPanel) {
-                    qtyPanel.style.display = 'flex';
-                }
+                isMultiplyInputMode = true;
+                return;
+            }
+
+            // ✖️押下後の数字入力（1〜9）を個数として受け取る
+            if (isMultiplyInputMode && /^[1-9]$/.test(value)) {
+                multiplyCount = parseInt(value, 10);
+                isMultiplyInputMode = false;
+                return;
+            }
+            if (isMultiplyInputMode && value === 'C') {
+                multiplyCount = null;
+                isMultiplyInputMode = false;
                 return;
             }
 

@@ -150,24 +150,6 @@
         </div>
         <button data-value="リピート">登録/リピート</button>
     </div>
-    <!-- ✖️ボタン用の個数入力パネル（1〜9） -->
-    <div class="qty-panel-overlay" id="qtyPanel" style="display: none;">
-        <div class="qty-panel">
-            <div class="qty-panel-title">個数を入力</div>
-            <div class="qty-panel-buttons">
-                <button type="button" class="qty-panel-btn" data-qty="1">1</button>
-                <button type="button" class="qty-panel-btn" data-qty="2">2</button>
-                <button type="button" class="qty-panel-btn" data-qty="3">3</button>
-                <button type="button" class="qty-panel-btn" data-qty="4">4</button>
-                <button type="button" class="qty-panel-btn" data-qty="5">5</button>
-                <button type="button" class="qty-panel-btn" data-qty="6">6</button>
-                <button type="button" class="qty-panel-btn" data-qty="7">7</button>
-                <button type="button" class="qty-panel-btn" data-qty="8">8</button>
-                <button type="button" class="qty-panel-btn" data-qty="9">9</button>
-            </div>
-        </div>
-    </div>
-
     @if(isset($sevenProducts))
         <div class="seven-products-with-image">
             @foreach($sevenProducts as $product)
