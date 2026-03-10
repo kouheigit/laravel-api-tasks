@@ -53,8 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var tbody = document.getElementById('displayTableBody');
         if (!tbody) return;
         tbody.innerHTML = '';
+        var total = 0;
         Object.keys(registerItems).forEach(function (productId) {
             var item = registerItems[productId];
+            total += item.price * item.quantity;
             var tr = document.createElement('tr');
             tr.innerHTML =
                 '<td class="display-table-td-name">' + escapeHtml(item.product_name) + '</td>' +
@@ -62,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 '<td class="display-table-td-qty">' + escapeHtml(String(item.quantity)) + '</td>';
             tbody.appendChild(tr);
         });
+        var totalEl = document.getElementById('displayTotalValue');
+        if (totalEl) totalEl.textContent = total;
     }
 
     function escapeHtml(str) {

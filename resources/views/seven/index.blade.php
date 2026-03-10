@@ -29,11 +29,25 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="display-total" id="displayTotal">
+                    <span class="display-total-label">合計</span>
+                    <span class="display-total-value" id="displayTotalValue">0</span>
+                </div>
                 <div class="display-bottom-buttons">
                     <button data-value="中華まん">中華まん</button>
                     <button data-value="ffドリンク">ffドリンク</button>
                 </div>
             </div>
+        </div>
+        <div class="payment-method-select">
+            <div class="payment-method-line1">支払い方法を選択してください:(セブンイレブン本番では客が選択する)</div>
+            <select name="pets" id="pet-select" class="payment-method-line2">
+                <option value="">--1 つ選択してください--</option>
+                <option value="dog">現金(セブンイレブン本番は客が選択する)</option>
+                <option value="cat">クレジットカード(セブンイレブン本番は客が選択する)</option>
+                <option value="hamster">交通系IC(セブンイレブン本番は客が選択する)</option>
+                <option value="parrot">PayPay支払い(セブンイレブン本番は客が選択する)</option>
+            </select>
         </div>
         <div class="buttons">
             <button class="clear" data-value="C">C</button>
@@ -68,6 +82,7 @@
         </div>
         <button data-value="リピート">登録/リピート</button>
     </div>
+
 
     @if(isset($sevenProducts))
         <div class="seven-products-with-image">
