@@ -286,12 +286,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!lastClickedProduct) return;
             playClickSound();
 
-            // ✖️パネルで個数が指定されている場合：
-            // 商品はすでに1回スキャン済み（レジに1個入っている）という前提なので、
-            // 「指定個数 - 1」回ぶんだけ追加で登録する。
+            // ✖️で個数が指定されている場合：その個数ぶんリピート登録する
             var times = 1;
-            if (multiplyCount !== null && multiplyCount > 1) {
-                times = multiplyCount - 1;
+            if (multiplyCount !== null && multiplyCount > 0) {
+                times = multiplyCount;
             }
 
             for (var i = 0; i < times; i++) {
