@@ -286,14 +286,45 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!lastClickedProduct) return;
             playClickSound();
 
-            // ✖️で個数が指定されている場合：その個数ぶんリピート登録する
+            // いまどの画面にいるかで挙動を変える
+            var nikumanVisible = displayNikumanPanel && displayNikumanPanel.style.display !== 'none';
+            var hotSnackVisible = displayHotSnackPanel && displayHotSnackPanel.style.display !== 'none';
+
+            // ✖️で個数が指定されている場合：その個数ぶんリピート
             var times = 1;
             if (multiplyCount !== null && multiplyCount > 0) {
                 times = multiplyCount;
             }
 
-            for (var i = 0; i < times; i++) {
-                addProductToRegister(lastClickedProduct.product_id, lastClickedProduct.product_name, lastClickedProduct.price);
+            if (nikumanVisible) {
+                // 肉まん専用画面：肉まん用の別会計（nikumanItems）だけ更新し、本会計にはまだ反映しない
+                var pid = String(lastClickedProduct.product_id);
+                var pname = lastClickedProduct.product_name;
+                var pprice = parseInt(lastClickedProduct.price, 10);
+                if (!nikumanItems[pid]) {
+                    nikumanItems[pid] = { product_name: pname, price: pprice, quantity: 0 };
+                }
+                for (var i = 0; i < times; i++) {
+                    nikumanItems[pid].quantity += 1;
+                }
+                updateNikumanPanelDisplay();
+            } else if (hotSnackVisible) {
+                // ホットスナック専用画面：ホットスナック用の別会計（hotSnackItems）のみ更新
+                var hpid = String(lastClickedProduct.product_id);
+                var hname = lastClickedProduct.product_name;
+                var hprice = parseInt(lastClickedProduct.price, 10);
+                if (!hotSnackItems[hpid]) {
+                    hotSnackItems[hpid] = { product_name: hname, price: hprice, quantity: 0 };
+                }
+                for (var j = 0; j < times; j++) {
+                    hotSnackItems[hpid].quantity += 1;
+                }
+                updateHotSnackPanelDisplay();
+            } else {
+                // 通常のレジ画面：本会計にそのまま反映
+                for (var k = 0; k < times; k++) {
+                    addProductToRegister(lastClickedProduct.product_id, lastClickedProduct.product_name, lastClickedProduct.price);
+                }
             }
 
             // 一度使ったらリセット
