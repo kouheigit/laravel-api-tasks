@@ -117,6 +117,7 @@
             </select>
         </div>
         <div class="buttons">
+            <button data-value="x">x</button>
             <button class="clear" data-value="C">C</button>
             <button data-value="7">7</button>
             <button data-value="8">8</button>

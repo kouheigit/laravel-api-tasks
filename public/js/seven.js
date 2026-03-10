@@ -313,6 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var productName = this.getAttribute('data-product-name');
                 var productPrice = parseInt(this.getAttribute('data-product-price'), 10);
                 if (!productId || !productName || isNaN(productPrice)) return;
+                lastClickedProduct = { product_id: productId, product_name: productName, price: productPrice };
                 if (!nikumanItems[productId]) {
                     nikumanItems[productId] = { product_name: productName, price: productPrice, quantity: 0 };
                 }
@@ -429,6 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var productName = this.getAttribute('data-product-name');
                 var productPrice = parseInt(this.getAttribute('data-product-price'), 10);
                 if (!productId || !productName || isNaN(productPrice)) return;
+                lastClickedProduct = { product_id: productId, product_name: productName, price: productPrice };
                 if (!hotSnackItems[productId]) {
                     hotSnackItems[productId] = { product_name: productName, price: productPrice, quantity: 0 };
                 }
