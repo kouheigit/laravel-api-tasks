@@ -220,6 +220,46 @@
     background: #b71c1c;
 }
 
+/* ✖️ボタン用 個数入力パネル */
+.qty-panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+.qty-panel {
+    background: #fff;
+    padding: 16px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    min-width: 220px;
+}
+.qty-panel-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+.qty-panel-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+.qty-panel-btn {
+    padding: 10px 0;
+    font-size: 1.05rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+.qty-panel-btn:hover {
+    background: #e0e0e0;
+}
+
 /* レジディスプレイ：表形式 */
 .calculator .display-table-wrap {
     flex: 1;

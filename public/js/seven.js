@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let isUnlockMode = true; // 最初は数値入力モード（責任者解除で計算画面へ）
     let registerItems = {}; // product_id -> { product_name, price, quantity }（入力欄表示・seven_register_items 連動用）
     let lastClickedProduct = null; // 最後に押されたメニュー（登録/リピート用）
+    let multiplyCount = null; // ✖️ボタンで指定した個数（1〜9）
 
     // ボタン押下時のポチッという音
     function playClickSound() {
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var displayUnlockRow = document.getElementById('displayUnlockRow');
     var displayCalcArea = document.getElementById('displayCalcArea');
     var unlockInput = document.getElementById('unlockInput');
+    var qtyPanel = document.getElementById('qtyPanel');
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -128,11 +130,34 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // ✖️個数パネルのボタン（1〜9）
+    document.querySelectorAll('.qty-panel-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var v = parseInt(this.getAttribute('data-qty'), 10);
+            if (!isNaN(v) && v >= 1 && v <= 9) {
+                multiplyCount = v;
+            } else {
+                multiplyCount = null;
+            }
+            if (qtyPanel) qtyPanel.style.display = 'none';
+        });
+    });
+
     // .buttons 内のボタン
     document.querySelectorAll('.buttons button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             playClickSound();
             const value = this.getAttribute('data-value');
+
+            // ✖️ボタン：個数パネルを表示（計算モードのみ）
+            if (value === 'x') {
+                if (isUnlockMode) return;
+                multiplyCount = null;
+                if (qtyPanel) {
+                    qtyPanel.style.display = 'flex';
+                }
+                return;
+            }
 
             // 責任者解除：下のボタン欄で押したら責任者番号を送信し、計算画面に切り替え
             if (value === '責任者解除') {
@@ -256,14 +281,28 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 登録/リピートボタン：最後に押されたメニューをもう1つ追加
+    // 登録/リピートボタン：最後に押されたメニューをもう1つ（または ✖️個数ぶん）追加
     var repeatBtn = document.querySelector('button[data-value="リピート"]');
     if (repeatBtn) {
         repeatBtn.addEventListener('click', function () {
             if (isUnlockMode) return;
             if (!lastClickedProduct) return;
             playClickSound();
-            addProductToRegister(lastClickedProduct.product_id, lastClickedProduct.product_name, lastClickedProduct.price);
+
+            // ✖️パネルで個数が指定されている場合：
+            // 商品はすでに1回スキャン済み（レジに1個入っている）という前提なので、
+            // 「指定個数 - 1」回ぶんだけ追加で登録する。
+            var times = 1;
+            if (multiplyCount !== null && multiplyCount > 1) {
+                times = multiplyCount - 1;
+            }
+
+            for (var i = 0; i < times; i++) {
+                addProductToRegister(lastClickedProduct.product_id, lastClickedProduct.product_name, lastClickedProduct.price);
+            }
+
+            // 一度使ったらリセット
+            multiplyCount = null;
         });
     }
 
