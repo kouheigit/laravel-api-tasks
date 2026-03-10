@@ -41,12 +41,12 @@
         </div>
         <div class="payment-method-select">
             <div class="payment-method-line1">支払い方法を選択してください:(セブンイレブン本番では客が選択する)</div>
-            <select name="pets" id="pet-select" class="payment-method-line2">
+            <select name="payment_method" id="payment-method" class="payment-method-line2">
                 <option value="">--1 つ選択してください--</option>
-                <option value="dog">現金(セブンイレブン本番は客が選択する)</option>
-                <option value="cat">クレジットカード(セブンイレブン本番は客が選択する)</option>
-                <option value="hamster">交通系IC(セブンイレブン本番は客が選択する)</option>
-                <option value="parrot">PayPay支払い(セブンイレブン本番は客が選択する)</option>
+                <option value="cash">現金(セブンイレブン本番は客が選択する)</option>
+                <option value="credit_card">クレジットカード(セブンイレブン本番は客が選択する)</option>
+                <option value="ic_card">交通系IC(セブンイレブン本番は客が選択する)</option>
+                <option value="paypay">PayPay支払い(セブンイレブン本番は客が選択する)</option>
             </select>
         </div>
         <div class="buttons">

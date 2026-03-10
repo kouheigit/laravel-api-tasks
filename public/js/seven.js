@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedAge = null;
     let isUnlockMode = true; // 最初は数値入力モード（責任者解除で計算画面へ）
     let registerItems = {}; // product_id -> { product_name, price, quantity }（入力欄表示・seven_register_items 連動用）
+    let lastClickedProduct = null; // 最後に押されたメニュー（登録/リピート用）
 
     // ボタン押下時のポチッという音
     function playClickSound() {
@@ -72,6 +73,42 @@ document.addEventListener('DOMContentLoaded', function () {
         var div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    function addProductToRegister(productId, productName, productPrice) {
+        var registerId = null;
+        try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
+        if (!registerId) return;
+
+        var csrfToken = document.querySelector('meta[name="csrf-token"]');
+        var headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+
+        fetch('/seven/register/items', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                register_id: parseInt(registerId, 10),
+                product_id: parseInt(productId, 10),
+                product_name: productName,
+                price: parseInt(productPrice, 10)
+            }),
+            credentials: 'same-origin'
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            registerItems[data.product_id] = {
+                product_name: data.product_name,
+                price: data.price,
+                quantity: data.quantity
+            };
+            updateDisplayFromRegisterItems();
+        })
+        .catch(function () {});
     }
 
     function updateUnlockInput(appendValue) {
@@ -208,49 +245,27 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.seven-product-item').forEach(function (el) {
         el.addEventListener('click', function () {
             if (isUnlockMode) return;
-            var registerId = null;
-            try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
-            if (!registerId) {
-                return;
-            }
             var productId = this.getAttribute('data-product-id');
             var productName = this.getAttribute('data-product-name');
             var productPrice = this.getAttribute('data-product-price');
             if (!productId || !productName || productPrice === null || productPrice === undefined) return;
 
+            lastClickedProduct = { product_id: productId, product_name: productName, price: productPrice };
             playProductClickSound();
-
-            var csrfToken = document.querySelector('meta[name="csrf-token"]');
-            var headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            };
-            if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
-
-            fetch('/seven/register/items', {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({
-                    register_id: parseInt(registerId, 10),
-                    product_id: parseInt(productId, 10),
-                    product_name: productName,
-                    price: parseInt(productPrice, 10)
-                }),
-                credentials: 'same-origin'
-            })
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                registerItems[data.product_id] = {
-                    product_name: data.product_name,
-                    price: data.price,
-                    quantity: data.quantity
-                };
-                updateDisplayFromRegisterItems();
-            })
-            .catch(function () {});
+            addProductToRegister(productId, productName, productPrice);
         });
     });
+
+    // 登録/リピートボタン：最後に押されたメニューをもう1つ追加
+    var repeatBtn = document.querySelector('button[data-value="リピート"]');
+    if (repeatBtn) {
+        repeatBtn.addEventListener('click', function () {
+            if (isUnlockMode) return;
+            if (!lastClickedProduct) return;
+            playClickSound();
+            addProductToRegister(lastClickedProduct.product_id, lastClickedProduct.product_name, lastClickedProduct.price);
+        });
+    }
 
     updateDisplay();
 });
