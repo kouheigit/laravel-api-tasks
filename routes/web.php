@@ -146,6 +146,7 @@ Route::middleware([
 
 // Seven: シンプルに "hello" を表示するテスト用
 Route::get('/seven', [SevenController::class, 'index'])->name('seven.index');
+Route::get('/seven/nikuman', [SevenController::class, 'nikuman'])->name('seven.nikuman');
 Route::post('/seven', [SevenController::class, 'store'])->name('seven.store');
 Route::post('/seven/register', [SevenController::class, 'startRegister'])->name('seven.register');
 Route::post('/seven/register/items', [SevenController::class, 'addRegisterItem'])->name('seven.register.items');

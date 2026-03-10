@@ -96,6 +96,129 @@
 .calculator .display-calc-area .display {
     flex: 1;
 }
+.calculator .display-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+.calculator .display-nikuman-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+.calculator .nikuman-panel-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 8px 0;
+}
+.calculator .nikuman-panel-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+.calculator .nikuman-panel-buttons .nikuman-product-btn {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+.calculator .nikuman-panel-buttons .nikuman-product-btn:hover {
+    background: #f0f0f0;
+}
+.calculator .nikuman-panel-buttons .hotSnack-product-btn {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+.calculator .nikuman-panel-buttons .hotSnack-product-btn:hover {
+    background: #f0f0f0;
+}
+.calculator .nikuman-panel-buttons .nikuman-product-btn .price {
+    float: right;
+    color: #666;
+}
+.calculator .nikuman-panel-buttons .hotSnack-product-btn .price {
+    float: right;
+    color: #666;
+}
+.calculator .nikuman-panel-subtotal {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.calculator .nikuman-panel-subtotal-title {
+    background: #333;
+    color: #fff;
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.calculator .nikuman-panel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.calculator .nikuman-panel-table th,
+.calculator .nikuman-panel-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #eee;
+}
+.calculator .nikuman-panel-table th { background: #f5f5f5; text-align: left; }
+.calculator .nikuman-panel-table .col-price,
+.calculator .nikuman-panel-table .col-qty { text-align: right; }
+.calculator .nikuman-panel-total {
+    background: #333;
+    color: #fff;
+    font-weight: 600;
+    padding: 8px 10px;
+    text-align: right;
+    font-size: 0.95rem;
+}
+.calculator .nikuman-panel-confirm-btn {
+    margin-top: 10px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #2e7d32;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.calculator .nikuman-panel-confirm-btn:hover { background: #1b5e20; }
+.calculator .nikuman-panel-confirm-btn:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+.calculator .nikuman-panel-cancel-btn {
+    margin-top: 8px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #c62828;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.calculator .nikuman-panel-cancel-btn:hover {
+    background: #b71c1c;
+}
 
 /* レジディスプレイ：表形式 */
 .calculator .display-table-wrap {

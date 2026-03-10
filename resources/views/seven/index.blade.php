@@ -16,26 +16,93 @@
             </div>
             <!-- 責任者解除後：計算表示エリア（表形式） -->
             <div class="display-calc-area" id="displayCalcArea" style="display: none;">
-                <div class="display-table-wrap">
-                    <table class="display-table">
-                        <thead>
-                            <tr>
-                                <th class="display-table-th-name">商品名</th>
-                                <th class="display-table-th-price">値段</th>
-                                <th class="display-table-th-qty">数量</th>
-                            </tr>
-                        </thead>
-                        <tbody id="displayTableBody">
-                        </tbody>
-                    </table>
+                <!-- 通常のレジ画面 -->
+                <div class="display-main" id="displayMain">
+                    <div class="display-table-wrap">
+                        <table class="display-table">
+                            <thead>
+                                <tr>
+                                    <th class="display-table-th-name">商品名</th>
+                                    <th class="display-table-th-price">値段</th>
+                                    <th class="display-table-th-qty">数量</th>
+                                </tr>
+                            </thead>
+                            <tbody id="displayTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="display-total" id="displayTotal">
+                        <span class="display-total-label">合計</span>
+                        <span class="display-total-value" id="displayTotalValue">0</span>
+                    </div>
+                    <div class="display-bottom-buttons">
+                        <button data-value="中華まん" id="nikumanBtn">中華まん</button>
+                        <button data-value="ffドリンク">ffドリンク</button>
+                    </div>
                 </div>
-                <div class="display-total" id="displayTotal">
-                    <span class="display-total-label">合計</span>
-                    <span class="display-total-value" id="displayTotalValue">0</span>
+                <!-- 肉まん一覧パネル（中華まん押下で表示） -->
+                <div class="display-nikuman-panel" id="displayNikumanPanel" style="display: none;">
+                    <div class="nikuman-panel-title">肉まん一覧</div>
+                    <div class="nikuman-panel-buttons" id="nikumanPanelButtons">
+                        @if(isset($nikumanProducts))
+                            @foreach($nikumanProducts as $product)
+                                <button type="button" class="nikuman-product-btn"
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-name="{{ e($product->name) }}"
+                                    data-product-price="{{ $product->price }}">
+                                    {{ $product->name }} <span class="price">{{ $product->price }}円</span>
+                                </button>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="nikuman-panel-subtotal">
+                        <div class="nikuman-panel-subtotal-title">肉まんだけの別会計</div>
+                        <table class="nikuman-panel-table">
+                            <thead>
+                                <tr>
+                                    <th>商品名</th>
+                                    <th class="col-price">値段</th>
+                                    <th class="col-qty">数量</th>
+                                </tr>
+                            </thead>
+                            <tbody id="nikumanPanelTableBody"></tbody>
+                        </table>
+                        <div class="nikuman-panel-total" id="nikumanPanelTotal">合計: 0円</div>
+                    </div>
+                    <button type="button" class="nikuman-panel-confirm-btn" id="nikumanPanelConfirmBtn">確認</button>
+                    <button type="button" class="nikuman-panel-cancel-btn" id="nikumanPanelCancelBtn">取り消し</button>
                 </div>
-                <div class="display-bottom-buttons">
-                    <button data-value="中華まん">中華まん</button>
-                    <button data-value="ffドリンク">ffドリンク</button>
+                <!-- ホットスナック一覧パネル（ffドリンク押下で表示） -->
+                <div class="display-nikuman-panel" id="displayHotSnackPanel" style="display: none;">
+                    <div class="nikuman-panel-title">ホットスナック一覧</div>
+                    <div class="nikuman-panel-buttons" id="hotSnackPanelButtons">
+                        @if(isset($hotSnackProducts))
+                            @foreach($hotSnackProducts as $product)
+                                <button type="button" class="hotSnack-product-btn"
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-name="{{ e($product->name) }}"
+                                    data-product-price="{{ $product->price }}">
+                                    {{ $product->name }} <span class="price">{{ $product->price }}円</span>
+                                </button>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="nikuman-panel-subtotal">
+                        <div class="nikuman-panel-subtotal-title">ホットスナックの別会計</div>
+                        <table class="nikuman-panel-table">
+                            <thead>
+                                <tr>
+                                    <th>商品名</th>
+                                    <th class="col-price">値段</th>
+                                    <th class="col-qty">数量</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hotSnackPanelTableBody"></tbody>
+                        </table>
+                        <div class="nikuman-panel-total" id="hotSnackPanelTotal">合計: 0円</div>
+                    </div>
+                    <button type="button" class="nikuman-panel-confirm-btn" id="hotSnackPanelConfirmBtn">確認</button>
+                    <button type="button" class="nikuman-panel-cancel-btn" id="hotSnackPanelCancelBtn">取り消し</button>
                 </div>
             </div>
         </div>

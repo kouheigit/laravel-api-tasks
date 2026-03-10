@@ -15,7 +15,18 @@ class SevenController extends Controller
     public function index()
     {
         $sevenProducts = SevenProduct::orderBy('id')->get();
-        return view('Seven.index', compact('sevenProducts'));
+        $nikumanProducts = SevenProduct::where('description', 'like', '%肉まん%')->orderBy('id')->get();
+        $hotSnackProducts = SevenProduct::where('description', 'like', '%ホットスナック%')->orderBy('id')->get();
+        return view('Seven.index', compact('sevenProducts', 'nikumanProducts', 'hotSnackProducts'));
+    }
+
+    /**
+     * description に「肉まん」を含む商品一覧を別ウィンドウで表示。
+     */
+    public function nikuman()
+    {
+        $nikumanProducts = SevenProduct::where('description', 'like', '%肉まん%')->orderBy('id')->get();
+        return view('Seven.nikuman', compact('nikumanProducts'));
     }
 
     /**
@@ -48,14 +59,17 @@ class SevenController extends Controller
             'product_id' => ['required', 'integer', 'exists:seven_products,id'],
             'product_name' => ['required', 'string', 'max:255'],
             'price' => ['required', 'integer', 'min:0'],
+            'quantity' => ['sometimes', 'integer', 'min:1'],
         ]);
+
+        $qty = $validated['quantity'] ?? 1;
 
         $item = SevenRegisterItem::where('register_id', $validated['register_id'])
             ->where('product_id', $validated['product_id'])
             ->first();
 
         if ($item) {
-            $item->quantity += 1;
+            $item->quantity += $qty;
             $item->subtotal = $item->price * $item->quantity;
             $item->save();
         } else {
@@ -64,8 +78,8 @@ class SevenController extends Controller
                 'product_id' => $validated['product_id'],
                 'product_name' => $validated['product_name'],
                 'price' => $validated['price'],
-                'quantity' => 1,
-                'subtotal' => $validated['price'],
+                'quantity' => $qty,
+                'subtotal' => $validated['price'] * $qty,
             ]);
         }
 
