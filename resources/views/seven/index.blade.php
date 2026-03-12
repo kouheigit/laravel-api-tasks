@@ -111,10 +111,10 @@
             <div class="payment-method-line1">支払い方法を選択してください:(セブンイレブン本番では客が選択する)</div>
             <select name="payment_method" id="payment-method" class="payment-method-line2">
                 <option value="">--1 つ選択してください--</option>
-                <option value="cash">現金(セブンイレブン本番は客が選択する)</option>
-                <option value="credit_card">クレジットカード(セブンイレブン本番は客が選択する)</option>
-                <option value="ic_card">交通系IC(セブンイレブン本番は客が選択する)</option>
-                <option value="paypay">PayPay支払い(セブンイレブン本番は客が選択する)</option>
+                <option value="cash">現金</option>
+                <option value="credit_card">クレジットカード</option>
+                <option value="ic_card">交通系IC</option>
+                <option value="paypay">PayPay支払い</option>
             </select>
         </div>
         <div class="buttons">
