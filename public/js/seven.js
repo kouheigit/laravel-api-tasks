@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let lastClickedProduct = null; // 最後に押されたメニュー（登録/リピート用）
     let multiplyCount = null; // ✖️ボタンで指定した個数（1〜9）
     let isMultiplyInputMode = false; // ✖️押下後に次の数字入力を待機しているかどうか
+    let selectedProductId = null; // ディスプレイで選択中の商品（取り消し用）
 
     // ボタン押下時のポチッという音
     function playClickSound() {
@@ -61,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
             var item = registerItems[productId];
             total += item.price * item.quantity;
             var tr = document.createElement('tr');
+            tr.setAttribute('data-product-id', String(productId));
+            if (selectedProductId !== null && String(selectedProductId) === String(productId)) {
+                tr.classList.add('is-selected');
+            }
             tr.innerHTML =
                 '<td class="display-table-td-name">' + escapeHtml(item.product_name) + '</td>' +
                 '<td class="display-table-td-price">' + escapeHtml(String(item.price)) + '</td>' +
@@ -108,9 +113,71 @@ document.addEventListener('DOMContentLoaded', function () {
                 price: data.price,
                 quantity: data.quantity
             };
+            // 新しい商品が本会計に追加されたら、取り消しの選択状態を解除
+            selectedProductId = null;
             updateDisplayFromRegisterItems();
         })
         .catch(function () {});
+    }
+
+    // ディスプレイ行クリック：選択（黄色ハイライト）
+    var displayTbody = document.getElementById('displayTableBody');
+    if (displayTbody) {
+        displayTbody.addEventListener('click', function (e) {
+            var tr = e.target && e.target.closest ? e.target.closest('tr') : null;
+            if (!tr) return;
+            var pid = tr.getAttribute('data-product-id');
+            if (!pid) return;
+            selectedProductId = pid;
+            updateDisplayFromRegisterItems();
+        });
+    }
+
+    // 取り消しボタン：選択中の商品を1個取り消し
+    var deleteBtn = document.getElementById('delete');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function () {
+            if (isUnlockMode) return;
+            if (!selectedProductId) return;
+
+            playProductClickSound();
+
+            var registerId = null;
+            try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
+            if (!registerId) return;
+
+            var csrfToken = document.querySelector('meta[name="csrf-token"]');
+            var headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            };
+            if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+
+            fetch('/seven/register/items/decrement', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    register_id: parseInt(registerId, 10),
+                    product_id: parseInt(selectedProductId, 10)
+                }),
+                credentials: 'same-origin'
+            })
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                var pid = String(data.product_id);
+                if (data.quantity && data.quantity > 0) {
+                    if (registerItems[pid]) {
+                        registerItems[pid].quantity = data.quantity;
+                    }
+                } else {
+                    delete registerItems[pid];
+                    if (String(selectedProductId) === pid) selectedProductId = null;
+                }
+                updateDisplayFromRegisterItems();
+            })
+            .catch(function () {});
+        });
     }
 
     function updateUnlockInput(appendValue) {
@@ -135,6 +202,13 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             playClickSound();
             const value = this.getAttribute('data-value');
+
+            // 取り消しモード中に 0〜9 / 00 が押されたら、取り消しモードを解除するだけ（通常の数字処理は行わない）
+            if (!isUnlockMode && selectedProductId !== null && (/^[0-9]$/.test(value) || value === '00')) {
+                selectedProductId = null;
+                updateDisplayFromRegisterItems();
+                return;
+            }
 
             // ✖️ボタン：次の数字入力を個数として解釈（計算モードのみ）
             if (value === 'x') {

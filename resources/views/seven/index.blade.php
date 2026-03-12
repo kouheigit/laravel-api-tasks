@@ -36,6 +36,7 @@
                         <span class="display-total-value" id="displayTotalValue">0</span>
                     </div>
                     <div class="display-bottom-buttons">
+                        <button data-value="取り消し" id="delete">取り消し</button>
                         <button data-value="中華まん" id="nikumanBtn">中華まん</button>
                         <button data-value="ffドリンク">ffドリンク</button>
                     </div>

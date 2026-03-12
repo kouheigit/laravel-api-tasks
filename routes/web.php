@@ -150,3 +150,4 @@ Route::get('/seven/nikuman', [SevenController::class, 'nikuman'])->name('seven.n
 Route::post('/seven', [SevenController::class, 'store'])->name('seven.store');
 Route::post('/seven/register', [SevenController::class, 'startRegister'])->name('seven.register');
 Route::post('/seven/register/items', [SevenController::class, 'addRegisterItem'])->name('seven.register.items');
+Route::post('/seven/register/items/decrement', [SevenController::class, 'decrementRegisterItem'])->name('seven.register.items.decrement');

@@ -93,6 +93,46 @@ class SevenController extends Controller
     }
 
     /**
+     * 会計の明細から該当商品を1個取り消し（数量-1、0なら削除）。非同期用。
+     */
+    public function decrementRegisterItem(Request $request)
+    {
+        $validated = $request->validate([
+            'register_id' => ['required', 'integer', 'exists:seven_registers,id'],
+            'product_id' => ['required', 'integer', 'exists:seven_products,id'],
+        ]);
+
+        $item = SevenRegisterItem::where('register_id', $validated['register_id'])
+            ->where('product_id', $validated['product_id'])
+            ->first();
+
+        if (!$item) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        if ($item->quantity > 1) {
+            $item->quantity -= 1;
+            $item->subtotal = $item->price * $item->quantity;
+            $item->save();
+
+            return response()->json([
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->subtotal,
+            ]);
+        }
+
+        $productId = $item->product_id;
+        $item->delete();
+
+        return response()->json([
+            'product_id' => $productId,
+            'quantity' => 0,
+            'subtotal' => 0,
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
