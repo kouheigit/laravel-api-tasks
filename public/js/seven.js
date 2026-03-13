@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let lastClickedProduct = null; // 最後に押されたメニュー（登録/リピート用）
     let multiplyCount = null; // ✖️ボタンで指定した個数（1〜9）
     let isMultiplyInputMode = false; // ✖️押下後に次の数字入力を待機しているかどうか
+    let isPaymentMode = false; // 客層選択後の支払い方法入力モードかどうか
     let selectedProductId = null; // ディスプレイで選択中の商品（取り消し用）
 
     // ボタン押下時のポチッという音
@@ -45,6 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var displayUnlockRow = document.getElementById('displayUnlockRow');
     var displayCalcArea = document.getElementById('displayCalcArea');
     var unlockInput = document.getElementById('unlockInput');
+    var paymentSelect = document.getElementById('payment-method');
+    var paymentOverlay = document.getElementById('payment-overlay');
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -189,11 +192,23 @@ document.addEventListener('DOMContentLoaded', function () {
         unlockInput.value += appendValue;
     }
 
-    // .age 内のボタン：値だけ受け取り、ディスプレイには表示しない
+    // .age / .age-w 内のボタン：値だけ受け取り、ディスプレイには表示しない
     document.querySelectorAll('.age button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             playClickSound();
             selectedAge = this.getAttribute('data-value');
+            isPaymentMode = true;
+            if (paymentOverlay) paymentOverlay.style.display = 'block';
+            if (paymentSelect) paymentSelect.disabled = false;
+        });
+    });
+    document.querySelectorAll('.age-w button[data-value]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            playClickSound();
+            selectedAge = this.getAttribute('data-value');
+            isPaymentMode = true;
+            if (paymentOverlay) paymentOverlay.style.display = 'block';
+            if (paymentSelect) paymentSelect.disabled = false;
         });
     });
 
@@ -202,6 +217,11 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             playClickSound();
             const value = this.getAttribute('data-value');
+
+            // 支払い方法入力モード中はレジボタン無効（すべての値を無視）
+            if (isPaymentMode) {
+                return;
+            }
 
             // 取り消しモード中に 0〜9 / 00 が押されたら、取り消しモードを解除するだけ（通常の数字処理は行わない）
             if (!isUnlockMode && selectedProductId !== null && (/^[0-9]$/.test(value) || value === '00')) {
@@ -340,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 商品画像クリック：入力欄に商品名・値段・数量を表示し、seven_register_items に即時追加
     document.querySelectorAll('.seven-product-item').forEach(function (el) {
         el.addEventListener('click', function () {
-            if (isUnlockMode) return;
+            if (isUnlockMode || isPaymentMode) return;
             var productId = this.getAttribute('data-product-id');
             var productName = this.getAttribute('data-product-name');
             var productPrice = this.getAttribute('data-product-price');
@@ -437,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (nikumanBtn && displayMain && displayNikumanPanel) {
         nikumanBtn.addEventListener('click', function () {
-            if (isUnlockMode) return;
+            if (isUnlockMode || isPaymentMode) return;
             playClickSound();
             nikumanItems = {};
             updateNikumanPanelDisplay();
@@ -448,6 +468,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelectorAll('.nikuman-product-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
+                if (isPaymentMode) return;
                 var productId = this.getAttribute('data-product-id');
                 var productName = this.getAttribute('data-product-name');
                 var productPrice = parseInt(this.getAttribute('data-product-price'), 10);
@@ -554,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var hotSnackBtn = document.querySelector('button[data-value="ffドリンク"]');
     if (hotSnackBtn && displayMain && displayHotSnackPanel) {
         hotSnackBtn.addEventListener('click', function () {
-            if (isUnlockMode) return;
+            if (isUnlockMode || isPaymentMode) return;
             playClickSound();
             hotSnackItems = {};
             updateHotSnackPanelDisplay();
@@ -565,6 +586,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelectorAll('.hotSnack-product-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
+                if (isPaymentMode) return;
                 var productId = this.getAttribute('data-product-id');
                 var productName = this.getAttribute('data-product-name');
                 var productPrice = parseInt(this.getAttribute('data-product-price'), 10);

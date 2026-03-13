@@ -9,6 +9,7 @@
     border-radius: 4px;
     box-sizing: border-box;
     overflow: hidden;
+    position: relative;
 }
 
 .calculator .display {
@@ -283,6 +284,15 @@
 .calculator .display-table-td-price,
 .calculator .display-table-td-qty {
     text-align: right;
+}
+
+/* 客層選択後のレジ操作ロック用オーバーレイ */
+.calculator .payment-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 20;
+    pointer-events: auto;
 }
 
 /* レジディスプレイ：合計（枠内の一番下に固定） */

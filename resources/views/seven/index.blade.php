@@ -106,10 +106,11 @@
                     <button type="button" class="nikuman-panel-cancel-btn" id="hotSnackPanelCancelBtn">取り消し</button>
                 </div>
             </div>
+            <div class="payment-overlay" id="payment-overlay" style="display: none;"></div>
         </div>
         <div class="payment-method-select">
             <div class="payment-method-line1">支払い方法を選択してください:(セブンイレブン本番では客が選択する)</div>
-            <select name="payment_method" id="payment-method" class="payment-method-line2">
+            <select name="payment_method" id="payment-method" class="payment-method-line2" disabled>
                 <option value="">--1 つ選択してください--</option>
                 <option value="cash">現金</option>
                 <option value="credit_card">クレジットカード</option>
