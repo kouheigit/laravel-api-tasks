@@ -238,6 +238,21 @@ document.addEventListener('DOMContentLoaded', function () {
         unlockInput.value += appendValue;
     }
 
+    // 支払い方法選択を促す音声（12〜50 客層押下時に再生）
+    function speakPayment() {
+        try {
+            var msg = new SpeechSynthesisUtterance('お支払い方法をお選びください');
+            msg.lang = 'ja-JP';
+            msg.pitch = 1.2;
+            msg.rate = 0.95;
+            msg.volume = 1;
+            var voices = speechSynthesis.getVoices();
+            var jaVoice = voices.find(function (v) { return v.lang === 'ja-JP'; });
+            if (jaVoice) msg.voice = jaVoice;
+            speechSynthesis.speak(msg);
+        } catch (e) {}
+    }
+
     // 中央パネル：客層ボタン（age-grid）
     document.querySelectorAll('.age-grid .age-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -247,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
             isPaymentMode = true;
             if (paymentOverlay) paymentOverlay.style.display = 'block';
             if (paymentSelect) paymentSelect.disabled = false;
+            speakPayment();
         });
     });
 
