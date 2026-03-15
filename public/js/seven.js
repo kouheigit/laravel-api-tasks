@@ -59,6 +59,32 @@ document.addEventListener('DOMContentLoaded', function () {
     var paymentOverlay = document.getElementById('payment-overlay');
     var paypaySmartphoneWrap = document.getElementById('paypaySmartphoneWrap');
     var sevenProductsWrap = document.querySelector('.seven-products-wrap');
+    var receiptVoiceRef = null;
+
+    function loadReceiptVoice() {
+        var allVoices = window.speechSynthesis.getVoices();
+        var jaVoices = allVoices.filter(function (v) { return v.lang && v.lang.indexOf('ja') !== -1; });
+        var preferred = jaVoices.filter(function (v) {
+            return /female|woman|mizuki|kyoko|haruka|japanese/i.test(v.name);
+        })[0] || jaVoices[0] || allVoices[0];
+        receiptVoiceRef = preferred;
+    }
+    loadReceiptVoice();
+    if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = loadReceiptVoice;
+    }
+
+    function speakReceipt() {
+        if (!window.speechSynthesis) return;
+        window.speechSynthesis.cancel();
+        var utterance = new SpeechSynthesisUtterance('レシートをお受け取りください');
+        utterance.lang = 'ja-JP';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.15;
+        utterance.volume = 1;
+        if (receiptVoiceRef) utterance.voice = receiptVoiceRef;
+        window.speechSynthesis.speak(utterance);
+    }
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -211,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
             if (sevenProductsWrap) sevenProductsWrap.style.display = '';
             sendFinishAndLock();
+            speakReceipt();
         });
     }
 
@@ -230,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
             paypaySmartphoneWrap.style.display = 'none';
             if (sevenProductsWrap) sevenProductsWrap.style.display = '';
             sendFinishAndLock();
+            speakReceipt();
         });
     }
 
