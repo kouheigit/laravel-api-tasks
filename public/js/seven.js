@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let current = '';
-    let selectedAge = null;
+    let selectedAge = null; // 12,19,29,49,50 のいずれか
     let isUnlockMode = true; // 最初は数値入力モード（責任者解除で計算画面へ）
     let registerItems = {}; // product_id -> { product_name, price, quantity }（入力欄表示・seven_register_items 連動用）
     let lastClickedProduct = null; // 最後に押されたメニュー（登録/リピート用）
@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         var totalEl = document.getElementById('displayTotalValue');
         if (totalEl) totalEl.textContent = total;
+        window.__seven_last_total_amount = total; // 支払い時に参照するため
     }
 
     function escapeHtml(str) {
@@ -86,41 +87,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function addProductToRegister(productId, productName, productPrice) {
-        var registerId = null;
-        try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
-        if (!registerId) return;
-
-        var csrfToken = document.querySelector('meta[name="csrf-token"]');
-        var headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        };
-        if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
-
-        fetch('/seven/register/items', {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                register_id: parseInt(registerId, 10),
-                product_id: parseInt(productId, 10),
+        if (isUnlockMode) return;
+        var pid = String(productId);
+        var price = parseInt(productPrice, 10);
+        if (registerItems[pid]) {
+            registerItems[pid].quantity += 1;
+        } else {
+            registerItems[pid] = {
                 product_name: productName,
-                price: parseInt(productPrice, 10)
-            }),
-            credentials: 'same-origin'
-        })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-            registerItems[data.product_id] = {
-                product_name: data.product_name,
-                price: data.price,
-                quantity: data.quantity
+                price: price,
+                quantity: 1
             };
-            // 新しい商品が本会計に追加されたら、取り消しの選択状態を解除
-            selectedProductId = null;
-            updateDisplayFromRegisterItems();
-        })
-        .catch(function () {});
+        }
+        selectedProductId = null;
+        updateDisplayFromRegisterItems();
     }
 
     // ディスプレイ行クリック：選択（黄色ハイライト）
@@ -136,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 取り消しボタン：選択中の商品を1個取り消し
+    // 取り消しボタン：選択中の商品を1個取り消し（ローカルのみ、DBは会計完了時のみ更新）
     var deleteBtn = document.getElementById('delete');
     if (deleteBtn) {
         deleteBtn.addEventListener('click', function () {
@@ -145,9 +125,49 @@ document.addEventListener('DOMContentLoaded', function () {
 
             playProductClickSound();
 
-            var registerId = null;
-            try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
-            if (!registerId) return;
+            var pid = String(selectedProductId);
+            if (!registerItems[pid]) return;
+            if (registerItems[pid].quantity > 1) {
+                registerItems[pid].quantity -= 1;
+            } else {
+                delete registerItems[pid];
+                selectedProductId = null;
+            }
+            updateDisplayFromRegisterItems();
+        });
+    }
+
+    // 支払い方法選択：現金 / クレジットカード / 交通系IC で会計を確定
+    if (paymentSelect) {
+        paymentSelect.addEventListener('change', function () {
+            if (!isPaymentMode) return;
+            var method = paymentSelect.value;
+            if (!method) return;
+            if (method === 'paypay') {
+                // PayPayは今は何もしない（要件外）
+                return;
+            }
+
+            var responsibleNumber = 0;
+            try { responsibleNumber = parseInt(sessionStorage.getItem('seven_responsible_number') || '0', 10); } catch (e) {}
+            if (isNaN(responsibleNumber)) responsibleNumber = 0;
+            if (selectedAge === null) return;
+
+            var totalAmount = typeof window.__seven_last_total_amount === 'number'
+                ? window.__seven_last_total_amount
+                : 0;
+
+            var items = [];
+            Object.keys(registerItems).forEach(function (productId) {
+                var item = registerItems[productId];
+                items.push({
+                    product_id: parseInt(productId, 10),
+                    product_name: item.product_name,
+                    price: item.price,
+                    quantity: item.quantity
+                });
+            });
+            if (items.length === 0) return;
 
             var csrfToken = document.querySelector('meta[name="csrf-token"]');
             var headers = {
@@ -157,27 +177,21 @@ document.addEventListener('DOMContentLoaded', function () {
             };
             if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
 
-            fetch('/seven/register/items/decrement', {
+            fetch('/seven/register/finish', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
-                    register_id: parseInt(registerId, 10),
-                    product_id: parseInt(selectedProductId, 10)
+                    responsible_number: responsibleNumber,
+                    customer_type: parseInt(selectedAge, 10),
+                    total_amount: parseInt(totalAmount, 10),
+                    items: items
                 }),
                 credentials: 'same-origin'
             })
             .then(function (res) { return res.json(); })
-            .then(function (data) {
-                var pid = String(data.product_id);
-                if (data.quantity && data.quantity > 0) {
-                    if (registerItems[pid]) {
-                        registerItems[pid].quantity = data.quantity;
-                    }
-                } else {
-                    delete registerItems[pid];
-                    if (String(selectedProductId) === pid) selectedProductId = null;
-                }
-                updateDisplayFromRegisterItems();
+            .then(function () {
+                // 会計完了後もオーバーレイ表示を継続（Cボタンで解除するまでロック）
+                if (paymentSelect) paymentSelect.disabled = true;
             })
             .catch(function () {});
         });
@@ -196,7 +210,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.age button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             playClickSound();
-            selectedAge = this.getAttribute('data-value');
+            var label = parseInt(this.textContent, 10);
+            if (!isNaN(label)) selectedAge = label;
             isPaymentMode = true;
             if (paymentOverlay) paymentOverlay.style.display = 'block';
             if (paymentSelect) paymentSelect.disabled = false;
@@ -205,7 +220,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.age-w button[data-value]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             playClickSound();
-            selectedAge = this.getAttribute('data-value');
+            var label = parseInt(this.textContent, 10);
+            if (!isNaN(label)) selectedAge = label;
             isPaymentMode = true;
             if (paymentOverlay) paymentOverlay.style.display = 'block';
             if (paymentSelect) paymentSelect.disabled = false;
@@ -218,8 +234,24 @@ document.addEventListener('DOMContentLoaded', function () {
             playClickSound();
             const value = this.getAttribute('data-value');
 
-            // 支払い方法入力モード中はレジボタン無効（すべての値を無視）
+            // 支払い方法モード中：Cボタンだけでロック解除して新規レジ準備
             if (isPaymentMode) {
+                if (value === 'C') {
+                    isPaymentMode = false;
+                    if (paymentOverlay) paymentOverlay.style.display = 'none';
+                    if (paymentSelect) {
+                        paymentSelect.disabled = true;
+                        paymentSelect.value = '';
+                    }
+                    registerItems = {};
+                    selectedProductId = null;
+                    selectedAge = null;
+                    current = '';
+                    multiplyCount = null;
+                    isMultiplyInputMode = false;
+                    updateDisplayFromRegisterItems();
+                    updateDisplay();
+                }
                 return;
             }
 
@@ -265,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     };
                     if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
 
+                    try { sessionStorage.setItem('seven_responsible_number', String(responsibleNumber)); } catch (e) {}
                     fetch('/seven/register', {
                         method: 'POST',
                         headers: headers,
@@ -272,10 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         credentials: 'same-origin'
                     })
                     .then(function (res) { return res.json(); })
-                    .then(function (data) {
-                        if (data.register_id) {
-                            try { sessionStorage.setItem('seven_register_id', data.register_id); } catch (e) {}
-                        }
+                    .then(function () {
                         isUnlockMode = false;
                         displayUnlockRow.style.display = 'none';
                         displayCalcArea.style.display = 'flex';
@@ -485,62 +515,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('nikumanPanelConfirmBtn').addEventListener('click', function () {
             if (Object.keys(nikumanItems).length === 0) return;
-            var registerId = null;
-            try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
-            if (!registerId) return;
-
-            var csrfToken = document.querySelector('meta[name="csrf-token"]');
-            var headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            };
-            if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
-
-            var productIds = Object.keys(nikumanItems);
-            var done = 0;
-
-            function sendNext() {
-                if (done >= productIds.length) {
-                    nikumanItems = {};
-                    updateNikumanPanelDisplay();
-                    displayMain.style.display = 'flex';
-                    displayNikumanPanel.style.display = 'none';
-                    playProductClickSound();
-                    return;
-                }
-                var productId = productIds[done];
+            Object.keys(nikumanItems).forEach(function (productId) {
                 var item = nikumanItems[productId];
-                fetch('/seven/register/items', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        register_id: parseInt(registerId, 10),
-                        product_id: parseInt(productId, 10),
+                if (registerItems[productId]) {
+                    registerItems[productId].quantity += item.quantity;
+                } else {
+                    registerItems[productId] = {
                         product_name: item.product_name,
                         price: item.price,
                         quantity: item.quantity
-                    }),
-                    credentials: 'same-origin'
-                })
-                .then(function (res) { return res.json(); })
-                .then(function (data) {
-                    registerItems[data.product_id] = {
-                        product_name: data.product_name,
-                        price: data.price,
-                        quantity: data.quantity
                     };
-                    lastClickedProduct = { product_id: String(data.product_id), product_name: data.product_name, price: data.price };
-                    updateDisplayFromRegisterItems();
-                    done++;
-                    sendNext();
-                })
-                .catch(function () {
-                    done++;
-                    sendNext();
-                });
-            }
-            sendNext();
+                }
+                lastClickedProduct = { product_id: productId, product_name: item.product_name, price: item.price };
+            });
+            nikumanItems = {};
+            updateNikumanPanelDisplay();
+            updateDisplayFromRegisterItems();
+            displayMain.style.display = 'flex';
+            displayNikumanPanel.style.display = 'none';
+            playProductClickSound();
         });
 
         document.getElementById('nikumanPanelCancelBtn').addEventListener('click', function () {
@@ -603,62 +596,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('hotSnackPanelConfirmBtn').addEventListener('click', function () {
             if (Object.keys(hotSnackItems).length === 0) return;
-            var registerId = null;
-            try { registerId = sessionStorage.getItem('seven_register_id'); } catch (e) {}
-            if (!registerId) return;
-
-            var csrfToken = document.querySelector('meta[name="csrf-token"]');
-            var headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            };
-            if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
-
-            var productIds = Object.keys(hotSnackItems);
-            var done = 0;
-
-            function sendNext() {
-                if (done >= productIds.length) {
-                    hotSnackItems = {};
-                    updateHotSnackPanelDisplay();
-                    displayMain.style.display = 'flex';
-                    displayHotSnackPanel.style.display = 'none';
-                    playProductClickSound();
-                    return;
-                }
-                var productId = productIds[done];
+            Object.keys(hotSnackItems).forEach(function (productId) {
                 var item = hotSnackItems[productId];
-                fetch('/seven/register/items', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({
-                        register_id: parseInt(registerId, 10),
-                        product_id: parseInt(productId, 10),
+                if (registerItems[productId]) {
+                    registerItems[productId].quantity += item.quantity;
+                } else {
+                    registerItems[productId] = {
                         product_name: item.product_name,
                         price: item.price,
                         quantity: item.quantity
-                    }),
-                    credentials: 'same-origin'
-                })
-                .then(function (res) { return res.json(); })
-                .then(function (data) {
-                    registerItems[data.product_id] = {
-                        product_name: data.product_name,
-                        price: data.price,
-                        quantity: data.quantity
                     };
-                    lastClickedProduct = { product_id: String(data.product_id), product_name: data.product_name, price: data.price };
-                    updateDisplayFromRegisterItems();
-                    done++;
-                    sendNext();
-                })
-                .catch(function () {
-                    done++;
-                    sendNext();
-                });
-            }
-            sendNext();
+                }
+                lastClickedProduct = { product_id: productId, product_name: item.product_name, price: item.price };
+            });
+            hotSnackItems = {};
+            updateHotSnackPanelDisplay();
+            updateDisplayFromRegisterItems();
+            displayMain.style.display = 'flex';
+            displayHotSnackPanel.style.display = 'none';
+            playProductClickSound();
         });
 
         document.getElementById('hotSnackPanelCancelBtn').addEventListener('click', function () {

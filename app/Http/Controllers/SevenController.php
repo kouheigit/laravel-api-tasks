@@ -30,23 +30,15 @@ class SevenController extends Controller
     }
 
     /**
-     * 責任者番号を送信し、新規会計（seven_register）を作成。非同期用。
+     * 責任者解除（会計開始）。DBには記録せず、会計完了時のみ seven_registers を作成する。
      */
     public function startRegister(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'responsible_number' => ['required', 'integer'],
         ]);
 
-        $register = SevenRegister::create([
-            'customer_type' => 0,
-            'total_amount' => 0,
-            'responsible_number' => $validated['responsible_number'],
-        ]);
-
-        return response()->json([
-            'register_id' => $register->id,
-        ]);
+        return response()->json(['ok' => true]);
     }
 
     /**
@@ -129,6 +121,51 @@ class SevenController extends Controller
             'product_id' => $productId,
             'quantity' => 0,
             'subtotal' => 0,
+        ]);
+    }
+
+    /**
+     * 会計完了時に seven_register と seven_register_items を一括で作成。未完了会計のゴミデータが残らない。
+     */
+    public function finishRegister(Request $request)
+    {
+        $validated = $request->validate([
+            'responsible_number' => ['required', 'integer'],
+            'customer_type' => ['required', 'integer'],
+            'total_amount' => ['required', 'integer', 'min:0'],
+            'items' => ['required', 'array', 'min:1'],
+            'items.*.product_id' => ['required', 'integer', 'exists:seven_products,id'],
+            'items.*.product_name' => ['required', 'string', 'max:255'],
+            'items.*.price' => ['required', 'integer', 'min:0'],
+            'items.*.quantity' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $register = null;
+        \DB::transaction(function () use ($validated, &$register) {
+            $register = SevenRegister::create([
+                'customer_type' => $validated['customer_type'],
+                'total_amount' => $validated['total_amount'],
+                'responsible_number' => $validated['responsible_number'],
+            ]);
+
+            foreach ($validated['items'] as $row) {
+                $qty = (int) $row['quantity'];
+                $price = (int) $row['price'];
+                SevenRegisterItem::create([
+                    'register_id' => $register->id,
+                    'product_id' => $row['product_id'],
+                    'product_name' => $row['product_name'],
+                    'price' => $price,
+                    'quantity' => $qty,
+                    'subtotal' => $price * $qty,
+                ]);
+            }
+        });
+
+        return response()->json([
+            'register_id' => $register->id,
+            'customer_type' => $register->customer_type,
+            'total_amount' => $register->total_amount,
         ]);
     }
 
