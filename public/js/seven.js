@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var unlockInput = document.getElementById('unlockInput');
     var paymentSelect = document.getElementById('payment-method');
     var paymentOverlay = document.getElementById('payment-overlay');
+    var paypaySmartphoneWrap = document.getElementById('paypaySmartphoneWrap');
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -137,63 +138,74 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 支払い方法選択：現金 / クレジットカード / 交通系IC で会計を確定
+    // 会計確定API送信（現金・クレカ・IC・PayPayスマホクリック後で共通）
+    function sendFinishAndLock() {
+        var responsibleNumber = 0;
+        try { responsibleNumber = parseInt(sessionStorage.getItem('seven_responsible_number') || '0', 10); } catch (e) {}
+        if (isNaN(responsibleNumber)) responsibleNumber = 0;
+        if (selectedAge === null) return;
+        var totalAmount = typeof window.__seven_last_total_amount === 'number'
+            ? window.__seven_last_total_amount
+            : 0;
+        var items = [];
+        Object.keys(registerItems).forEach(function (productId) {
+            var item = registerItems[productId];
+            items.push({
+                product_id: parseInt(productId, 10),
+                product_name: item.product_name,
+                price: item.price,
+                quantity: item.quantity
+            });
+        });
+        if (items.length === 0) return;
+
+        var csrfToken = document.querySelector('meta[name="csrf-token"]');
+        var headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        };
+        if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+
+        fetch('/seven/register/finish', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                responsible_number: responsibleNumber,
+                customer_type: parseInt(selectedAge, 10),
+                total_amount: parseInt(totalAmount, 10),
+                items: items
+            }),
+            credentials: 'same-origin'
+        })
+        .then(function (res) { return res.json(); })
+        .then(function () {
+            if (paymentSelect) paymentSelect.disabled = true;
+        })
+        .catch(function () {});
+    }
+
+    // 支払い方法選択：現金/クレカ/ICは即会計確定、PayPayは画面右にスマホ画像を表示
     if (paymentSelect) {
         paymentSelect.addEventListener('change', function () {
             if (!isPaymentMode) return;
             var method = paymentSelect.value;
             if (!method) return;
             if (method === 'paypay') {
-                // PayPayは今は何もしない（要件外）
+                if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'block';
                 return;
             }
+            if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
+            sendFinishAndLock();
+        });
+    }
 
-            var responsibleNumber = 0;
-            try { responsibleNumber = parseInt(sessionStorage.getItem('seven_responsible_number') || '0', 10); } catch (e) {}
-            if (isNaN(responsibleNumber)) responsibleNumber = 0;
-            if (selectedAge === null) return;
-
-            var totalAmount = typeof window.__seven_last_total_amount === 'number'
-                ? window.__seven_last_total_amount
-                : 0;
-
-            var items = [];
-            Object.keys(registerItems).forEach(function (productId) {
-                var item = registerItems[productId];
-                items.push({
-                    product_id: parseInt(productId, 10),
-                    product_name: item.product_name,
-                    price: item.price,
-                    quantity: item.quantity
-                });
-            });
-            if (items.length === 0) return;
-
-            var csrfToken = document.querySelector('meta[name="csrf-token"]');
-            var headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            };
-            if (csrfToken) headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
-
-            fetch('/seven/register/finish', {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({
-                    responsible_number: responsibleNumber,
-                    customer_type: parseInt(selectedAge, 10),
-                    total_amount: parseInt(totalAmount, 10),
-                    items: items
-                }),
-                credentials: 'same-origin'
-            })
-            .then(function (res) { return res.json(); })
-            .then(function () {
-                // 会計完了後もオーバーレイ表示を継続（Cボタンで解除するまでロック）
-                if (paymentSelect) paymentSelect.disabled = true;
-            })
-            .catch(function () {});
+    // PayPayスマホ画像クリック：ピッと音 → 画像を消す → 会計完了
+    if (paypaySmartphoneWrap) {
+        paypaySmartphoneWrap.addEventListener('click', function () {
+            playProductClickSound();
+            paypaySmartphoneWrap.style.display = 'none';
+            sendFinishAndLock();
         });
     }
 
@@ -239,6 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (value === 'C') {
                     isPaymentMode = false;
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
+                    if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
                     if (paymentSelect) {
                         paymentSelect.disabled = true;
                         paymentSelect.value = '';

@@ -152,6 +152,10 @@
         </div>
         <button data-value="リピート">登録/リピート</button>
     </div>
+    <!-- PayPay支払い選択時：画面右に表示。クリックで会計完了 -->
+    <div class="paypay-smartphone-wrap" id="paypaySmartphoneWrap" style="display: none;" title="スマホをタップして支払い完了">
+        <img src="{{ asset('sevenimg/smartphone.png') }}" alt="PayPay" class="paypay-smartphone-img" id="paypaySmartphoneImg">
+    </div>
     @if(isset($sevenProducts))
         <div class="seven-products-with-image">
             @foreach($sevenProducts as $product)
