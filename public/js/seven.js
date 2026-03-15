@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let multiplyCount = null; // ✖️ボタンで指定した個数（1〜9）
     let isMultiplyInputMode = false; // ✖️押下後に次の数字入力を待機しているかどうか
     let isPaymentMode = false; // 客層選択後の支払い方法入力モードかどうか
-    let selectedProductId = null; // ディスプレイで選択中の商品（取り消し用）
+    let isCancelMode = false; // 取り消しボタン押下後、商品欄クリックで1個取り消すモード
 
     // ボタン押下時のポチッという音
     function playClickSound() {
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
             total += item.price * item.quantity;
             var tr = document.createElement('tr');
             tr.setAttribute('data-product-id', String(productId));
-            if (selectedProductId !== null && String(selectedProductId) === String(productId)) {
-                tr.classList.add('is-selected');
+            if (isCancelMode && registerItems[productId]) {
+                tr.classList.add('is-cancel-target');
             }
             tr.innerHTML =
                 '<td class="display-table-td-name">' + escapeHtml(item.product_name) + '</td>' +
@@ -100,11 +100,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 quantity: 1
             };
         }
-        selectedProductId = null;
+        isCancelMode = false;
+        if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
         updateDisplayFromRegisterItems();
     }
 
-    // ディスプレイ行クリック：選択（黄色ハイライト）
+    // ディスプレイ行クリック：取り消しモード時のみ、クリックした商品を1個取り消し
     var displayTbody = document.getElementById('displayTableBody');
     if (displayTbody) {
         displayTbody.addEventListener('click', function (e) {
@@ -112,28 +113,29 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!tr) return;
             var pid = tr.getAttribute('data-product-id');
             if (!pid) return;
-            selectedProductId = pid;
-            updateDisplayFromRegisterItems();
-        });
-    }
+            if (!isCancelMode) return;
 
-    // 取り消しボタン：選択中の商品を1個取り消し（ローカルのみ、DBは会計完了時のみ更新）
-    var deleteBtn = document.getElementById('delete');
-    if (deleteBtn) {
-        deleteBtn.addEventListener('click', function () {
-            if (isUnlockMode) return;
-            if (!selectedProductId) return;
-
-            playProductClickSound();
-
-            var pid = String(selectedProductId);
             if (!registerItems[pid]) return;
+            playProductClickSound();
             if (registerItems[pid].quantity > 1) {
                 registerItems[pid].quantity -= 1;
             } else {
                 delete registerItems[pid];
-                selectedProductId = null;
             }
+            isCancelMode = false;
+            if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
+            updateDisplayFromRegisterItems();
+        });
+    }
+
+    // 取り消しボタン：押下後に商品欄の該当商品をクリックすると1個取り消される
+    var deleteBtn = document.getElementById('delete');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function () {
+            if (isUnlockMode || isPaymentMode) return;
+            playClickSound();
+            isCancelMode = true;
+            deleteBtn.classList.add('is-cancel-mode');
             updateDisplayFromRegisterItems();
         });
     }
@@ -257,7 +259,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         paymentSelect.value = '';
                     }
                     registerItems = {};
-                    selectedProductId = null;
+                    isCancelMode = false;
+                    if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
                     selectedAge = null;
                     current = '';
                     multiplyCount = null;
@@ -269,8 +272,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // 取り消しモード中に 0〜9 / 00 が押されたら、取り消しモードを解除するだけ（通常の数字処理は行わない）
-            if (!isUnlockMode && selectedProductId !== null && (/^[0-9]$/.test(value) || value === '00')) {
-                selectedProductId = null;
+            if (!isUnlockMode && isCancelMode && (/^[0-9]$/.test(value) || value === '00')) {
+                isCancelMode = false;
+                var delBtn = document.getElementById('delete');
+                if (delBtn) delBtn.classList.remove('is-cancel-mode');
                 updateDisplayFromRegisterItems();
                 return;
             }

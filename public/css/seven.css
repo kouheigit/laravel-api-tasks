@@ -39,6 +39,18 @@
 .calculator #delete:hover {
     background: #ef9a9a;
 }
+.calculator #delete.is-cancel-mode {
+    background: #ff8a80;
+    border-color: #e57373;
+    box-shadow: 0 0 0 2px rgba(229, 115, 115, 0.5);
+}
+.calculator .display-table tr.is-cancel-target {
+    cursor: pointer;
+    background: rgba(255, 205, 210, 0.4);
+}
+.calculator .display-table tr.is-cancel-target:hover {
+    background: rgba(255, 205, 210, 0.7);
+}
 
 .calculator .bottom-buttons {
     margin-top: 1rem;
