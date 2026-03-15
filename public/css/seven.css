@@ -348,7 +348,7 @@
 /* PayPay支払い：画面右に表示するスマホ画像 */
 .paypay-smartphone-wrap {
     position: fixed;
-    right: 24px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
@@ -356,8 +356,10 @@
 }
 .paypay-smartphone-img {
     display: block;
-    max-width: 120px;
-    max-height: 200px;
+    max-width: 240px;
+    max-height: 400px;
+    width: 240px;
+    height: auto;
     object-fit: contain;
     pointer-events: none;
 }
