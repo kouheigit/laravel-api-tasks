@@ -371,6 +371,12 @@
 .calculator .nikuman-panel-table th { background: #f5f5f5; text-align: left; }
 .calculator .nikuman-panel-table .col-price,
 .calculator .nikuman-panel-table .col-qty { text-align: right; }
+.calculator .nikuman-panel-table tr.is-cancel-target {
+    cursor: pointer;
+}
+.calculator .nikuman-panel-table tr.is-cancel-target:hover {
+    background: rgba(255, 205, 210, 0.7);
+}
 .calculator .nikuman-panel-total {
     background: #333;
     color: #fff;

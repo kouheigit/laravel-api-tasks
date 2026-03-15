@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function speakReceipt() {
         if (!window.speechSynthesis) return;
         window.speechSynthesis.cancel();
-        var utterance = new SpeechSynthesisUtterance('レシートをお受け取りください');
+        var utterance = new SpeechSynthesisUtterance('レシートをお受け取りくださいお取り忘れにご注意ください');
         utterance.lang = 'ja-JP';
         utterance.rate = 0.95;
         utterance.pitch = 1.15;
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 取り消しボタン：押下後に商品欄の該当商品をクリックすると1個取り消される
+    // 取り消しボタン：押下後に商品欄の該当商品をクリックすると1個取り消される（本会計・肉まん別会計・ホットスナック別会計で有効）
     var deleteBtn = document.getElementById('delete');
     if (deleteBtn) {
         deleteBtn.addEventListener('click', function () {
@@ -173,6 +173,8 @@ document.addEventListener('DOMContentLoaded', function () {
             isCancelMode = true;
             deleteBtn.classList.add('is-cancel-mode');
             updateDisplayFromRegisterItems();
+            if (typeof updateNikumanPanelDisplay === 'function') updateNikumanPanelDisplay();
+            if (typeof updateHotSnackPanelDisplay === 'function') updateHotSnackPanelDisplay();
         });
     }
 
@@ -555,6 +557,8 @@ document.addEventListener('DOMContentLoaded', function () {
             var item = nikumanItems[productId];
             total += item.price * item.quantity;
             var tr = document.createElement('tr');
+            tr.setAttribute('data-product-id', String(productId));
+            if (isCancelMode) tr.classList.add('is-cancel-target');
             tr.innerHTML =
                 '<td>' + escapeHtml(item.product_name) + '</td>' +
                 '<td class="col-price">' + escapeHtml(String(item.price)) + '</td>' +
@@ -630,6 +634,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 displayNikumanPanel.style.display = 'none';
             });
         }
+
+        // 肉まん別会計：取り消しモード時にテーブル行クリックで1個取り消し
+        var nikumanPanelTableBody = document.getElementById('nikumanPanelTableBody');
+        if (nikumanPanelTableBody) {
+            nikumanPanelTableBody.addEventListener('click', function (e) {
+                var tr = e.target && e.target.closest ? e.target.closest('tr') : null;
+                if (!tr) return;
+                var pid = tr.getAttribute('data-product-id');
+                if (!pid) return;
+                if (!isCancelMode) return;
+                if (displayNikumanPanel.style.display === 'none') return;
+                if (!nikumanItems[pid]) return;
+                playProductClickSound();
+                if (nikumanItems[pid].quantity > 1) {
+                    nikumanItems[pid].quantity -= 1;
+                } else {
+                    delete nikumanItems[pid];
+                }
+                isCancelMode = false;
+                if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
+                updateNikumanPanelDisplay();
+            });
+        }
     }
 
     function updateHotSnackPanelDisplay() {
@@ -643,6 +670,8 @@ document.addEventListener('DOMContentLoaded', function () {
             var item = hotSnackItems[productId];
             total += item.price * item.quantity;
             var tr = document.createElement('tr');
+            tr.setAttribute('data-product-id', String(productId));
+            if (isCancelMode) tr.classList.add('is-cancel-target');
             tr.innerHTML =
                 '<td>' + escapeHtml(item.product_name) + '</td>' +
                 '<td class="col-price">' + escapeHtml(String(item.price)) + '</td>' +
@@ -714,6 +743,29 @@ document.addEventListener('DOMContentLoaded', function () {
             displayMain.style.display = 'flex';
             displayHotSnackPanel.style.display = 'none';
         });
+
+        // ホットスナック別会計：取り消しモード時にテーブル行クリックで1個取り消し
+        var hotSnackPanelTableBody = document.getElementById('hotSnackPanelTableBody');
+        if (hotSnackPanelTableBody) {
+            hotSnackPanelTableBody.addEventListener('click', function (e) {
+                var tr = e.target && e.target.closest ? e.target.closest('tr') : null;
+                if (!tr) return;
+                var pid = tr.getAttribute('data-product-id');
+                if (!pid) return;
+                if (!isCancelMode) return;
+                if (displayHotSnackPanel.style.display === 'none') return;
+                if (!hotSnackItems[pid]) return;
+                playProductClickSound();
+                if (hotSnackItems[pid].quantity > 1) {
+                    hotSnackItems[pid].quantity -= 1;
+                } else {
+                    delete hotSnackItems[pid];
+                }
+                isCancelMode = false;
+                if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
+                updateHotSnackPanelDisplay();
+            });
+        }
     }
 
     // 別ウィンドウ（肉まん選択）から商品追加時に呼ばれる
