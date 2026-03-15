@@ -220,18 +220,8 @@ document.addEventListener('DOMContentLoaded', function () {
         unlockInput.value += appendValue;
     }
 
-    // .age / .age-w 内のボタン：値だけ受け取り、ディスプレイには表示しない
-    document.querySelectorAll('.age button[data-value]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            playClickSound();
-            var label = parseInt(this.textContent, 10);
-            if (!isNaN(label)) selectedAge = label;
-            isPaymentMode = true;
-            if (paymentOverlay) paymentOverlay.style.display = 'block';
-            if (paymentSelect) paymentSelect.disabled = false;
-        });
-    });
-    document.querySelectorAll('.age-w button[data-value]').forEach(function (btn) {
+    // 中央パネル：客層ボタン（age-grid）
+    document.querySelectorAll('.age-grid .age-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
             playClickSound();
             var label = parseInt(this.textContent, 10);
@@ -242,11 +232,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // .buttons 内のボタン
-    document.querySelectorAll('.buttons button[data-value]').forEach(function (btn) {
+    // 左パネル：キーパッド + 機能/管理/取消（取消は#deleteで別処理）
+    document.querySelectorAll('.keypad-grid .key-btn, .mini-buttons .mini-btn, .touch-btn[data-value="責任者解除"]').forEach(function (btn) {
         btn.addEventListener('click', function () {
+            var val = this.getAttribute('data-value');
+            if (val === '取り消し') return;
+            if (val === '管理') return;
             playClickSound();
-            const value = this.getAttribute('data-value');
+            var value = val;
 
             // 支払い方法モード中：Cボタンだけでロック解除して新規レジ準備
             if (isPaymentMode) {
@@ -339,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // 責任者解除モード以外では、数字・00 は無効。C だけは計算モードでも有効
+            // 責任者解除モード以外では、数字・00・小計 は無効。C だけは計算モードでも有効
             if (!isUnlockMode && value !== 'C') {
                 return;
             }
@@ -353,6 +346,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 return;
             }
+
+            // 小計ボタン：何もしない
+            if (value === '小計') return;
 
             // 計算モード：従来どおりディスプレイに表示
             if (value === 'テスト') {
@@ -421,8 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 登録/リピートボタン：最後に押されたメニューをもう1つ（または ✖️個数ぶん）追加
-    var repeatBtn = document.querySelector('button[data-value="リピート"]');
-    if (repeatBtn) {
+    document.querySelectorAll('[data-value="リピート"]').forEach(function (repeatBtn) {
         repeatBtn.addEventListener('click', function () {
             if (isUnlockMode) return;
             if (!lastClickedProduct) return;
@@ -472,10 +467,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // 一度使ったらリセット
             multiplyCount = null;
         });
-    }
+    });
 
-    // 中華まんボタン：レジ画面内で肉まん一覧パネルを表示
-    var nikumanBtn = document.getElementById('nikumanBtn') || document.querySelector('button[data-value="中華まん"]');
+    // 中華まんボタン：レジ画面内で肉まん一覧パネルを表示（ディスプレイ下＋タッチパネル「お買得商品」）
+    var nikumanBtns = document.querySelectorAll('[data-value="中華まん"]');
     var displayMain = document.getElementById('displayMain');
     var displayNikumanPanel = document.getElementById('displayNikumanPanel');
     var displayHotSnackPanel = document.getElementById('displayHotSnackPanel');
@@ -503,7 +498,8 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBtn.disabled = Object.keys(nikumanItems).length === 0;
     }
 
-    if (nikumanBtn && displayMain && displayNikumanPanel) {
+    nikumanBtns.forEach(function (nikumanBtn) {
+        if (!displayMain || !displayNikumanPanel) return;
         nikumanBtn.addEventListener('click', function () {
             if (isUnlockMode || isPaymentMode) return;
             playClickSound();
@@ -560,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
             displayMain.style.display = 'flex';
             displayNikumanPanel.style.display = 'none';
         });
-    }
+    });
 
     function updateHotSnackPanelDisplay() {
         var tbody = document.getElementById('hotSnackPanelTableBody');
@@ -583,8 +579,9 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBtn.disabled = Object.keys(hotSnackItems).length === 0;
     }
 
-    var hotSnackBtn = document.querySelector('button[data-value="ffドリンク"]');
-    if (hotSnackBtn && displayMain && displayHotSnackPanel) {
+    // ffドリンクボタン：ホットスナック一覧を表示（ディスプレイ下＋タッチパネル「イチオシメニュー」）
+    document.querySelectorAll('[data-value="ffドリンク"]').forEach(function (hotSnackBtn) {
+        if (!displayMain || !displayHotSnackPanel) return;
         hotSnackBtn.addEventListener('click', function () {
             if (isUnlockMode || isPaymentMode) return;
             playClickSound();
@@ -594,7 +591,9 @@ document.addEventListener('DOMContentLoaded', function () {
             displayMain.style.display = 'none';
             displayHotSnackPanel.style.display = 'flex';
         });
+    });
 
+    if (displayMain && displayHotSnackPanel) {
         document.querySelectorAll('.hotSnack-product-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 if (isPaymentMode) return;

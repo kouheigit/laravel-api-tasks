@@ -1,12 +1,192 @@
+.calculator {
+    max-width: 580px;
+    width: 100%;
+    margin: 0;
+}
+
+/* === POSパネル（参照 seven_register_button_panel_react.jsx）コンパクト版 === */
+.pos-panel {
+    display: grid;
+    grid-template-columns: 1.1fr 0.62fr 1.2fr;
+    gap: 0.6rem;
+    align-items: start;
+    margin-top: 0.5rem;
+}
+.pos-section {
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem;
+}
+
+.mini-buttons {
+    display: flex;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+}
+.mini-btn {
+    position: relative;
+    min-width: 44px;
+    height: 26px;
+    border: none;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+    transition: transform 120ms ease, filter 120ms ease;
+}
+.mini-btn:hover {
+    transform: translateY(-1px) scale(1.02);
+    filter: brightness(1.04);
+}
+.mini-btn.mini-dark {
+    background: linear-gradient(180deg, #475569, #1e293b);
+    color: white;
+}
+.mini-btn.mini-gold {
+    background: linear-gradient(180deg, #fcd34d, #d97706);
+    color: #3f2b00;
+}
+.mini-btn.mini-pink {
+    background: linear-gradient(180deg, #f9a8d4, #db2777);
+    color: white;
+}
+.mini-btn.mini-pink#delete.is-cancel-mode {
+    background: linear-gradient(180deg, #ff8a80, #e57373);
+    box-shadow: 0 0 0 2px rgba(229, 115, 115, 0.5);
+}
+
+.keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+}
+.key-btn {
+    position: relative;
+    overflow: hidden;
+    height: 34px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #4f46e5, #312e81);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 4px 8px rgba(49, 46, 129, 0.2);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.key-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 12px rgba(49, 46, 129, 0.25);
+}
+.key-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+.key-btn.action-key {
+    background: linear-gradient(180deg, #67e8f9, #0f766e);
+    color: #082f49;
+}
+.key-btn.key-subtotal {
+    font-size: 10px;
+}
+
+.age-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem;
+}
+.age-btn {
+    position: relative;
+    overflow: hidden;
+    height: 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 8px rgba(15, 23, 42, 0.1);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.age-btn:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 10px rgba(15, 23, 42, 0.14);
+}
+.age-btn.age-left {
+    background: linear-gradient(180deg, #dbeafe, #60a5fa);
+    color: #1e3a8a;
+}
+.age-btn.age-right {
+    background: linear-gradient(180deg, #fbcfe8, #fb7185);
+    color: #881337;
+}
+
+.receipt-btn {
+    width: 100%;
+    height: 28px;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #86efac, #16a34a);
+    color: #14532d;
+    font-weight: 800;
+    font-size: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.16);
+    transition: transform 120ms ease, filter 120ms ease;
+}
+.receipt-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+}
+
+.touch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+}
+.touch-btn {
+    position: relative;
+    overflow: hidden;
+    min-height: 36px;
+    border-radius: 10px;
+    padding: 5px 4px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: linear-gradient(135deg, #ecfeff 0%, #dbeafe 45%, #f0fdf4 100%);
+    color: #334155;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 4px 8px rgba(148, 163, 184, 0.12);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.touch-btn:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 6px 12px rgba(148, 163, 184, 0.18);
+}
+.touch-btn:active {
+    transform: translateY(1px) scale(0.985);
+}
+.touch-btn[data-value=""] {
+    cursor: default;
+    opacity: 0.6;
+}
+.touch-btn.touch-btn-responsible {
+    color: #111;
+    font-weight: 800;
+}
 .calculator .display-wrap {
     width: 100%;
-    max-width: 560px;
-    min-height: 400px;
-    height: 400px;
+    max-width: 100%;
+    min-height: 420px;
+    height: 420px;
     display: flex;
     flex-direction: column;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
@@ -16,9 +196,9 @@
     width: 100%;
     flex: 1;
     min-height: 0;
-    padding: 20px 28px;
-    font-size: 20px;
-    line-height: 1.4;
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 1.35;
     box-sizing: border-box;
     resize: none;
     border: none;
@@ -27,22 +207,15 @@
 
 .calculator .display-bottom-buttons {
     display: flex;
-    gap: 0.5rem;
-    padding: 8px 12px;
+    gap: 0.35rem;
+    padding: 5px 8px;
     border-top: 1px solid #ccc;
     background: #f5f5f5;
 }
-.calculator #delete {
-    background: #ffcdd2; /* 薄い赤 */
-    border: 1px solid #ef9a9a;
-}
-.calculator #delete:hover {
-    background: #ef9a9a;
-}
-.calculator #delete.is-cancel-mode {
-    background: #ff8a80;
-    border-color: #e57373;
-    box-shadow: 0 0 0 2px rgba(229, 115, 115, 0.5);
+.calculator .display-bottom-buttons button {
+    padding: 5px 8px;
+    font-size: 11px;
+    border-radius: 5px;
 }
 .calculator .display-table tr.is-cancel-target {
     cursor: pointer;
@@ -52,52 +225,52 @@
 }
 
 .calculator .bottom-buttons {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: flex;
-    gap: 0.5rem;
+    gap: 0.35rem;
 }
 
 /* 支払い方法選択：2行表示 */
 .calculator .payment-method-select {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
 }
 .calculator .payment-method-line1 {
     display: block;
-    font-size: 0.95rem;
+    font-size: 0.75rem;
 }
 .calculator .payment-method-line2 {
     display: block;
     width: 100%;
-    max-width: 560px;
-    padding: 8px 12px;
-    font-size: 0.95rem;
+    max-width: 100%;
+    padding: 5px 8px;
+    font-size: 0.75rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 /* 四角の中：数値入力欄（レジボタンでここに反映） */
 .calculator .display-unlock-row {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 16px 20px;
+    gap: 0.35rem;
+    padding: 10px 12px;
     box-sizing: border-box;
 }
 .calculator .display-unlock-header {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     font-weight: 600;
 }
 .calculator .display-unlock-input {
     width: 100%;
     min-width: 0;
-    padding: 10px 14px;
-    font-size: 16px;
-    line-height: 1.4;
+    padding: 6px 10px;
+    font-size: 13px;
+    line-height: 1.35;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     box-sizing: border-box;
 }
 .calculator .display-unlock-input:focus {
@@ -129,19 +302,19 @@
     overflow: auto;
 }
 .calculator .nikuman-panel-title {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    padding: 8px 0;
+    padding: 5px 0;
 }
 .calculator .nikuman-panel-buttons {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.3rem;
     flex-shrink: 0;
 }
 .calculator .nikuman-panel-buttons .nikuman-product-btn {
-    padding: 10px 12px;
-    font-size: 0.95rem;
+    padding: 6px 9px;
+    font-size: 0.8rem;
     text-align: left;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -152,8 +325,8 @@
     background: #f0f0f0;
 }
 .calculator .nikuman-panel-buttons .hotSnack-product-btn {
-    padding: 10px 12px;
-    font-size: 0.95rem;
+    padding: 6px 9px;
+    font-size: 0.8rem;
     text-align: left;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -181,18 +354,18 @@
 .calculator .nikuman-panel-subtotal-title {
     background: #333;
     color: #fff;
-    padding: 6px 10px;
+    padding: 4px 8px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 .calculator .nikuman-panel-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 11px;
 }
 .calculator .nikuman-panel-table th,
 .calculator .nikuman-panel-table td {
-    padding: 4px 8px;
+    padding: 3px 6px;
     border-bottom: 1px solid #eee;
 }
 .calculator .nikuman-panel-table th { background: #f5f5f5; text-align: left; }
@@ -202,14 +375,14 @@
     background: #333;
     color: #fff;
     font-weight: 600;
-    padding: 8px 10px;
+    padding: 5px 8px;
     text-align: right;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
 }
 .calculator .nikuman-panel-confirm-btn {
-    margin-top: 10px;
-    padding: 12px 20px;
-    font-size: 1rem;
+    margin-top: 6px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
     font-weight: 600;
     background: #2e7d32;
     color: #fff;
@@ -224,9 +397,9 @@
     cursor: not-allowed;
 }
 .calculator .nikuman-panel-cancel-btn {
-    margin-top: 8px;
-    padding: 12px 20px;
-    font-size: 1rem;
+    margin-top: 5px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
     font-weight: 600;
     background: #c62828;
     color: #fff;
@@ -249,7 +422,7 @@
 .calculator .display-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 15px;
+    font-size: 12px;
     table-layout: fixed;
 }
 .calculator .display-table thead {
@@ -260,7 +433,7 @@
     z-index: 1;
 }
 .calculator .display-table th {
-    padding: 10px 12px;
+    padding: 6px 8px;
     text-align: left;
     font-weight: 600;
 }
@@ -285,7 +458,7 @@
     background: #fff59d; /* 薄い黄色 */
 }
 .calculator .display-table td {
-    padding: 8px 12px;
+    padding: 5px 8px;
     vertical-align: middle;
 }
 .calculator .display-table-td-name {
@@ -312,44 +485,57 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 1rem;
-    padding: 12px 16px;
+    gap: 0.5rem;
+    padding: 7px 10px;
     background: #333;
     color: #fff;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
     border-top: 2px solid #555;
 }
 .calculator .display-total-label {
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 .calculator .display-total-value {
     min-width: 6ch;
     text-align: right;
 }
 
-/* 画像あり商品一覧（登録/リピートの下） */
+/* レジ上・商品画像はレジ下部に表示（レジやや大きく・左寄せ） */
+.seven-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 640px;
+    margin: 0;
+    padding: 0 1rem 0 1.5rem;
+}
+.seven-products-wrap {
+    margin-top: 1rem;
+    width: 100%;
+}
 .seven-products-with-image {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-top: 2.5rem;
-    max-width: 560px;
+    justify-content: center;
 }
 .seven-product-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.3rem;
 }
 .seven-product-img {
-    max-width: 140px;
-    max-height: 140px;
+    max-width: 130px;
+    max-height: 130px;
+    width: 130px;
+    height: 130px;
     object-fit: contain;
     transition: transform 0.2s ease;
 }
 .seven-product-img:hover {
-    transform: scale(1.15);
+    transform: scale(1.1);
 }
 .seven-product-item span {
     font-size: 0.8rem;
@@ -359,7 +545,7 @@
 /* PayPay支払い：画面右に表示するスマホ画像 */
 .paypay-smartphone-wrap {
     position: fixed;
-    right: 80px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
@@ -367,9 +553,9 @@
 }
 .paypay-smartphone-img {
     display: block;
-    max-width: 360px;
-    max-height: 560px;
-    width: 360px;
+    max-width: 180px;
+    max-height: 280px;
+    width: 180px;
     height: auto;
     object-fit: contain;
     pointer-events: none;
