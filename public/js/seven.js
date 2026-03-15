@@ -498,18 +498,20 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBtn.disabled = Object.keys(nikumanItems).length === 0;
     }
 
-    nikumanBtns.forEach(function (nikumanBtn) {
-        if (!displayMain || !displayNikumanPanel) return;
-        nikumanBtn.addEventListener('click', function () {
-            if (isUnlockMode || isPaymentMode) return;
-            playClickSound();
-            nikumanItems = {};
-            updateNikumanPanelDisplay();
-            if (displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
-            displayMain.style.display = 'none';
-            displayNikumanPanel.style.display = 'flex';
+    if (displayMain && displayNikumanPanel) {
+        nikumanBtns.forEach(function (nikumanBtn) {
+            nikumanBtn.addEventListener('click', function () {
+                if (isUnlockMode || isPaymentMode) return;
+                playClickSound();
+                nikumanItems = {};
+                updateNikumanPanelDisplay();
+                if (displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
+                displayMain.style.display = 'none';
+                displayNikumanPanel.style.display = 'flex';
+            });
         });
 
+        // 肉まん商品ボタンは1回だけリスナー登録（forEach の外で実行して二重登録を防ぐ）
         document.querySelectorAll('.nikuman-product-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
                 if (isPaymentMode) return;
@@ -527,36 +529,41 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
-        document.getElementById('nikumanPanelConfirmBtn').addEventListener('click', function () {
-            if (Object.keys(nikumanItems).length === 0) return;
-            Object.keys(nikumanItems).forEach(function (productId) {
-                var item = nikumanItems[productId];
-                if (registerItems[productId]) {
-                    registerItems[productId].quantity += item.quantity;
-                } else {
-                    registerItems[productId] = {
-                        product_name: item.product_name,
-                        price: item.price,
-                        quantity: item.quantity
-                    };
-                }
-                lastClickedProduct = { product_id: productId, product_name: item.product_name, price: item.price };
+        var nikumanPanelConfirmBtn = document.getElementById('nikumanPanelConfirmBtn');
+        var nikumanPanelCancelBtn = document.getElementById('nikumanPanelCancelBtn');
+        if (nikumanPanelConfirmBtn) {
+            nikumanPanelConfirmBtn.addEventListener('click', function () {
+                if (Object.keys(nikumanItems).length === 0) return;
+                Object.keys(nikumanItems).forEach(function (productId) {
+                    var item = nikumanItems[productId];
+                    if (registerItems[productId]) {
+                        registerItems[productId].quantity += item.quantity;
+                    } else {
+                        registerItems[productId] = {
+                            product_name: item.product_name,
+                            price: item.price,
+                            quantity: item.quantity
+                        };
+                    }
+                    lastClickedProduct = { product_id: productId, product_name: item.product_name, price: item.price };
+                });
+                nikumanItems = {};
+                updateNikumanPanelDisplay();
+                updateDisplayFromRegisterItems();
+                displayMain.style.display = 'flex';
+                displayNikumanPanel.style.display = 'none';
+                playProductClickSound();
             });
-            nikumanItems = {};
-            updateNikumanPanelDisplay();
-            updateDisplayFromRegisterItems();
-            displayMain.style.display = 'flex';
-            displayNikumanPanel.style.display = 'none';
-            playProductClickSound();
-        });
-
-        document.getElementById('nikumanPanelCancelBtn').addEventListener('click', function () {
-            nikumanItems = {};
-            updateNikumanPanelDisplay();
-            displayMain.style.display = 'flex';
-            displayNikumanPanel.style.display = 'none';
-        });
-    });
+        }
+        if (nikumanPanelCancelBtn) {
+            nikumanPanelCancelBtn.addEventListener('click', function () {
+                nikumanItems = {};
+                updateNikumanPanelDisplay();
+                displayMain.style.display = 'flex';
+                displayNikumanPanel.style.display = 'none';
+            });
+        }
+    }
 
     function updateHotSnackPanelDisplay() {
         var tbody = document.getElementById('hotSnackPanelTableBody');
