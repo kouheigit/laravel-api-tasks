@@ -6,7 +6,7 @@
     <title>Seven / Hello</title>
     <link rel="stylesheet" href="{{ asset('css/seven.css') }}">
 </head>
-<body>
+<body data-product-click-sound="{{ asset('audio/レジ音.mp3') }}">
     <div class="seven-layout">
         <div class="calculator">
         <div class="display-wrap">
@@ -203,7 +203,7 @@
         @endif
     </div>
     <!-- PayPay支払い選択時：画面右に表示。クリックで会計完了 -->
-    <div class="paypay-smartphone-wrap" id="paypaySmartphoneWrap" style="display: none;" title="スマホをタップして支払い完了">
+    <div class="paypay-smartphone-wrap" id="paypaySmartphoneWrap" style="display: none;" title="スマホをタップして支払い完了" data-paypay-sound="{{ asset('audio/PayPay.mp3') }}">
         <img src="{{ asset('sevenimg/smartphone.png') }}" alt="PayPay" class="paypay-smartphone-img" id="paypaySmartphoneImg">
     </div>
 

@@ -26,8 +26,17 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {}
     }
 
-    // 商品クリック時のピッという音（高め・短く鋭く）
+    // 商品クリック時の音（レジ音.mp3 または従来の合成音）
+    var productClickSoundUrl = document.body.getAttribute('data-product-click-sound') || '';
     function playProductClickSound() {
+        if (productClickSoundUrl) {
+            try {
+                var audio = new Audio(productClickSoundUrl);
+                audio.volume = 1;
+                audio.play().catch(function () {});
+            } catch (e) {}
+            return;
+        }
         try {
             var ctx = new (window.AudioContext || window.webkitAudioContext)();
             var osc = ctx.createOscillator();
@@ -202,10 +211,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // PayPayスマホ画像クリック：ピッと音 → 画像を消す → 会計完了
+    // PayPayスマホ画像クリック：PayPay音源を再生 → 画像を消す → 会計完了
     if (paypaySmartphoneWrap) {
         paypaySmartphoneWrap.addEventListener('click', function () {
-            playProductClickSound();
+            var soundUrl = paypaySmartphoneWrap.getAttribute('data-paypay-sound');
+            if (soundUrl) {
+                try {
+                    var audio = new Audio(soundUrl);
+                    audio.volume = 1;
+                    audio.play().catch(function () {});
+                } catch (e) {}
+            } else {
+                playProductClickSound();
+            }
             paypaySmartphoneWrap.style.display = 'none';
             sendFinishAndLock();
         });
