@@ -542,10 +542,10 @@
     text-align: center;
 }
 
-/* PayPay支払い：画面右に表示するスマホ画像 */
+/* PayPay支払い：画面右に表示するスマホ画像（やや左寄せ） */
 .paypay-smartphone-wrap {
     position: fixed;
-    right: 20px;
+    right: 60px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
@@ -553,9 +553,9 @@
 }
 .paypay-smartphone-img {
     display: block;
-    max-width: 180px;
-    max-height: 280px;
-    width: 180px;
+    max-width: 360px;
+    max-height: 560px;
+    width: 360px;
     height: auto;
     object-fit: contain;
     pointer-events: none;
