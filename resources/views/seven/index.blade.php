@@ -8,6 +8,25 @@
 </head>
 <body data-product-click-sound="{{ asset('audio/レジ音.mp3') }}">
     <div class="seven-layout">
+        @if(isset($sevenProducts))
+            <aside class="seven-products-wrap">
+                <div class="seven-products-with-image">
+                    @foreach($sevenProducts as $product)
+                        @if($product->image_path !== null && $product->image_path !== '')
+                            @php
+                                $raw = trim($product->image_path, " \t\n\r\"'\/");
+                                $filename = basename($raw);
+                                $imgPath = 'sevenimg/' . $filename;
+                            @endphp
+                            <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
+                                <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </aside>
+        @endif
+        <div class="seven-register-column">
         <div class="calculator">
         <div class="display-wrap">
             <!-- 最初：四角の中に長い入力欄（レジボタンでここに反映） -->
@@ -183,24 +202,6 @@
             </section>
         </div>
         </div>
-        @if(isset($sevenProducts))
-            <div class="seven-products-wrap">
-                <div class="seven-products-with-image">
-                    @foreach($sevenProducts as $product)
-                        @if($product->image_path !== null && $product->image_path !== '')
-                            @php
-                                $raw = trim($product->image_path, " \t\n\r\"'\/");
-                                $filename = basename($raw);
-                                $imgPath = 'sevenimg/' . $filename;
-                            @endphp
-                            <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
-                                <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
-                            </div>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
-        @endif
     </div>
     <!-- PayPay支払い選択時：画面右に表示。クリックで会計完了 -->
     <div class="paypay-smartphone-wrap" id="paypaySmartphoneWrap" style="display: none;" title="スマホをタップして支払い完了" data-paypay-sound="{{ asset('audio/PayPay.mp3') }}">

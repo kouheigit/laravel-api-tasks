@@ -501,24 +501,35 @@
     text-align: right;
 }
 
-/* レジ上・商品画像はレジ下部に表示（レジやや大きく・左寄せ） */
+/* レジ左・商品画像右の横並び（同一行に必ず並べる） */
 .seven-layout {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
     align-items: flex-start;
-    max-width: 640px;
+    gap: 1.5rem;
+    max-width: 960px;
     margin: 0;
     padding: 0 1rem 0 1.5rem;
 }
+.seven-register-column {
+    flex: 0 0 auto;
+    width: 580px;
+    max-width: 580px;
+    order: 1; /* レジを左に表示 */
+}
 .seven-products-wrap {
-    margin-top: 1rem;
-    width: 100%;
+    flex: 0 0 auto;
+    width: 320px;
+    max-width: 320px;
+    order: 2; /* 商品をレジの右に表示 */
 }
 .seven-products-with-image {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    justify-content: center;
+    width: 100%;
+    align-content: flex-start;
 }
 .seven-product-item {
     display: flex;

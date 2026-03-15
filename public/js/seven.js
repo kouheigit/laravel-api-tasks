@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var paymentSelect = document.getElementById('payment-method');
     var paymentOverlay = document.getElementById('payment-overlay');
     var paypaySmartphoneWrap = document.getElementById('paypaySmartphoneWrap');
+    var sevenProductsWrap = document.querySelector('.seven-products-wrap');
 
     function updateDisplay() {
         const display = document.getElementById('display');
@@ -204,9 +205,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!method) return;
             if (method === 'paypay') {
                 if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'block';
+                if (sevenProductsWrap) sevenProductsWrap.style.display = 'none';
                 return;
             }
             if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
+            if (sevenProductsWrap) sevenProductsWrap.style.display = '';
             sendFinishAndLock();
         });
     }
@@ -225,6 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 playProductClickSound();
             }
             paypaySmartphoneWrap.style.display = 'none';
+            if (sevenProductsWrap) sevenProductsWrap.style.display = '';
             sendFinishAndLock();
         });
     }
@@ -281,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     isPaymentMode = false;
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
                     if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
+                    if (sevenProductsWrap) sevenProductsWrap.style.display = '';
                     if (paymentSelect) {
                         paymentSelect.disabled = true;
                         paymentSelect.value = '';
