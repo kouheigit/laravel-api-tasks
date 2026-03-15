@@ -46,7 +46,6 @@
 }
 .calculator .display-table tr.is-cancel-target {
     cursor: pointer;
-    background: rgba(255, 205, 210, 0.4);
 }
 .calculator .display-table tr.is-cancel-target:hover {
     background: rgba(255, 205, 210, 0.7);
