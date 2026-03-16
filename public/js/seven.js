@@ -189,6 +189,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityAllConfirmBtn.textContent = '確定';
             }
             if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
+            // 公共料金完了後は「中華まん」「ffドリンク」は表示しない
+            var nikumanBtn = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
+            var hotSnackBtn = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
+            if (nikumanBtn) nikumanBtn.style.display = 'none';
+            if (hotSnackBtn) hotSnackBtn.style.display = 'none';
             if (utilityBillsWrap) {
                 // 画像は残す（追加クリックは不可）
                 utilityBillsWrap.style.display = 'grid';
