@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityAllConfirmBtn.addEventListener('click', function () {
             if (!isUtilityMode) return;
         if (utilityAllConfirmBtn.disabled) return;
+            playClickSound();
             // 1回目のクリック：ラベルを「確定」→「確認」に変えるだけ
             if (utilityAllConfirmBtn.textContent === '確定') {
                 utilityAllConfirmBtn.textContent = '確認';
@@ -192,8 +193,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // 公共料金完了後は「中華まん」「ffドリンク」は表示しない
             var nikumanBtn = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
             var hotSnackBtn = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
+            var utilityBtn2 = document.querySelector('.display-bottom-btn[data-value="公共料金"]');
             if (nikumanBtn) nikumanBtn.style.display = 'none';
             if (hotSnackBtn) hotSnackBtn.style.display = 'none';
+            if (utilityBtn2) utilityBtn2.style.display = 'none';
             if (utilityBillsWrap) {
                 // 画像は残す（追加クリックは不可）
                 utilityBillsWrap.style.display = 'grid';
