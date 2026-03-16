@@ -61,14 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
     var sevenProductsWrap = document.querySelector('.seven-products-wrap');
     var productsWithImage = document.getElementById('sevenProductsWithImage');
     var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
-    var utilityOverlay = document.getElementById('utilityOverlay');
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
     var utilityConfirmBtn = document.getElementById('utilityConfirmBtn');
+    var utilityAllConfirmBtn = document.getElementById('utilityAllConfirmBtn');
     var displayBottomButtons = document.querySelector('.display-bottom-buttons');
     var receiptVoiceRef = null;
     var isUtilityMode = false;
     var utilityTargetCount = 0;
+    var utilityClickedCount = 0;
 
     function loadReceiptVoice() {
         var allVoices = window.speechSynthesis.getVoices();
@@ -107,10 +108,12 @@ document.addEventListener('DOMContentLoaded', function () {
         var imgSrc = document.body.getAttribute('data-utility-bill-img');
         if (!imgSrc) return;
         utilityTargetCount = Math.floor(Math.random() * 5) + 1; // 1〜5
+        utilityClickedCount = 0;
         for (var i = 0; i < utilityTargetCount; i++) {
             var img = document.createElement('img');
             img.src = imgSrc;
             img.alt = '公共料金伝票';
+            img.dataset.clicked = '0';
             utilityBillsWrap.appendChild(img);
         }
         // 入力欄を表示・リセット（商品欄内の1行として表示）
@@ -118,6 +121,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (utilityCountInput) utilityCountInput.value = '';
         // レジ下のボタン群（中華まん／ffドリンク／公共料金）は隠す
         if (displayBottomButtons) displayBottomButtons.style.display = 'none';
+        // 右上の確認ボタンを表示（まだ無効）
+        if (utilityAllConfirmBtn) {
+            utilityAllConfirmBtn.style.display = 'block';
+            utilityAllConfirmBtn.disabled = true;
+        }
     }
 
     function exitUtilityMode() {
@@ -129,8 +137,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (utilityCountRow) utilityCountRow.style.display = 'none';
         if (utilityCountInput) utilityCountInput.value = '';
-        if (utilityOverlay) utilityOverlay.style.display = 'none';
         utilityTargetCount = 0;
+        utilityClickedCount = 0;
+        if (utilityAllConfirmBtn) {
+            utilityAllConfirmBtn.style.display = 'none';
+            utilityAllConfirmBtn.disabled = true;
+        }
         // レジ下のボタン群を元に戻す
         if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
     }
@@ -140,9 +152,18 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityConfirmBtn.addEventListener('click', function () {
             if (!isUtilityMode) return;
             var val = parseInt(utilityCountInput.value || '0', 10);
-            if (!isNaN(val) && val === utilityTargetCount) {
-                if (utilityOverlay) utilityOverlay.style.display = 'block';
-            }
+            // 正解・不正解の画面切り替えは行わず、ここでは枚数チェックだけ行う
+            if (isNaN(val) || val !== utilityTargetCount) return;
+        });
+    }
+
+    // 公共料金モード：右上の確認ボタン（全ての伝票をクリックし終えたら押せる）
+    if (utilityAllConfirmBtn) {
+        utilityAllConfirmBtn.addEventListener('click', function () {
+            if (!isUtilityMode) return;
+            if (utilityAllConfirmBtn.disabled) return;
+            // ここでは公共料金モードを終了するだけ（必要なら後で会計処理を追加）
+            exitUtilityMode();
         });
     }
 
@@ -313,8 +334,24 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityBtn.addEventListener('click', function () {
             if (isUnlockMode || isPaymentMode) return;
             playClickSound();
-            // 中華まん・ffドリンクボタンはCSSで残すが、モードとしては公共料金専用とする
             enterUtilityMode();
+        });
+    }
+
+    // 公共料金画像クリック：商品クリックと同じ音を鳴らし、1度押した画像は薄暗くして無効化
+    if (utilityBillsWrap) {
+        utilityBillsWrap.addEventListener('click', function (e) {
+            if (!isUtilityMode) return;
+            var img = e.target && e.target.closest ? e.target.closest('img') : null;
+            if (!img) return;
+            if (img.dataset.clicked === '1') return;
+            img.dataset.clicked = '1';
+            img.classList.add('is-clicked');
+            playProductClickSound();
+            utilityClickedCount += 1;
+            if (utilityAllConfirmBtn && utilityClickedCount === utilityTargetCount) {
+                utilityAllConfirmBtn.disabled = false;
+            }
         });
     }
 

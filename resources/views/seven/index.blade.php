@@ -30,6 +30,8 @@
         <div class="seven-register-column">
         <div class="calculator">
         <div class="display-wrap">
+            <!-- 公共料金モード：レジ右上の確認ボタン（すべての伝票をクリックしたら有効化） -->
+            <button type="button" id="utilityAllConfirmBtn" class="utility-all-confirm-btn" style="display: none;" disabled>確認</button>
             <!-- 最初：四角の中に長い入力欄（レジボタンでここに反映） -->
             <div class="display-unlock-row" id="displayUnlockRow">
                 <div class="display-unlock-header">責任者解除</div>
@@ -73,8 +75,6 @@
                         <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">ffドリンク</button>
                         <button type="button" class="display-bottom-btn" data-value="公共料金">公共料金</button>
             </div>
-            <!-- 公共料金モード：正しい枚数入力時に表示する白いレジ画面 -->
-            <div class="utility-overlay" id="utilityOverlay" style="display: none;"></div>
                 </div>
                 <!-- 肉まん一覧パネル（中華まん押下で表示） -->
                 <div class="display-nikuman-panel" id="displayNikumanPanel" style="display: none;">
