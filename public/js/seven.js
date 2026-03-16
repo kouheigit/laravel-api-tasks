@@ -166,23 +166,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 公共料金モード：右上の確認ボタン（全ての伝票をクリックし終えたら押せる）
+    // 公共料金モード：レジ中央の大きな確定→確認ボタン（全ての伝票をクリックし終えたら押せる）
     if (utilityAllConfirmBtn) {
         utilityAllConfirmBtn.addEventListener('click', function () {
             if (!isUtilityMode) return;
-            if (utilityAllConfirmBtn.disabled) return;
+        if (utilityAllConfirmBtn.disabled) return;
             // 1回目のクリック：ラベルを「確定」→「確認」に変えるだけ
             if (utilityAllConfirmBtn.textContent === '確定') {
                 utilityAllConfirmBtn.textContent = '確認';
                 return;
             }
-            // 2回目（確認ボタンとして押されたとき）：
-            // 公共料金の枚数ぶん、1枚あたり6000円を合計に加算してから公共料金モードを終了
-            if (!isNaN(utilityTargetCount) && utilityTargetCount > 0) {
-                for (var i = 0; i < utilityTargetCount; i++) {
-                    addProductToRegister('__utility__', '公共料金', 6000);
-                }
-            }
+            // 2回目（確認ボタンとして押されたとき）：公共料金モードを終了
             exitUtilityMode();
         });
     }
@@ -359,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // 公共料金画像クリック：商品クリックと同じ音を鳴らし、1度押した画像は薄暗くして無効化
+    // クリックされた時点で、1枚あたり6000円を合計値に反映する
     if (utilityBillsWrap) {
         utilityBillsWrap.addEventListener('click', function (e) {
             if (!isUtilityMode) return;
@@ -369,6 +364,8 @@ document.addEventListener('DOMContentLoaded', function () {
             img.dataset.clicked = '1';
             img.classList.add('is-clicked');
             playProductClickSound();
+            // 公共料金1枚ぶん 6000円をレジに追加
+            addProductToRegister('__utility__', '公共料金', 6000);
             utilityClickedCount += 1;
             if (utilityAllConfirmBtn && utilityClickedCount === utilityTargetCount) {
                 utilityAllConfirmBtn.disabled = false;
