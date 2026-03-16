@@ -113,8 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
             img.alt = '公共料金伝票';
             utilityBillsWrap.appendChild(img);
         }
-        // 入力欄を表示・リセット
-        if (utilityCountRow) utilityCountRow.style.display = 'flex';
+        // 入力欄を表示・リセット（商品欄内の1行として表示）
+        if (utilityCountRow) utilityCountRow.style.display = 'table-row';
         if (utilityCountInput) utilityCountInput.value = '';
         // レジ下のボタン群（中華まん／ffドリンク／公共料金）は隠す
         if (displayBottomButtons) displayBottomButtons.style.display = 'none';

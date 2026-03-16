@@ -43,19 +43,23 @@
                         <table class="display-table">
                             <thead>
                                 <tr>
-                                    <th class="display-table-th-name">
-                                        商品名
-                                        <!-- 公共料金モード：枚数入力と確定ボタン（商品名ヘッダ内に表示） -->
-                                        <div class="utility-count-row" id="utilityCountRow" style="display: none; margin-top: 4px;">
-                                            <span class="utility-count-label">公共料金の枚数</span>
-                                            <input type="text" id="utilityCountInput" class="utility-count-input" readonly inputmode="numeric" autocomplete="off">
-                                            <button type="button" id="utilityConfirmBtn" class="utility-confirm-btn">確定</button>
-                                        </div>
-                                    </th>
+                                    <th class="display-table-th-name">商品名</th>
                                     <th class="display-table-th-price">値段</th>
                                     <th class="display-table-th-qty">数量</th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <!-- 公共料金モード：商品欄内の先頭行に枚数入力と確定ボタンを表示 -->
+                                <tr id="utilityCountRow" class="utility-count-row" style="display: none;">
+                                    <td colspan="3">
+                                        <div class="utility-count-inner">
+                                            <span class="utility-count-label">公共料金の枚数</span>
+                                            <input type="text" id="utilityCountInput" class="utility-count-input" readonly inputmode="numeric" autocomplete="off">
+                                            <button type="button" id="utilityConfirmBtn" class="utility-confirm-btn">確定</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
                             <tbody id="displayTableBody">
                             </tbody>
                         </table>

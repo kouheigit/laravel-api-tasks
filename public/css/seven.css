@@ -221,14 +221,14 @@
     margin-left: auto; /* 公共料金ボタンを右端に寄せる */
 }
 
-/* 公共料金モード：枚数入力行 */
+/* 公共料金モード：枚数入力行（商品欄内の1行として表示） */
 .utility-count-row {
+    background: #fafafa;
+}
+.utility-count-inner {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 4px 8px;
-    border-top: 1px solid #ddd;
-    background: #fafafa;
 }
 .utility-count-label {
     font-size: 11px;
