@@ -6,11 +6,11 @@
     <title>Seven / Hello</title>
     <link rel="stylesheet" href="{{ asset('css/seven.css') }}">
 </head>
-<body data-product-click-sound="{{ asset('audio/レジ音.mp3') }}">
+<body data-product-click-sound="{{ asset('audio/レジ音.mp3') }}" data-utility-bill-img="{{ asset('sevenimg/utilitybills.png') }}">
     <div class="seven-layout">
         @if(isset($sevenProducts))
             <aside class="seven-products-wrap">
-                <div class="seven-products-with-image">
+                <div class="seven-products-with-image" id="sevenProductsWithImage">
                     @foreach($sevenProducts as $product)
                         @if($product->image_path !== null && $product->image_path !== '')
                             @php
@@ -24,6 +24,7 @@
                         @endif
                     @endforeach
                 </div>
+                <div class="seven-utility-bills-wrap" id="sevenUtilityBillsWrap"></div>
             </aside>
         @endif
         <div class="seven-register-column">
@@ -51,6 +52,12 @@
                             </tbody>
                         </table>
                     </div>
+                    <!-- 公共料金モード：枚数入力と確定ボタン（商品名テーブルの直下に表示） -->
+                    <div class="utility-count-row" id="utilityCountRow" style="display: none;">
+                        <div class="utility-count-label">公共料金の枚数</div>
+                        <input type="text" id="utilityCountInput" class="utility-count-input" readonly inputmode="numeric" autocomplete="off">
+                        <button type="button" id="utilityConfirmBtn" class="utility-confirm-btn">確定</button>
+                    </div>
                     <div class="display-total" id="displayTotal">
                         <span class="display-total-label">合計</span>
                         <span class="display-total-value" id="displayTotalValue">0</span>
@@ -59,7 +66,9 @@
                         <button type="button" class="display-bottom-btn" data-value="中華まん" id="nikumanBtn">中華まん</button>
                         <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">ffドリンク</button>
                         <button type="button" class="display-bottom-btn" data-value="公共料金">公共料金</button>
-                    </div>
+            </div>
+            <!-- 公共料金モード：正しい枚数入力時に表示する白いレジ画面 -->
+            <div class="utility-overlay" id="utilityOverlay" style="display: none;"></div>
                 </div>
                 <!-- 肉まん一覧パネル（中華まん押下で表示） -->
                 <div class="display-nikuman-panel" id="displayNikumanPanel" style="display: none;">

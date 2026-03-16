@@ -220,6 +220,48 @@
 .calculator .display-bottom-buttons button:last-child {
     margin-left: auto; /* 公共料金ボタンを右端に寄せる */
 }
+
+/* 公共料金モード：枚数入力行 */
+.utility-count-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 8px;
+    border-top: 1px solid #ddd;
+    background: #fafafa;
+}
+.utility-count-label {
+    font-size: 11px;
+    white-space: nowrap;
+}
+.utility-count-input {
+    flex: 1;
+    padding: 4px 6px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+.utility-confirm-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    border-radius: 4px;
+    border: none;
+    background: #22c55e;
+    color: #fff;
+    cursor: pointer;
+}
+.utility-confirm-btn:hover {
+    background: #16a34a;
+}
+
+/* 公共料金モード：正解時に表示する白い画面 */
+.utility-overlay {
+    position: fixed;
+    inset: 0;
+    background: #ffffff;
+    z-index: 200;
+}
 .calculator .display-table tr.is-cancel-target {
     cursor: pointer;
 }
@@ -539,6 +581,17 @@
     gap: 0.75rem;
     width: 100%;
     align-content: flex-start;
+}
+.seven-utility-bills-wrap {
+    display: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(80px, 1fr));
+    gap: 0.5rem;
+}
+.seven-utility-bills-wrap img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 .seven-product-item {
     display: flex;

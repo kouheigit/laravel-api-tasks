@@ -59,7 +59,15 @@ document.addEventListener('DOMContentLoaded', function () {
     var paymentOverlay = document.getElementById('payment-overlay');
     var paypaySmartphoneWrap = document.getElementById('paypaySmartphoneWrap');
     var sevenProductsWrap = document.querySelector('.seven-products-wrap');
+    var productsWithImage = document.getElementById('sevenProductsWithImage');
+    var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
+    var utilityOverlay = document.getElementById('utilityOverlay');
+    var utilityCountRow = document.getElementById('utilityCountRow');
+    var utilityCountInput = document.getElementById('utilityCountInput');
+    var utilityConfirmBtn = document.getElementById('utilityConfirmBtn');
     var receiptVoiceRef = null;
+    var isUtilityMode = false;
+    var utilityTargetCount = 0;
 
     function loadReceiptVoice() {
         var allVoices = window.speechSynthesis.getVoices();
@@ -84,6 +92,53 @@ document.addEventListener('DOMContentLoaded', function () {
         utterance.volume = 1;
         if (receiptVoiceRef) utterance.voice = receiptVoiceRef;
         window.speechSynthesis.speak(utterance);
+    }
+
+    // 公共料金モード：開始・終了ヘルパー
+    function enterUtilityMode() {
+        if (!productsWithImage || !utilityBillsWrap) return;
+        isUtilityMode = true;
+        // 商品画像を隠し、公共料金画像エリアを表示
+        productsWithImage.style.display = 'none';
+        utilityBillsWrap.style.display = 'grid';
+        utilityBillsWrap.innerHTML = '';
+        // 1〜5 枚のランダム枚数で画像を表示
+        var imgSrc = document.body.getAttribute('data-utility-bill-img');
+        if (!imgSrc) return;
+        utilityTargetCount = Math.floor(Math.random() * 5) + 1; // 1〜5
+        for (var i = 0; i < utilityTargetCount; i++) {
+            var img = document.createElement('img');
+            img.src = imgSrc;
+            img.alt = '公共料金伝票';
+            utilityBillsWrap.appendChild(img);
+        }
+        // 入力欄を表示・リセット
+        if (utilityCountRow) utilityCountRow.style.display = 'flex';
+        if (utilityCountInput) utilityCountInput.value = '';
+    }
+
+    function exitUtilityMode() {
+        isUtilityMode = false;
+        if (productsWithImage) productsWithImage.style.display = 'flex';
+        if (utilityBillsWrap) {
+            utilityBillsWrap.style.display = 'none';
+            utilityBillsWrap.innerHTML = '';
+        }
+        if (utilityCountRow) utilityCountRow.style.display = 'none';
+        if (utilityCountInput) utilityCountInput.value = '';
+        if (utilityOverlay) utilityOverlay.style.display = 'none';
+        utilityTargetCount = 0;
+    }
+
+    // 公共料金モード：確定ボタン押下時の判定
+    if (utilityConfirmBtn && utilityCountInput) {
+        utilityConfirmBtn.addEventListener('click', function () {
+            if (!isUtilityMode) return;
+            var val = parseInt(utilityCountInput.value || '0', 10);
+            if (!isNaN(val) && val === utilityTargetCount) {
+                if (utilityOverlay) utilityOverlay.style.display = 'block';
+            }
+        });
     }
 
     function updateDisplay() {
@@ -231,6 +286,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!isPaymentMode) return;
             var method = paymentSelect.value;
             if (!method) return;
+            // 公共料金モード中に支払い方法が選ばれたら終了
+            if (isUtilityMode) {
+                exitUtilityMode();
+            }
             if (method === 'paypay') {
                 if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'block';
                 if (sevenProductsWrap) sevenProductsWrap.style.display = 'none';
@@ -240,6 +299,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (sevenProductsWrap) sevenProductsWrap.style.display = '';
             sendFinishAndLock();
             speakReceipt();
+        });
+    }
+
+    // 公共料金ボタン：公共料金支払いモードに入る
+    var utilityBtn = document.querySelector('.display-bottom-btn[data-value="公共料金"]');
+    if (utilityBtn) {
+        utilityBtn.addEventListener('click', function () {
+            if (isUnlockMode || isPaymentMode) return;
+            playClickSound();
+            // 中華まん・ffドリンクボタンはCSSで残すが、モードとしては公共料金専用とする
+            enterUtilityMode();
         });
     }
 
@@ -308,6 +378,21 @@ document.addEventListener('DOMContentLoaded', function () {
             if (val === '管理') return;
             playClickSound();
             var value = val;
+
+            // 公共料金モード中：数字とCは公共料金枚数入力欄に反映させる
+            if (isUtilityMode && utilityCountInput) {
+                if (/^[0-9]$/.test(value)) {
+                    if (value === '0' && utilityCountInput.value === '') {
+                        return;
+                    }
+                    utilityCountInput.value += value;
+                    return;
+                }
+                if (value === 'C') {
+                    utilityCountInput.value = '';
+                    return;
+                }
+            }
 
             // 支払い方法モード中：Cボタンだけでロック解除して新規レジ準備
             if (isPaymentMode) {
