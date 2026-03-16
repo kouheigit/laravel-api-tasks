@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var isUtilityMode = false;
     var utilityTargetCount = 0;
     var utilityClickedCount = 0;
+    var isUtilityCountConfirmed = false;
 
     function loadReceiptVoice() {
         var allVoices = window.speechSynthesis.getVoices();
@@ -119,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力欄を表示・リセット（商品欄内の1行として表示）
         if (utilityCountRow) utilityCountRow.style.display = 'table-row';
         if (utilityCountInput) utilityCountInput.value = '';
+        isUtilityCountConfirmed = false;
         // レジ下のボタン群（中華まん／ffドリンク／公共料金）は隠す
         if (displayBottomButtons) displayBottomButtons.style.display = 'none';
         // 右上の確認ボタンを表示（まだ無効）
@@ -139,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (utilityCountInput) utilityCountInput.value = '';
         utilityTargetCount = 0;
         utilityClickedCount = 0;
+        isUtilityCountConfirmed = false;
         if (utilityAllConfirmBtn) {
             utilityAllConfirmBtn.style.display = 'none';
             utilityAllConfirmBtn.disabled = true;
@@ -153,7 +156,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!isUtilityMode) return;
             var val = parseInt(utilityCountInput.value || '0', 10);
             // 正解・不正解の画面切り替えは行わず、ここでは枚数チェックだけ行う
-            if (isNaN(val) || val !== utilityTargetCount) return;
+            if (isNaN(val) || val !== utilityTargetCount) {
+                isUtilityCountConfirmed = false;
+                return;
+            }
+            isUtilityCountConfirmed = true;
+            // 入力欄と小さい確定ボタンは消す
+            if (utilityCountRow) utilityCountRow.style.display = 'none';
+            // 右上（画面中央）の大きな確認ボタンは、公共料金モード開始時に既に表示済みだが、
+            // このタイミングではまだ disable のまま（全伝票クリック完了で有効化）
         });
     }
 
@@ -342,6 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (utilityBillsWrap) {
         utilityBillsWrap.addEventListener('click', function (e) {
             if (!isUtilityMode) return;
+            if (!isUtilityCountConfirmed) return; // 枚数が正しく確定するまでクリック不可
             var img = e.target && e.target.closest ? e.target.closest('img') : null;
             if (!img) return;
             if (img.dataset.clicked === '1') return;
