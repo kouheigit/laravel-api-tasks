@@ -30,8 +30,8 @@
         <div class="seven-register-column">
         <div class="calculator">
         <div class="display-wrap">
-            <!-- 公共料金モード：レジ右上の確認ボタン（すべての伝票をクリックしたら有効化） -->
-            <button type="button" id="utilityAllConfirmBtn" class="utility-all-confirm-btn" style="display: none;" disabled>確認</button>
+            <!-- 公共料金モード：レジ中央の大きな確定ボタン（すべての伝票をクリックしたら有効化） -->
+            <button type="button" id="utilityAllConfirmBtn" class="utility-all-confirm-btn" style="display: none;" disabled>確定</button>
             <!-- 最初：四角の中に長い入力欄（レジボタンでここに反映） -->
             <div class="display-unlock-row" id="displayUnlockRow">
                 <div class="display-unlock-header">責任者解除</div>
