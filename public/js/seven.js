@@ -577,18 +577,45 @@ document.addEventListener('DOMContentLoaded', function () {
             // 公共料金：現金支払い選択後は、受領印が完了するまで入力をロック（Cも無効）
             if (utilityPaymentLocked) {
                 if (val === 'C' && utilityStampsCompleted) {
-                    // スタンプ完了後のみ、暗い画面を解除して操作を戻す
+                    // スタンプ完了後のみ、通常のレジ画面（責任者解除後の画面）へ戻す
                     utilityPaymentLocked = false;
                     utilityStampMode = false;
                     utilityStampsCompleted = false;
+                    utilityStampTargetCount = 0;
+                    utilityStampClickedCount = 0;
                     forceCashOnlyPayment = false;
                     setCashOnlyPaymentOptions(false);
+
                     isPaymentMode = false;
+                    selectedAge = null;
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
+                    if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
                     if (paymentSelect) {
-                        paymentSelect.disabled = true;
+                        paymentSelect.disabled = true; // 支払い方法一覧はロック
                         paymentSelect.value = '';
                     }
+
+                    // 公共料金票は消して、商品画像を再表示
+                    if (utilityBillsWrap) {
+                        utilityBillsWrap.style.display = 'none';
+                        utilityBillsWrap.style.pointerEvents = 'auto';
+                        utilityBillsWrap.innerHTML = '';
+                    }
+                    if (productsWithImage) productsWithImage.style.display = 'flex';
+
+                    // 下の「中華まん」「ffドリンク」「公共料金」ボタンを復帰
+                    if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
+                    var nikumanBtnRestore = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
+                    var hotSnackBtnRestore = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
+                    var utilityBtnRestore = document.querySelector('.display-bottom-btn[data-value="公共料金"]');
+                    if (nikumanBtnRestore) nikumanBtnRestore.style.display = '';
+                    if (hotSnackBtnRestore) hotSnackBtnRestore.style.display = '';
+                    if (utilityBtnRestore) utilityBtnRestore.style.display = '';
+
+                    // レジ画面は「責任者解除後」の状態に
+                    isUnlockMode = false;
+                    if (displayUnlockRow) displayUnlockRow.style.display = 'none';
+                    if (displayCalcArea) displayCalcArea.style.display = 'flex';
                 }
                 return;
             }
