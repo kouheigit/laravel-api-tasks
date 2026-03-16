@@ -58,6 +58,7 @@
                     <div class="display-bottom-buttons">
                         <button type="button" class="display-bottom-btn" data-value="中華まん" id="nikumanBtn">中華まん</button>
                         <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">ffドリンク</button>
+                        <button type="button" class="display-bottom-btn" data-value="公共料金">公共料金</button>
                     </div>
                 </div>
                 <!-- 肉まん一覧パネル（中華まん押下で表示） -->

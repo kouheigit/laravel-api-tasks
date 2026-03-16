@@ -217,6 +217,9 @@
     font-size: 11px;
     border-radius: 5px;
 }
+.calculator .display-bottom-buttons button:last-child {
+    margin-left: auto; /* 公共料金ボタンを右端に寄せる */
+}
 .calculator .display-table tr.is-cancel-target {
     cursor: pointer;
 }
