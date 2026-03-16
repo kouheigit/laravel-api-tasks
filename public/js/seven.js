@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityStampTargetCount = 0;
     var utilityStampClickedCount = 0;
     var utilityStampsCompleted = false;
+    var utilityPaymentLocked = false; // 現金支払い選択後、受領印が全部押されるまで操作ロック
     var forceCashOnlyPayment = false; // 公共料金フロー中（確定/確認後も含む）は現金のみ
     var paymentOptionsBackupHtml = null;
 
@@ -172,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityStampTargetCount = 0;
         utilityStampClickedCount = 0;
         utilityStampsCompleted = false;
+        utilityPaymentLocked = false;
         for (var i = 0; i < utilityTargetCount; i++) {
             var item = document.createElement('div');
             item.className = 'utility-bill-item';
@@ -208,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityStampTargetCount = 0;
         utilityStampClickedCount = 0;
         utilityStampsCompleted = false;
+        utilityPaymentLocked = false;
         if (utilityAllConfirmBtn) {
             utilityAllConfirmBtn.style.display = 'none';
             utilityAllConfirmBtn.disabled = true;
@@ -424,6 +427,19 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!isPaymentMode) return;
             var method = paymentSelect.value;
             if (!method) return;
+            // 公共料金フロー：現金支払いを選んだら、受領印が全部押されるまで操作をロックする
+            if (forceCashOnlyPayment && method === 'cash') {
+                utilityPaymentLocked = true;
+                // 暗い画面は維持し、他の操作を無効化（スタンプのみ許可）
+                if (paymentOverlay) paymentOverlay.style.display = 'block';
+                // スタンプモードを開始（票を元の状態に戻してクリック可能に）
+                utilityStampMode = true;
+                utilityStampsCompleted = false;
+                utilityStampTargetCount = utilityBillsWrap ? utilityBillsWrap.querySelectorAll('img').length : 0;
+                utilityStampClickedCount = 0;
+                resetUtilityBillsForStamp();
+                return;
+            }
             // 公共料金モード中に支払い方法が選ばれたら終了
             if (isUtilityMode) {
                 exitUtilityMode();
@@ -540,6 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 中央パネル：客層ボタン（age-grid）
     document.querySelectorAll('.age-grid .age-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
+            if (utilityPaymentLocked) return;
             playClickSound();
             var label = parseInt(this.textContent, 10);
             if (!isNaN(label)) selectedAge = label;
@@ -557,6 +574,24 @@ document.addEventListener('DOMContentLoaded', function () {
             var val = this.getAttribute('data-value');
             if (val === '取り消し') return;
             if (val === '管理') return;
+            // 公共料金：現金支払い選択後は、受領印が完了するまで入力をロック（Cも無効）
+            if (utilityPaymentLocked) {
+                if (val === 'C' && utilityStampsCompleted) {
+                    // スタンプ完了後のみ、暗い画面を解除して操作を戻す
+                    utilityPaymentLocked = false;
+                    utilityStampMode = false;
+                    utilityStampsCompleted = false;
+                    forceCashOnlyPayment = false;
+                    setCashOnlyPaymentOptions(false);
+                    isPaymentMode = false;
+                    if (paymentOverlay) paymentOverlay.style.display = 'none';
+                    if (paymentSelect) {
+                        paymentSelect.disabled = true;
+                        paymentSelect.value = '';
+                    }
+                }
+                return;
+            }
             playClickSound();
             var value = val;
 
