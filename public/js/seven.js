@@ -176,8 +176,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityAllConfirmBtn.textContent = '確認';
                 return;
             }
-            // 2回目（確認ボタンとして押されたとき）：公共料金モードを終了
-            exitUtilityMode();
+            // 2回目（確認ボタンとして押されたとき）：
+            // 公共料金の支払い票画像は右側に残したまま、公共料金モードだけ終了する
+            isUtilityMode = false;
+            isUtilityCountConfirmed = false;
+            utilityTargetCount = 0;
+            utilityClickedCount = 0;
+
+            if (utilityAllConfirmBtn) {
+                utilityAllConfirmBtn.style.display = 'none';
+                utilityAllConfirmBtn.disabled = true;
+                utilityAllConfirmBtn.textContent = '確定';
+            }
+            if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
+            if (utilityBillsWrap) {
+                // 画像は残す（追加クリックは不可）
+                utilityBillsWrap.style.display = 'grid';
+                utilityBillsWrap.style.pointerEvents = 'none';
+            }
         });
     }
 
