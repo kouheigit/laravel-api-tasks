@@ -52,6 +52,24 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {}
     }
 
+    // ボンッという効果音（公共料金スタンプ用）
+    function playBonSound() {
+        try {
+            var ctx = new (window.AudioContext || window.webkitAudioContext)();
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(180, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.35, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.13);
+        } catch (e) {}
+    }
+
     var displayUnlockRow = document.getElementById('displayUnlockRow');
     var displayCalcArea = document.getElementById('displayCalcArea');
     var unlockInput = document.getElementById('unlockInput');
@@ -71,6 +89,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityTargetCount = 0;
     var utilityClickedCount = 0;
     var isUtilityCountConfirmed = false;
+    var utilityStampMode = false; // 現金決済後にCで、再クリック→スタンプを押すモード
+    var utilityStampTargetCount = 0;
+    var utilityStampClickedCount = 0;
+    var utilityStampsCompleted = false;
+    var forceCashOnlyPayment = false; // 公共料金フロー中（確定/確認後も含む）は現金のみ
     var paymentOptionsBackupHtml = null;
 
     function loadReceiptVoice() {
@@ -118,10 +141,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function resetUtilityBillsForStamp() {
+        if (!utilityBillsWrap) return;
+        // 既存のスタンプ削除
+        utilityBillsWrap.querySelectorAll('.utility-bill-stamp').forEach(function (el) { el.remove(); });
+        // クリック状態をリセット
+        utilityBillsWrap.querySelectorAll('img').forEach(function (img) {
+            img.dataset.clicked = '0';
+            img.classList.remove('is-clicked');
+        });
+        utilityBillsWrap.style.pointerEvents = 'auto';
+    }
+
     // 公共料金モード：開始・終了ヘルパー
     function enterUtilityMode() {
         if (!productsWithImage || !utilityBillsWrap) return;
         isUtilityMode = true;
+        forceCashOnlyPayment = true;
         setCashOnlyPaymentOptions(true);
         // 商品画像を隠し、公共料金画像エリアを表示
         productsWithImage.style.display = 'none';
@@ -132,12 +168,19 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!imgSrc) return;
         utilityTargetCount = Math.floor(Math.random() * 5) + 1; // 1〜5
         utilityClickedCount = 0;
+        utilityStampMode = false;
+        utilityStampTargetCount = 0;
+        utilityStampClickedCount = 0;
+        utilityStampsCompleted = false;
         for (var i = 0; i < utilityTargetCount; i++) {
+            var item = document.createElement('div');
+            item.className = 'utility-bill-item';
             var img = document.createElement('img');
             img.src = imgSrc;
             img.alt = '公共料金伝票';
             img.dataset.clicked = '0';
-            utilityBillsWrap.appendChild(img);
+            item.appendChild(img);
+            utilityBillsWrap.appendChild(item);
         }
         // 入力欄を表示・リセット（商品欄内の1行として表示）
         if (utilityCountRow) utilityCountRow.style.display = 'table-row';
@@ -149,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function exitUtilityMode() {
         isUtilityMode = false;
+        forceCashOnlyPayment = false;
         setCashOnlyPaymentOptions(false);
         if (productsWithImage) productsWithImage.style.display = 'flex';
         if (utilityBillsWrap) {
@@ -160,6 +204,10 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityTargetCount = 0;
         utilityClickedCount = 0;
         isUtilityCountConfirmed = false;
+        utilityStampMode = false;
+        utilityStampTargetCount = 0;
+        utilityStampClickedCount = 0;
+        utilityStampsCompleted = false;
         if (utilityAllConfirmBtn) {
             utilityAllConfirmBtn.style.display = 'none';
             utilityAllConfirmBtn.disabled = true;
@@ -206,6 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
             isUtilityCountConfirmed = false;
             utilityTargetCount = 0;
             utilityClickedCount = 0;
+            forceCashOnlyPayment = true;
 
             if (utilityAllConfirmBtn) {
                 utilityAllConfirmBtn.style.display = 'none';
@@ -220,8 +269,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (nikumanBtn) nikumanBtn.style.display = 'none';
             if (hotSnackBtn) hotSnackBtn.style.display = 'none';
             if (utilityBtn2) utilityBtn2.style.display = 'none';
-            // 公共料金モード終了扱いなので支払い選択肢は元に戻す
-            setCashOnlyPaymentOptions(false);
+            // 公共料金フローは継続扱い（客層→支払いは現金のみ）
+            setCashOnlyPaymentOptions(true);
             if (utilityBillsWrap) {
                 // 画像は残す（追加クリックは不可）
                 utilityBillsWrap.style.display = 'grid';
@@ -401,23 +450,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 公共料金画像クリック：商品クリックと同じ音を鳴らし、1度押した画像は薄暗くして無効化
-    // クリックされた時点で、1枚あたり6000円を合計値に反映する
+    // 公共料金画像クリック：
+    // - 公共料金モード中は、クリックで 6000円を合計に反映
+    // - 現金決済後にCを押した「スタンプモード」では、クリックでボン音＋スタンプ（合計は増やさない）
     if (utilityBillsWrap) {
         utilityBillsWrap.addEventListener('click', function (e) {
-            if (!isUtilityMode) return;
-            if (!isUtilityCountConfirmed) return; // 枚数が正しく確定するまでクリック不可
+            if (!isUtilityMode && !utilityStampMode) return;
+            if (isUtilityMode && !isUtilityCountConfirmed) return; // 枚数が正しく確定するまでクリック不可
             var img = e.target && e.target.closest ? e.target.closest('img') : null;
             if (!img) return;
             if (img.dataset.clicked === '1') return;
             img.dataset.clicked = '1';
             img.classList.add('is-clicked');
-            playProductClickSound();
-            // 公共料金1枚ぶん 6000円をレジに追加
-            addProductToRegister('__utility__', '公共料金', 6000);
-            utilityClickedCount += 1;
-            if (utilityAllConfirmBtn && utilityClickedCount === utilityTargetCount) {
-                utilityAllConfirmBtn.disabled = false;
+            if (utilityStampMode) {
+                playBonSound();
+                var stampSrc = document.body.getAttribute('data-utility-stamp-img');
+                if (stampSrc) {
+                    var wrap = img.closest ? img.closest('.utility-bill-item') : img.parentElement;
+                    if (wrap) {
+                        var stamp = document.createElement('img');
+                        stamp.src = stampSrc;
+                        stamp.alt = 'stamp';
+                        stamp.className = 'utility-bill-stamp';
+                        wrap.appendChild(stamp);
+                    }
+                }
+                utilityStampClickedCount += 1;
+                if (utilityStampTargetCount > 0 && utilityStampClickedCount >= utilityStampTargetCount) {
+                    utilityStampsCompleted = true;
+                    // もう触らせない
+                    utilityBillsWrap.style.pointerEvents = 'none';
+                }
+            } else {
+                playProductClickSound();
+                // 公共料金1枚ぶん 6000円をレジに追加
+                addProductToRegister('__utility__', '公共料金', 6000);
+                utilityClickedCount += 1;
+                if (utilityAllConfirmBtn && utilityClickedCount === utilityTargetCount) {
+                    utilityAllConfirmBtn.disabled = false;
+                }
             }
         });
     }
@@ -474,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!isNaN(label)) selectedAge = label;
             isPaymentMode = true;
             if (paymentOverlay) paymentOverlay.style.display = 'block';
-            if (isUtilityMode) setCashOnlyPaymentOptions(true);
+            if (forceCashOnlyPayment || isUtilityMode) setCashOnlyPaymentOptions(true);
             if (paymentSelect) paymentSelect.disabled = false;
             speakPayment();
         });
@@ -507,10 +578,47 @@ document.addEventListener('DOMContentLoaded', function () {
             // 支払い方法モード中：Cボタンだけでロック解除して新規レジ準備
             if (isPaymentMode) {
                 if (value === 'C') {
+                    // 公共料金フロー（現金のみ）で決済後：
+                    // スタンプが全て押されるまで、Cを押しても暗い画面のまま操作不可にする
+                    if (forceCashOnlyPayment && utilityBillsWrap && utilityBillsWrap.style.display !== 'none') {
+                        // まだスタンプモードに入っていなければ、ここでスタンプモード開始（暗い画面は維持）
+                        if (!utilityStampMode) {
+                            utilityStampMode = true;
+                            utilityStampsCompleted = false;
+                            // 現在表示中の票の枚数をターゲットにする
+                            utilityStampTargetCount = utilityBillsWrap.querySelectorAll('img').length;
+                            utilityStampClickedCount = 0;
+                            resetUtilityBillsForStamp();
+                            // 商品欄の公共料金入力行は出さない
+                            if (utilityCountRow) utilityCountRow.style.display = 'none';
+                            return;
+                        }
+                        // スタンプが終わるまでは何もしない（暗い画面のまま）
+                        if (!utilityStampsCompleted) {
+                            return;
+                        }
+                        // スタンプ完了後のみ、支払いモード解除して通常操作に戻す
+                        utilityStampMode = false;
+                        isPaymentMode = false;
+                        if (paymentOverlay) paymentOverlay.style.display = 'none';
+                        if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
+                        if (paymentSelect) {
+                            paymentSelect.disabled = true;
+                            paymentSelect.value = '';
+                        }
+                        // 公共料金票は残したまま、操作を戻す
+                        if (utilityBillsWrap) {
+                            utilityBillsWrap.style.pointerEvents = 'none';
+                        }
+                        return;
+                    }
                     isPaymentMode = false;
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
                     if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
                     if (sevenProductsWrap) sevenProductsWrap.style.display = '';
+                    // 支払いモード解除時は、公共料金フローの現金のみ制限も解除
+                    forceCashOnlyPayment = false;
+                    setCashOnlyPaymentOptions(false);
                     if (paymentSelect) {
                         paymentSelect.disabled = true;
                         paymentSelect.value = '';
