@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityTargetCount = 0;
     var utilityClickedCount = 0;
     var isUtilityCountConfirmed = false;
+    var paymentOptionsBackupHtml = null;
 
     function loadReceiptVoice() {
         var allVoices = window.speechSynthesis.getVoices();
@@ -97,10 +98,31 @@ document.addEventListener('DOMContentLoaded', function () {
         window.speechSynthesis.speak(utterance);
     }
 
+    function setCashOnlyPaymentOptions(isCashOnly) {
+        if (!paymentSelect) return;
+        if (paymentOptionsBackupHtml === null) {
+            paymentOptionsBackupHtml = paymentSelect.innerHTML;
+        }
+        if (isCashOnly) {
+            // select の option を差し替えて確実に「現金のみ」にする（disabled/hidden はブラウザ差があるため）
+            paymentSelect.innerHTML =
+                '<option value="">--1 つ選択してください--</option>' +
+                '<option value="cash">現金</option>';
+            if (paymentSelect.value && paymentSelect.value !== 'cash') {
+                paymentSelect.value = '';
+            }
+            return;
+        }
+        if (paymentOptionsBackupHtml !== null) {
+            paymentSelect.innerHTML = paymentOptionsBackupHtml;
+        }
+    }
+
     // 公共料金モード：開始・終了ヘルパー
     function enterUtilityMode() {
         if (!productsWithImage || !utilityBillsWrap) return;
         isUtilityMode = true;
+        setCashOnlyPaymentOptions(true);
         // 商品画像を隠し、公共料金画像エリアを表示
         productsWithImage.style.display = 'none';
         utilityBillsWrap.style.display = 'grid';
@@ -127,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function exitUtilityMode() {
         isUtilityMode = false;
+        setCashOnlyPaymentOptions(false);
         if (productsWithImage) productsWithImage.style.display = 'flex';
         if (utilityBillsWrap) {
             utilityBillsWrap.style.display = 'none';
@@ -197,6 +220,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (nikumanBtn) nikumanBtn.style.display = 'none';
             if (hotSnackBtn) hotSnackBtn.style.display = 'none';
             if (utilityBtn2) utilityBtn2.style.display = 'none';
+            // 公共料金モード終了扱いなので支払い選択肢は元に戻す
+            setCashOnlyPaymentOptions(false);
             if (utilityBillsWrap) {
                 // 画像は残す（追加クリックは不可）
                 utilityBillsWrap.style.display = 'grid';
@@ -449,6 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!isNaN(label)) selectedAge = label;
             isPaymentMode = true;
             if (paymentOverlay) paymentOverlay.style.display = 'block';
+            if (isUtilityMode) setCashOnlyPaymentOptions(true);
             if (paymentSelect) paymentSelect.disabled = false;
             speakPayment();
         });
