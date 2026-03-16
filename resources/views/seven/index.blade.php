@@ -39,6 +39,12 @@
             <div class="display-calc-area" id="displayCalcArea" style="display: none;">
                 <!-- 通常のレジ画面 -->
                 <div class="display-main" id="displayMain">
+                    <!-- 公共料金モード：枚数入力と確定ボタン（レジ上部に表示） -->
+                    <div class="utility-count-row" id="utilityCountRow" style="display: none;">
+                        <div class="utility-count-label">公共料金の枚数</div>
+                        <input type="text" id="utilityCountInput" class="utility-count-input" readonly inputmode="numeric" autocomplete="off">
+                        <button type="button" id="utilityConfirmBtn" class="utility-confirm-btn">確定</button>
+                    </div>
                     <div class="display-table-wrap">
                         <table class="display-table">
                             <thead>
@@ -51,12 +57,6 @@
                             <tbody id="displayTableBody">
                             </tbody>
                         </table>
-                    </div>
-                    <!-- 公共料金モード：枚数入力と確定ボタン（商品名テーブルの直下に表示） -->
-                    <div class="utility-count-row" id="utilityCountRow" style="display: none;">
-                        <div class="utility-count-label">公共料金の枚数</div>
-                        <input type="text" id="utilityCountInput" class="utility-count-input" readonly inputmode="numeric" autocomplete="off">
-                        <button type="button" id="utilityConfirmBtn" class="utility-confirm-btn">確定</button>
                     </div>
                     <div class="display-total" id="displayTotal">
                         <span class="display-total-label">合計</span>

@@ -255,12 +255,12 @@
     background: #16a34a;
 }
 
-/* 公共料金モード：正解時に表示する白い画面 */
+/* 公共料金モード：正解時に表示する白いレジ画面 */
 .utility-overlay {
-    position: fixed;
+    position: absolute;
     inset: 0;
     background: #ffffff;
-    z-index: 200;
+    z-index: 50;
 }
 .calculator .display-table tr.is-cancel-target {
     cursor: pointer;

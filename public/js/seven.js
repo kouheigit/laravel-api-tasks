@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
     var utilityConfirmBtn = document.getElementById('utilityConfirmBtn');
+    var displayBottomButtons = document.querySelector('.display-bottom-buttons');
     var receiptVoiceRef = null;
     var isUtilityMode = false;
     var utilityTargetCount = 0;
@@ -115,6 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // 入力欄を表示・リセット
         if (utilityCountRow) utilityCountRow.style.display = 'flex';
         if (utilityCountInput) utilityCountInput.value = '';
+        // レジ下のボタン群（中華まん／ffドリンク／公共料金）は隠す
+        if (displayBottomButtons) displayBottomButtons.style.display = 'none';
     }
 
     function exitUtilityMode() {
@@ -128,6 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (utilityCountInput) utilityCountInput.value = '';
         if (utilityOverlay) utilityOverlay.style.display = 'none';
         utilityTargetCount = 0;
+        // レジ下のボタン群を元に戻す
+        if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
     }
 
     // 公共料金モード：確定ボタン押下時の判定
