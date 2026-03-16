@@ -123,11 +123,6 @@ document.addEventListener('DOMContentLoaded', function () {
         isUtilityCountConfirmed = false;
         // レジ下のボタン群（中華まん／ffドリンク／公共料金）は隠す
         if (displayBottomButtons) displayBottomButtons.style.display = 'none';
-        // 右上の確認ボタンを表示（まだ無効）
-        if (utilityAllConfirmBtn) {
-            utilityAllConfirmBtn.style.display = 'block';
-            utilityAllConfirmBtn.disabled = true;
-        }
     }
 
     function exitUtilityMode() {
@@ -163,8 +158,11 @@ document.addEventListener('DOMContentLoaded', function () {
             isUtilityCountConfirmed = true;
             // 入力欄と小さい確定ボタンは消す
             if (utilityCountRow) utilityCountRow.style.display = 'none';
-            // 右上（画面中央）の大きな確認ボタンは、公共料金モード開始時に既に表示済みだが、
-            // このタイミングではまだ disable のまま（全伝票クリック完了で有効化）
+            // 枚数が正しく確定したタイミングで、大きな確定ボタンを表示（まだ無効）
+            if (utilityAllConfirmBtn) {
+                utilityAllConfirmBtn.style.display = 'block';
+                utilityAllConfirmBtn.disabled = true;
+            }
         });
     }
 
@@ -173,7 +171,18 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityAllConfirmBtn.addEventListener('click', function () {
             if (!isUtilityMode) return;
             if (utilityAllConfirmBtn.disabled) return;
-            // ここでは公共料金モードを終了するだけ（必要なら後で会計処理を追加）
+            // 1回目のクリック：ラベルを「確定」→「確認」に変えるだけ
+            if (utilityAllConfirmBtn.textContent === '確定') {
+                utilityAllConfirmBtn.textContent = '確認';
+                return;
+            }
+            // 2回目（確認ボタンとして押されたとき）：
+            // 公共料金の枚数ぶん、1枚あたり6000円を合計に加算してから公共料金モードを終了
+            if (!isNaN(utilityTargetCount) && utilityTargetCount > 0) {
+                for (var i = 0; i < utilityTargetCount; i++) {
+                    addProductToRegister('__utility__', '公共料金', 6000);
+                }
+            }
             exitUtilityMode();
         });
     }
