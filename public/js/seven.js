@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var sevenProductsWrap = document.querySelector('.seven-products-wrap');
     var productsWithImage = document.getElementById('sevenProductsWithImage');
     var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
+    var utilityStampModal = document.getElementById('utilityStampModal');
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
     var utilityConfirmBtn = document.getElementById('utilityConfirmBtn');
@@ -432,6 +433,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityPaymentLocked = true;
                 // 暗い画面は維持し、他の操作を無効化（スタンプのみ許可）
                 if (paymentOverlay) paymentOverlay.style.display = 'block';
+                if (utilityStampModal) utilityStampModal.style.display = 'flex';
                 // スタンプモードを開始（票を元の状態に戻してクリック可能に）
                 utilityStampMode = true;
                 utilityStampsCompleted = false;
@@ -589,6 +591,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     isPaymentMode = false;
                     selectedAge = null;
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
+                    if (utilityStampModal) utilityStampModal.style.display = 'none';
                     if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
                     if (paymentSelect) {
                         paymentSelect.disabled = true; // 支払い方法一覧はロック

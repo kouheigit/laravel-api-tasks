@@ -213,6 +213,26 @@
     box-shadow: none;
 }
 
+/* 公共料金モード：スタンプ案内モーダル（レジ画面内） */
+.utility-stamp-modal {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 65;
+}
+.utility-stamp-modal-inner {
+    background: #ffffff;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
 .calculator .display {
     width: 100%;
     flex: 1;

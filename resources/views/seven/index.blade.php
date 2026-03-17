@@ -75,6 +75,12 @@
                         <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">ffドリンク</button>
                         <button type="button" class="display-bottom-btn" data-value="公共料金">公共料金</button>
             </div>
+                    <!-- 公共料金モード：現金選択後の案内モーダル -->
+                    <div class="utility-stamp-modal" id="utilityStampModal" style="display: none;">
+                        <div class="utility-stamp-modal-inner">
+                            <p>支払い票にスタンプを押してください。<br>右側を切り取ってお客様に渡してください。</p>
+                        </div>
+                    </div>
                 </div>
                 <!-- 肉まん一覧パネル（中華まん押下で表示） -->
                 <div class="display-nikuman-panel" id="displayNikumanPanel" style="display: none;">
