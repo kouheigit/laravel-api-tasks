@@ -10,6 +10,9 @@ use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\PointleaderController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\SevenController;
+use App\Http\Controllers\OrderExampleController;
+use App\Http\Controllers\AuthSessionController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
 
@@ -152,3 +155,8 @@ Route::post('/seven/register', [SevenController::class, 'startRegister'])->name(
 Route::post('/seven/register/items', [SevenController::class, 'addRegisterItem'])->name('seven.register.items');
 Route::post('/seven/register/items/decrement', [SevenController::class, 'decrementRegisterItem'])->name('seven.register.items.decrement');
 Route::post('/seven/register/finish', [SevenController::class, 'finishRegister'])->name('seven.register.finish');
+
+// OrderExample: StockManager サンプル画面
+Route::get('/order-example', [OrderExampleController::class, 'index'])->name('order-example.index');
+Route::post('/order-example/set-stock', [OrderExampleController::class, 'setStock'])->name('order-example.set-stock');
+Route::post('/order-example/decrease', [OrderExampleController::class, 'decrease'])->name('order-example.decrease');
