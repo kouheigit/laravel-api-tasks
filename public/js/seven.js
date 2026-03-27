@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // 公共料金：現金支払い選択後は、受領印が完了するまで入力をロック（Cも無効）
             if (utilityPaymentLocked) {
                 if (val === 'C' && utilityStampsCompleted) {
-                    // スタンプ完了後のみ、通常のレジ画面（責任者解除後の画面）へ戻す
+                    // スタンプ完了後のみ、公共料金の合計・商品を完全に消して元のレジモードへ戻す
                     utilityPaymentLocked = false;
                     utilityStampMode = false;
                     utilityStampsCompleted = false;
@@ -594,7 +594,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (utilityStampModal) utilityStampModal.style.display = 'none';
                     if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
                     if (paymentSelect) {
-                        paymentSelect.disabled = true; // 支払い方法一覧はロック
+                        paymentSelect.disabled = true;
                         paymentSelect.value = '';
                     }
 
@@ -614,6 +614,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (nikumanBtnRestore) nikumanBtnRestore.style.display = '';
                     if (hotSnackBtnRestore) hotSnackBtnRestore.style.display = '';
                     if (utilityBtnRestore) utilityBtnRestore.style.display = '';
+
+                    // レジの商品・合計を完全にクリアして元のレジモードに
+                    registerItems = {};
+                    current = '';
+                    multiplyCount = null;
+                    isMultiplyInputMode = false;
+                    isCancelMode = false;
+                    lastClickedProduct = null;
+                    if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
+                    updateDisplayFromRegisterItems();
+                    updateDisplay();
 
                     // レジ画面は「責任者解除後」の状態に
                     isUnlockMode = false;
