@@ -10,6 +10,17 @@ class UserService
         if (!$user->isActive()) return;
         if (!$user->hasSubscription()) return;
         if (!$user->subscription->isValid()) return;
+        /*ネスト地獄
+         * if ($user) {
+    if ($user->isActive()) {
+        if ($user->hasSubscription()) {
+            if ($user->subscription->isValid()) {
+                // 処理
+            }
+        }
+    }
+}
+         */
     }
     public function updateUser(int $id, array $data){
 
