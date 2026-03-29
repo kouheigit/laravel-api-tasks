@@ -1,44 +1,29 @@
 <?php
-
-class ContractAmout{
-    private float $salesTaxRate;
-
-    public function __construct(float $salesTaxRate)
-    {
-        $this->salesTaxRate = $salesTaxRate;
-    }
-
-    public function getSalesTaxRate(): float
-    {
-        return $this->salesRate;
-    }
-}
-
-/*
- * class ContractAmount
+class ContractAmount
 {
-    private float $salesTaxRate;
-
-    public function __construct(float $salesTaxRate)
+    public function __construct(private int $amountExcludingTax, private float $salesTaxRate,)
     {
-        $this->salesTaxRate = $salesTaxRate;
+        if ($amountExcludingTax < 0) {
+            throw new InvalidArgumentException('税抜金額は0以上である必要があります。');
+        }
+
+        if ($salesTaxRate < 0) {
+            throw new InvalidArgumentException('消費税率は0以上である必要があります。');
+        }
     }
 
-    public function getSalesTaxRate(): float
+    public function amountIncludingTax(): int
+    {
+        return (int) round($this->amountExcludingTax * (1 + $this->salesTaxRate));
+    }
+
+    public function amountExcludingTax(): int
+    {
+        return $this->amountExcludingTax;
+    }
+
+    public function salesTaxRate(): float
     {
         return $this->salesTaxRate;
     }
 }
- */
-
-/*
- *a
- NG例
- class ContractAmount
-{
-    public ?float $salesTaxRate = null;
-}
-
-$amount = new ContractAmount();
-echo $amount->salesTaxRate; // null
- */
