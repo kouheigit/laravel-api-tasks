@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b03637fcb85884668bf1151599fe43b5",
+    "content-hash": "e76b6dd6566a45099986c299505ae364",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6172,6 +6172,29 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.3.0"
             },
             "time": "2024-12-21T16:25:41+00:00"
+        },
+        {
+            "name": "veritrans/tgmdk",
+            "version": "1.1.8",
+            "dist": {
+                "type": "path",
+                "url": "./src/local_packages/veritrans-tgmdk",
+                "reference": "ecc9e8cd2d5ac8618d3b6fd4e3d9d690eb983fce"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "VeriTrans TGMDK (local path package placeholder). Place official SDK sources under src/.",
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
         },
         {
             "name": "vlucas/phpdotenv",

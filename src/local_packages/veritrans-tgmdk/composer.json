@@ -1,0 +1,12 @@
+{
+  "name": "veritrans/tgmdk",
+  "description": "VeriTrans TGMDK (local path package placeholder). Place official SDK sources under src/.",
+  "type": "library",
+  "version": "1.1.8",
+  "license": "proprietary",
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  }
+}
