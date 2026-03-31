@@ -1,26 +1,35 @@
 <?php
 
-class HitPoint
+final class HitPoint
 {
-    private const MAX = 999;
+    private const MIN = 0;
 
-    public function __construct(private int $value) {}
-
-    public function damage(int $amount): self
+    private function __construct(private int $amount)
     {
-        return new self(max(0, $this->value - $amount));
+        if($amount < self::MIN){
+            throw new InvalidArgumentException('HPは0以上である必要があります');
+        }
     }
-
-    public function heal(int $amount): self
+    public function damage(int $damageAmount): self
     {
-        return new self(min(self::MAX, $this->value + $amount));
-    }
+        if($damageAmount < 0){
+            throw new InvalidArgumentException('ダメージは0以上である必要があります');
+        }
+        $nextAmount = $this->amount - $damageAmount;
 
+        return new self(max(self::MIN,$nextAmount));
+    }
+    public function isZero(): bool
+    {
+        return $this->amount === self::MIN;
+    }
     public function value(): int
     {
-        return $this->value;
+        return $this->amount;
     }
 }
+
+
 /*
  * class HitPoint
 {
