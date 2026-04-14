@@ -15,6 +15,8 @@ use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\TodotestuController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
@@ -25,6 +27,8 @@ Route::get('/', function () {
 
 Route::resource('categories', CategoryController::class);
 Route::resource('expenses', ExpenseController::class);
+Route::resource('items', ItemController::class);
+Route::resource('stock-movements', StockMovementController::class)->only(['index', 'store']);
 Route::resource('todotestus', TodotestuController::class);
 
 // TodoUser ログイン画面
