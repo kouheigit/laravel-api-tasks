@@ -13,6 +13,8 @@ use App\Http\Controllers\SevenController;
 use App\Http\Controllers\OrderExampleController;
 use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\TodotestuController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
@@ -21,6 +23,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('categories', CategoryController::class);
+Route::resource('expenses', ExpenseController::class);
 Route::resource('todotestus', TodotestuController::class);
 
 // TodoUser ログイン画面
