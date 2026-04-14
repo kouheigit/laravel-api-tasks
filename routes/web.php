@@ -13,12 +13,16 @@ use App\Http\Controllers\SevenController;
 use App\Http\Controllers\OrderExampleController;
 use App\Http\Controllers\AuthSessionController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\TodotestuController;
 use App\Http\Controllers\Auth\MemberLoginController;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('todotestus', TodotestuController::class);
+
 // TodoUser ログイン画面
 Route::get('/todo/login', [TodoAuthController::class, 'showLoginForm'])
     ->name('todo.login');
