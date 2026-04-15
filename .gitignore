@@ -31,3 +31,6 @@ resources/views/todo/index_copy.blade.php
 
 # Ignored old migrations
 ignore_migrations/
+
+# Practice exercises
+練習問題/
