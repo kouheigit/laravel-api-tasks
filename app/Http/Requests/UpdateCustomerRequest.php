@@ -22,7 +22,11 @@ class UpdateCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+             'company'=>'required|string',
+            'contact_name'=>'required|string',
+            'contact_email'=>'required|string',
+            'phone'=>'required|string|max:20',
+            'customer_status'=>'required|string',
         ];
     }
 }
