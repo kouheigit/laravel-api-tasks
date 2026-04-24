@@ -5,3 +5,83 @@
 [x-cloak] {
     display: none;
 }
+
+:root {
+    --taxi-ink: #13212c;
+    --taxi-navy: #16354a;
+    --taxi-sky: #dff4ff;
+    --taxi-gold: #f7b500;
+    --taxi-sand: #fff7df;
+    --taxi-line: rgba(19, 33, 44, 0.12);
+    --taxi-card: rgba(255, 255, 255, 0.92);
+}
+
+.taxi-jobs-shell {
+    min-height: 100vh;
+    color: var(--taxi-ink);
+    background:
+        radial-gradient(circle at top left, rgba(247, 181, 0, 0.24), transparent 28%),
+        radial-gradient(circle at top right, rgba(110, 204, 255, 0.28), transparent 22%),
+        linear-gradient(180deg, #fffaf0 0%, #eef7fb 48%, #f9fcff 100%);
+}
+
+.taxi-grid {
+    background-image:
+        linear-gradient(rgba(22, 53, 74, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 53, 74, 0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+
+.taxi-glass {
+    background: var(--taxi-card);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    box-shadow: 0 24px 60px rgba(22, 53, 74, 0.12);
+    backdrop-filter: blur(18px);
+}
+
+.taxi-hero-badge {
+    letter-spacing: 0.18em;
+}
+
+.taxi-card {
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.taxi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 45px rgba(22, 53, 74, 0.14);
+    border-color: rgba(247, 181, 0, 0.45);
+}
+
+.taxi-stat-stripe {
+    background:
+        linear-gradient(135deg, rgba(247, 181, 0, 0.9), rgba(255, 212, 88, 0.88)),
+        repeating-linear-gradient(
+            -45deg,
+            rgba(19, 33, 44, 0.1) 0,
+            rgba(19, 33, 44, 0.1) 12px,
+            rgba(255, 255, 255, 0.08) 12px,
+            rgba(255, 255, 255, 0.08) 24px
+        );
+}
+
+.taxi-pill {
+    border: 1px solid rgba(19, 33, 44, 0.1);
+    background: rgba(255, 255, 255, 0.78);
+}
+
+.taxi-section-title::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, var(--taxi-gold), #ffd86f);
+    box-shadow: 6px 6px 0 rgba(22, 53, 74, 0.12);
+}
+
+.taxi-detail-panel {
+    border: 1px solid var(--taxi-line);
+    background: rgba(255, 255, 255, 0.88);
+}
