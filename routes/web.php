@@ -19,6 +19,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\StockMovementController;
 use App\Http\Controllers\TodotestuController;
 use App\Http\Controllers\Auth\MemberLoginController;
+use App\Http\Controllers\TaxiJobController;
 
 
 Route::get('/', function () {
@@ -172,3 +173,6 @@ Route::post('/seven/register/finish', [SevenController::class, 'finishRegister']
 Route::get('/order-example', [OrderExampleController::class, 'index'])->name('order-example.index');
 Route::post('/order-example/set-stock', [OrderExampleController::class, 'setStock'])->name('order-example.set-stock');
 Route::post('/order-example/decrease', [OrderExampleController::class, 'decrease'])->name('order-example.decrease');
+
+Route::get('/taxi-jobs', [TaxiJobController::class, 'index'])->name('taxi-jobs.index');
+Route::get('/taxi-jobs/{taxiJob:slug}', [TaxiJobController::class, 'show'])->name('taxi-jobs.show');
