@@ -415,6 +415,31 @@
 .calculator .nikuman-panel-buttons .hotSnack-product-btn:hover {
     background: #f0f0f0;
 }
+.calculator .nikuman-panel-buttons .drink-product-btn {
+    display: grid;
+    grid-template-columns: 54px 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 6px 9px;
+    font-size: 0.8rem;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+}
+.calculator .nikuman-panel-buttons .drink-product-btn:hover {
+    background: #f0f0f0;
+}
+.calculator .drink-product-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+.calculator .drink-product-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
 .calculator .nikuman-panel-buttons .nikuman-product-btn .price {
     float: right;
     color: #666;
@@ -422,6 +447,10 @@
 .calculator .nikuman-panel-buttons .hotSnack-product-btn .price {
     float: right;
     color: #666;
+}
+.calculator .nikuman-panel-buttons .drink-product-btn .price {
+    color: #666;
+    white-space: nowrap;
 }
 .calculator .nikuman-panel-subtotal {
     border: 1px solid #ccc;
@@ -643,6 +672,28 @@
     opacity: 0.4;
     filter: grayscale(0.4);
     cursor: default;
+}
+.seven-cafe-random-wrap {
+    width: 100%;
+}
+.seven-cafe-random-card {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    padding: 10px;
+    text-align: center;
+}
+.seven-cafe-random-card img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    margin: 0 auto 8px;
+}
+.seven-cafe-random-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1f2937;
+    overflow-wrap: anywhere;
 }
 .seven-product-item {
     display: flex;
