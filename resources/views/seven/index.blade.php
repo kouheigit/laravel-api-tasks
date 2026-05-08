@@ -15,8 +15,9 @@
                         @if($product->image_path !== null && $product->image_path !== '')
                             @php
                                 $raw = trim($product->image_path, " \t\n\r\"'\/");
-                                $filename = basename($raw);
-                                $imgPath = 'sevenimg/' . $filename;
+                                $imgPath = str_starts_with($raw, 'http://') || str_starts_with($raw, 'https://')
+                                    ? $raw
+                                    : 'sevenimg/' . ltrim($raw, '/');
                             @endphp
                             <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
                                 <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
@@ -156,8 +157,10 @@
                             @foreach($cafeProducts as $product)
                                 @php
                                     $raw = trim((string) $product->image_path, " \t\n\r\"'\/");
-                                    $filename = $raw !== '' ? basename($raw) : 'gazou2.png';
-                                    $imgPath = 'sevenimg/' . $filename;
+                                    $imgPath = $raw !== '' ? $raw : 'gazou2.png';
+                                    $imgPath = str_starts_with($imgPath, 'http://') || str_starts_with($imgPath, 'https://')
+                                        ? $imgPath
+                                        : 'sevenimg/' . ltrim($imgPath, '/');
                                 @endphp
                                 <button type="button" class="drink-product-btn"
                                     data-product-id="{{ $product->id }}"
