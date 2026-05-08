@@ -74,7 +74,7 @@
                     <div class="display-bottom-buttons">
                         <button type="button" class="display-bottom-btn" data-value="中華まん" id="nikumanBtn">中華まん</button>
                         <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">フライヤー</button>
-                        <button type="button" class="display-bottom-btn" data-value="ドリンク" id="drinkBtn">ドリンク</button>
+                        <button type="button" class="display-bottom-btn" data-value="ドリンク" id="drinkBtn" title="セブンカフェ商品を選択">ドリンク</button>
                         <button type="button" class="display-bottom-btn" data-value="公共料金">公共料金</button>
             </div>
                     <!-- 公共料金モード：現金選択後の案内モーダル -->
@@ -163,7 +163,8 @@
                                     data-product-id="{{ $product->id }}"
                                     data-product-name="{{ e($product->name) }}"
                                     data-product-price="{{ $product->price }}"
-                                    data-product-img="{{ asset($imgPath) }}">
+                                    data-product-img="{{ asset($imgPath) }}"
+                                    aria-label="{{ $product->name }}を選択">
                                     <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="drink-product-img">
                                     <span class="drink-product-name">{{ $product->name }}</span>
                                     <span class="price">{{ $product->price }}円</span>
