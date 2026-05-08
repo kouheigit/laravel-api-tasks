@@ -116,7 +116,7 @@
                     <button type="button" class="nikuman-panel-confirm-btn" id="nikumanPanelConfirmBtn">確認</button>
                     <button type="button" class="nikuman-panel-cancel-btn" id="nikumanPanelCancelBtn">取り消し</button>
                 </div>
-                <!-- ホットスナック一覧パネル（ffドリンク押下で表示） -->
+                <!-- ホットスナック一覧パネル（フライヤー押下で表示） -->
                 <div class="display-nikuman-panel" id="displayHotSnackPanel" style="display: none;">
                     <div class="nikuman-panel-title">ホットスナック一覧</div>
                     <div class="nikuman-panel-buttons" id="hotSnackPanelButtons">

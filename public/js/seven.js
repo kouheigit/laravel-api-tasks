@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (utilityCountRow) utilityCountRow.style.display = 'table-row';
         if (utilityCountInput) utilityCountInput.value = '';
         isUtilityCountConfirmed = false;
-        // レジ下のボタン群（中華まん／ffドリンク／公共料金）は隠す
+        // レジ下のボタン群（中華まん／フライヤー／ドリンク／公共料金）は隠す
         if (displayBottomButtons) displayBottomButtons.style.display = 'none';
     }
 
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityAllConfirmBtn.textContent = '確定';
             }
             if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
-            // 公共料金完了後は「中華まん」「ffドリンク」は表示しない
+            // 公共料金完了後は「中華まん」「フライヤー」「ドリンク」は表示しない
             var nikumanBtn = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
             var hotSnackBtn = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
             var drinkBtn = document.querySelector('.display-bottom-btn[data-value="ドリンク"]');
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     if (productsWithImage) productsWithImage.style.display = 'flex';
 
-                    // 下の「中華まん」「ffドリンク」「公共料金」ボタンを復帰
+                    // 下の「中華まん」「フライヤー」「ドリンク」「公共料金」ボタンを復帰
                     if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
                     var nikumanBtnRestore = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
                     var hotSnackBtnRestore = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
@@ -1135,7 +1135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmBtn.disabled = Object.keys(hotSnackItems).length === 0;
     }
 
-    // ffドリンクボタン：ホットスナック一覧を表示（ディスプレイ下＋タッチパネル「イチオシメニュー」）
+    // フライヤーボタン：ホットスナック一覧を表示（内部値は既存互換の ffドリンク）
     document.querySelectorAll('[data-value="ffドリンク"]').forEach(function (hotSnackBtn) {
         if (!displayMain || !displayHotSnackPanel) return;
         hotSnackBtn.addEventListener('click', function () {
