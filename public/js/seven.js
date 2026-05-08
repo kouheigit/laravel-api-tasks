@@ -960,7 +960,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showRandomCafeProduct() {
         var buttons = getDrinkProductButtons();
-        if (!cafeRandomWrap || buttons.length === 0) return;
+        if (!cafeRandomWrap || buttons.length === 0) {
+            activeCafeProductId = null;
+            if (productsWithImage) productsWithImage.style.display = 'flex';
+            return;
+        }
         var chosen = buttons[Math.floor(Math.random() * buttons.length)];
         activeCafeProductId = chosen.getAttribute('data-product-id');
         var productName = chosen.getAttribute('data-product-name') || '';
