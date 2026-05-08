@@ -25,6 +25,7 @@
                     @endforeach
                 </div>
                 <div class="seven-utility-bills-wrap" id="sevenUtilityBillsWrap"></div>
+                <div class="seven-cafe-random-wrap" id="sevenCafeRandomWrap" style="display: none;"></div>
             </aside>
         @endif
         <div class="seven-register-column">
@@ -72,7 +73,8 @@
                     </div>
                     <div class="display-bottom-buttons">
                         <button type="button" class="display-bottom-btn" data-value="中華まん" id="nikumanBtn">中華まん</button>
-                        <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">ffドリンク</button>
+                        <button type="button" class="display-bottom-btn" data-value="ffドリンク" id="hotSnackBtn">フライヤー</button>
+                        <button type="button" class="display-bottom-btn" data-value="ドリンク" id="drinkBtn">ドリンク</button>
                         <button type="button" class="display-bottom-btn" data-value="公共料金">公共料金</button>
             </div>
                     <!-- 公共料金モード：現金選択後の案内モーダル -->
@@ -145,6 +147,46 @@
                     </div>
                     <button type="button" class="nikuman-panel-confirm-btn" id="hotSnackPanelConfirmBtn">確認</button>
                     <button type="button" class="nikuman-panel-cancel-btn" id="hotSnackPanelCancelBtn">取り消し</button>
+                </div>
+                <!-- セブンカフェ一覧パネル（ドリンク押下で表示） -->
+                <div class="display-nikuman-panel" id="displayDrinkPanel" style="display: none;">
+                    <div class="nikuman-panel-title">セブンカフェ一覧</div>
+                    <div class="nikuman-panel-buttons drink-panel-buttons" id="drinkPanelButtons">
+                        @if(isset($cafeProducts))
+                            @foreach($cafeProducts as $product)
+                                @php
+                                    $raw = trim((string) $product->image_path, " \t\n\r\"'\/");
+                                    $filename = $raw !== '' ? basename($raw) : 'gazou2.png';
+                                    $imgPath = 'sevenimg/' . $filename;
+                                @endphp
+                                <button type="button" class="drink-product-btn"
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-name="{{ e($product->name) }}"
+                                    data-product-price="{{ $product->price }}"
+                                    data-product-img="{{ asset($imgPath) }}">
+                                    <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="drink-product-img">
+                                    <span class="drink-product-name">{{ $product->name }}</span>
+                                    <span class="price">{{ $product->price }}円</span>
+                                </button>
+                            @endforeach
+                        @endif
+                    </div>
+                    <div class="nikuman-panel-subtotal">
+                        <div class="nikuman-panel-subtotal-title">ドリンクの別会計</div>
+                        <table class="nikuman-panel-table">
+                            <thead>
+                                <tr>
+                                    <th>商品名</th>
+                                    <th class="col-price">値段</th>
+                                    <th class="col-qty">数量</th>
+                                </tr>
+                            </thead>
+                            <tbody id="drinkPanelTableBody"></tbody>
+                        </table>
+                        <div class="nikuman-panel-total" id="drinkPanelTotal">合計: 0円</div>
+                    </div>
+                    <button type="button" class="nikuman-panel-confirm-btn" id="drinkPanelConfirmBtn">確認</button>
+                    <button type="button" class="nikuman-panel-cancel-btn" id="drinkPanelCancelBtn">取り消し</button>
                 </div>
             </div>
             <div class="payment-overlay" id="payment-overlay" style="display: none;"></div>
@@ -233,4 +275,3 @@
     <script src="{{ asset('js/seven.js') }}"></script>
 </body>
 </html>
-
