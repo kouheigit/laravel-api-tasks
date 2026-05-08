@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var sevenProductsWrap = document.querySelector('.seven-products-wrap');
     var productsWithImage = document.getElementById('sevenProductsWithImage');
     var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
+    var cafeRandomWrap = document.getElementById('sevenCafeRandomWrap');
     var utilityStampModal = document.getElementById('utilityStampModal');
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
@@ -163,6 +164,10 @@ document.addEventListener('DOMContentLoaded', function () {
         setCashOnlyPaymentOptions(true);
         // 商品画像を隠し、公共料金画像エリアを表示
         productsWithImage.style.display = 'none';
+        if (cafeRandomWrap) {
+            cafeRandomWrap.style.display = 'none';
+            cafeRandomWrap.innerHTML = '';
+        }
         utilityBillsWrap.style.display = 'grid';
         utilityBillsWrap.innerHTML = '';
         // 1〜5 枚のランダム枚数で画像を表示
@@ -198,6 +203,10 @@ document.addEventListener('DOMContentLoaded', function () {
         forceCashOnlyPayment = false;
         setCashOnlyPaymentOptions(false);
         if (productsWithImage) productsWithImage.style.display = 'flex';
+        if (cafeRandomWrap) {
+            cafeRandomWrap.style.display = 'none';
+            cafeRandomWrap.innerHTML = '';
+        }
         if (utilityBillsWrap) {
             utilityBillsWrap.style.display = 'none';
             utilityBillsWrap.innerHTML = '';
@@ -269,9 +278,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // 公共料金完了後は「中華まん」「ffドリンク」は表示しない
             var nikumanBtn = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
             var hotSnackBtn = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
+            var drinkBtn = document.querySelector('.display-bottom-btn[data-value="ドリンク"]');
             var utilityBtn2 = document.querySelector('.display-bottom-btn[data-value="公共料金"]');
             if (nikumanBtn) nikumanBtn.style.display = 'none';
             if (hotSnackBtn) hotSnackBtn.style.display = 'none';
+            if (drinkBtn) drinkBtn.style.display = 'none';
             if (utilityBtn2) utilityBtn2.style.display = 'none';
             // 公共料金フローは継続扱い（客層→支払いは現金のみ）
             setCashOnlyPaymentOptions(true);
@@ -372,6 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updateDisplayFromRegisterItems();
             if (typeof updateNikumanPanelDisplay === 'function') updateNikumanPanelDisplay();
             if (typeof updateHotSnackPanelDisplay === 'function') updateHotSnackPanelDisplay();
+            if (typeof updateDrinkPanelDisplay === 'function') updateDrinkPanelDisplay();
         });
     }
 
@@ -610,9 +622,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
                     var nikumanBtnRestore = document.querySelector('.display-bottom-btn[data-value="中華まん"]');
                     var hotSnackBtnRestore = document.querySelector('.display-bottom-btn[data-value="ffドリンク"]');
+                    var drinkBtnRestore = document.querySelector('.display-bottom-btn[data-value="ドリンク"]');
                     var utilityBtnRestore = document.querySelector('.display-bottom-btn[data-value="公共料金"]');
                     if (nikumanBtnRestore) nikumanBtnRestore.style.display = '';
                     if (hotSnackBtnRestore) hotSnackBtnRestore.style.display = '';
+                    if (drinkBtnRestore) drinkBtnRestore.style.display = '';
                     if (utilityBtnRestore) utilityBtnRestore.style.display = '';
 
                     // レジの商品・合計を完全にクリアして元のレジモードに
@@ -874,6 +888,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // いまどの画面にいるかで挙動を変える
             var nikumanVisible = displayNikumanPanel && displayNikumanPanel.style.display !== 'none';
             var hotSnackVisible = displayHotSnackPanel && displayHotSnackPanel.style.display !== 'none';
+            var drinkVisible = displayDrinkPanel && displayDrinkPanel.style.display !== 'none';
 
             // ✖️で個数が指定されている場合：その個数ぶんリピート
             var times = 1;
@@ -905,6 +920,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     hotSnackItems[hpid].quantity += 1;
                 }
                 updateHotSnackPanelDisplay();
+            } else if (drinkVisible) {
+                return;
             } else {
                 // 通常のレジ画面：本会計にそのまま反映
                 for (var k = 0; k < times; k++) {
@@ -922,8 +939,63 @@ document.addEventListener('DOMContentLoaded', function () {
     var displayMain = document.getElementById('displayMain');
     var displayNikumanPanel = document.getElementById('displayNikumanPanel');
     var displayHotSnackPanel = document.getElementById('displayHotSnackPanel');
+    var displayDrinkPanel = document.getElementById('displayDrinkPanel');
     var nikumanItems = {}; // 肉まん別会計用
     var hotSnackItems = {}; // ホットスナック別会計用
+    var drinkItems = {}; // ドリンク別会計用
+    var activeCafeProductId = null;
+
+    function getDrinkProductButtons() {
+        return Array.prototype.slice.call(document.querySelectorAll('.drink-product-btn'));
+    }
+
+    function clearCafeRandomDisplay() {
+        activeCafeProductId = null;
+        if (cafeRandomWrap) {
+            cafeRandomWrap.style.display = 'none';
+            cafeRandomWrap.innerHTML = '';
+        }
+        if (productsWithImage) productsWithImage.style.display = 'flex';
+    }
+
+    function showRandomCafeProduct() {
+        var buttons = getDrinkProductButtons();
+        if (!cafeRandomWrap || buttons.length === 0) return;
+        var chosen = buttons[Math.floor(Math.random() * buttons.length)];
+        activeCafeProductId = chosen.getAttribute('data-product-id');
+        var productName = chosen.getAttribute('data-product-name') || '';
+        var productImg = chosen.getAttribute('data-product-img') || '';
+        if (productsWithImage) productsWithImage.style.display = 'none';
+        cafeRandomWrap.innerHTML =
+            '<div class="seven-cafe-random-card" data-product-id="' + escapeHtml(String(activeCafeProductId)) + '">' +
+                '<img src="' + escapeHtml(productImg) + '" alt="' + escapeHtml(productName) + '">' +
+                '<div class="seven-cafe-random-name">' + escapeHtml(productName) + '</div>' +
+            '</div>';
+        cafeRandomWrap.style.display = 'block';
+    }
+
+    function updateDrinkPanelDisplay() {
+        var tbody = document.getElementById('drinkPanelTableBody');
+        var totalEl = document.getElementById('drinkPanelTotal');
+        var confirmBtn = document.getElementById('drinkPanelConfirmBtn');
+        if (!tbody || !totalEl || !confirmBtn) return;
+        tbody.innerHTML = '';
+        var total = 0;
+        Object.keys(drinkItems).forEach(function (productId) {
+            var item = drinkItems[productId];
+            total += item.price * item.quantity;
+            var tr = document.createElement('tr');
+            tr.setAttribute('data-product-id', String(productId));
+            if (isCancelMode) tr.classList.add('is-cancel-target');
+            tr.innerHTML =
+                '<td>' + escapeHtml(item.product_name) + '</td>' +
+                '<td class="col-price">' + escapeHtml(String(item.price)) + '</td>' +
+                '<td class="col-qty">' + escapeHtml(String(item.quantity)) + '</td>';
+            tbody.appendChild(tr);
+        });
+        totalEl.textContent = '合計: ' + total + '円';
+        confirmBtn.disabled = Object.keys(drinkItems).length === 0;
+    }
 
     function updateNikumanPanelDisplay() {
         var tbody = document.getElementById('nikumanPanelTableBody');
@@ -956,6 +1028,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 nikumanItems = {};
                 updateNikumanPanelDisplay();
                 if (displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
+                if (displayDrinkPanel) displayDrinkPanel.style.display = 'none';
+                clearCafeRandomDisplay();
                 displayMain.style.display = 'none';
                 displayNikumanPanel.style.display = 'flex';
             });
@@ -1070,6 +1144,8 @@ document.addEventListener('DOMContentLoaded', function () {
             hotSnackItems = {};
             updateHotSnackPanelDisplay();
             if (displayNikumanPanel) displayNikumanPanel.style.display = 'none';
+            if (displayDrinkPanel) displayDrinkPanel.style.display = 'none';
+            clearCafeRandomDisplay();
             displayMain.style.display = 'none';
             displayHotSnackPanel.style.display = 'flex';
         });
@@ -1143,6 +1219,108 @@ document.addEventListener('DOMContentLoaded', function () {
                 isCancelMode = false;
                 if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
                 updateHotSnackPanelDisplay();
+            });
+        }
+    }
+
+    // ドリンクボタン：セブンカフェ一覧を表示し、外側の商品表示エリアに正解商品をランダム表示
+    document.querySelectorAll('[data-value="ドリンク"]').forEach(function (drinkBtn) {
+        if (!displayMain || !displayDrinkPanel) return;
+        drinkBtn.addEventListener('click', function () {
+            if (isUnlockMode || isPaymentMode) return;
+            playClickSound();
+            drinkItems = {};
+            updateDrinkPanelDisplay();
+            if (displayNikumanPanel) displayNikumanPanel.style.display = 'none';
+            if (displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
+            displayMain.style.display = 'none';
+            displayDrinkPanel.style.display = 'flex';
+            showRandomCafeProduct();
+        });
+    });
+
+    if (displayMain && displayDrinkPanel) {
+        document.querySelectorAll('.drink-product-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (isPaymentMode) return;
+                var productId = this.getAttribute('data-product-id');
+                var productName = this.getAttribute('data-product-name');
+                var productPrice = parseInt(this.getAttribute('data-product-price'), 10);
+                if (!productId || !productName || isNaN(productPrice)) return;
+                if (!activeCafeProductId || String(productId) !== String(activeCafeProductId)) return;
+
+                lastClickedProduct = { product_id: productId, product_name: productName, price: productPrice };
+                if (!drinkItems[productId]) {
+                    drinkItems[productId] = { product_name: productName, price: productPrice, quantity: 0 };
+                }
+                drinkItems[productId].quantity += 1;
+                updateDrinkPanelDisplay();
+                activeCafeProductId = null;
+                if (cafeRandomWrap) {
+                    cafeRandomWrap.style.display = 'none';
+                    cafeRandomWrap.innerHTML = '';
+                }
+                playProductClickSound();
+            });
+        });
+
+        var drinkPanelConfirmBtn = document.getElementById('drinkPanelConfirmBtn');
+        var drinkPanelCancelBtn = document.getElementById('drinkPanelCancelBtn');
+        if (drinkPanelConfirmBtn) {
+            drinkPanelConfirmBtn.addEventListener('click', function () {
+                if (Object.keys(drinkItems).length === 0) return;
+                Object.keys(drinkItems).forEach(function (productId) {
+                    var item = drinkItems[productId];
+                    if (registerItems[productId]) {
+                        registerItems[productId].quantity += item.quantity;
+                    } else {
+                        registerItems[productId] = {
+                            product_name: item.product_name,
+                            price: item.price,
+                            quantity: item.quantity
+                        };
+                    }
+                    lastClickedProduct = { product_id: productId, product_name: item.product_name, price: item.price };
+                });
+                drinkItems = {};
+                updateDrinkPanelDisplay();
+                updateDisplayFromRegisterItems();
+                displayMain.style.display = 'flex';
+                displayDrinkPanel.style.display = 'none';
+                clearCafeRandomDisplay();
+                playProductClickSound();
+            });
+        }
+        if (drinkPanelCancelBtn) {
+            drinkPanelCancelBtn.addEventListener('click', function () {
+                drinkItems = {};
+                updateDrinkPanelDisplay();
+                displayMain.style.display = 'flex';
+                displayDrinkPanel.style.display = 'none';
+                clearCafeRandomDisplay();
+            });
+        }
+
+        // ドリンク別会計：取り消しモード時にテーブル行クリックで1個取り消し
+        var drinkPanelTableBody = document.getElementById('drinkPanelTableBody');
+        if (drinkPanelTableBody) {
+            drinkPanelTableBody.addEventListener('click', function (e) {
+                var tr = e.target && e.target.closest ? e.target.closest('tr') : null;
+                if (!tr) return;
+                var pid = tr.getAttribute('data-product-id');
+                if (!pid) return;
+                if (!isCancelMode) return;
+                if (displayDrinkPanel.style.display === 'none') return;
+                if (!drinkItems[pid]) return;
+                playProductClickSound();
+                if (drinkItems[pid].quantity > 1) {
+                    drinkItems[pid].quantity -= 1;
+                } else {
+                    delete drinkItems[pid];
+                }
+                isCancelMode = false;
+                if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
+                updateDrinkPanelDisplay();
             });
         }
     }
