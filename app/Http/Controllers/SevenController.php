@@ -17,7 +17,13 @@ class SevenController extends Controller
         $sevenProducts = SevenProduct::orderBy('id')->get();
         $nikumanProducts = SevenProduct::where('description', 'like', '%肉まん%')->orderBy('id')->get();
         $hotSnackProducts = SevenProduct::where('description', 'like', '%ホットスナック%')->orderBy('id')->get();
-        return view('Seven.index', compact('sevenProducts', 'nikumanProducts', 'hotSnackProducts'));
+        $cafeProducts = SevenProduct::where(function ($query) {
+            $query->where('category', 'like', '%セブンカフェ%')
+                ->orWhere('category', 'like', '%カフェ%')
+                ->orWhere('description', 'like', '%セブンカフェ%');
+        })->orderBy('id')->get();
+
+        return view('Seven.index', compact('sevenProducts', 'nikumanProducts', 'hotSnackProducts', 'cafeProducts'));
     }
 
     /**
