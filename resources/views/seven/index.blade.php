@@ -188,7 +188,7 @@
                         </table>
                         <div class="nikuman-panel-total" id="drinkPanelTotal">合計: 0円</div>
                     </div>
-                    <button type="button" class="nikuman-panel-confirm-btn" id="drinkPanelConfirmBtn">確認</button>
+                    <button type="button" class="nikuman-panel-confirm-btn" id="drinkPanelConfirmBtn" disabled>確認</button>
                     <button type="button" class="nikuman-panel-cancel-btn" id="drinkPanelCancelBtn">取り消し</button>
                 </div>
             </div>
