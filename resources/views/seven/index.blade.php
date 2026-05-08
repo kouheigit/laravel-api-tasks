@@ -170,6 +170,9 @@
                                 </button>
                             @endforeach
                         @endif
+                        @if(!isset($cafeProducts) || $cafeProducts->isEmpty())
+                            <div class="drink-panel-empty">セブンカフェ商品が登録されていません</div>
+                        @endif
                     </div>
                     <div class="nikuman-panel-subtotal">
                         <div class="nikuman-panel-subtotal-title">ドリンクの別会計</div>

@@ -452,6 +452,14 @@
     color: #666;
     white-space: nowrap;
 }
+.calculator .drink-panel-empty {
+    padding: 10px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 4px;
+    color: #64748b;
+    font-size: 0.8rem;
+    text-align: center;
+}
 .calculator .nikuman-panel-subtotal {
     border: 1px solid #ccc;
     border-radius: 4px;
