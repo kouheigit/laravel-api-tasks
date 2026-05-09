@@ -27,6 +27,13 @@
                         @endif
                     @endforeach
                 </div>
+                <div class="price-change-panel" id="priceChangePanel" style="display: none;">
+                    <button type="button" class="price-change-btn" data-discount-amount="50">50円引き</button>
+                    <button type="button" class="price-change-btn" data-discount-amount="40">40円引き</button>
+                    <button type="button" class="price-change-btn" data-discount-amount="30">30円引き</button>
+                    <button type="button" class="price-change-btn" data-discount-amount="20">20円引き</button>
+                    <button type="button" class="price-change-back-btn" id="priceChangeBackBtn">戻る</button>
+                </div>
                 <div class="seven-utility-bills-wrap" id="sevenUtilityBillsWrap"></div>
                 <div class="seven-cafe-random-wrap" id="sevenCafeRandomWrap" style="display: none;"></div>
             </aside>
@@ -45,6 +52,7 @@
             <div class="display-calc-area" id="displayCalcArea" style="display: none;">
                 <!-- 通常のレジ画面 -->
                 <div class="display-main" id="displayMain">
+                    <div class="register-message" id="registerMessage" aria-live="polite" style="display: none;"></div>
                     <div class="display-table-wrap">
                         <table class="display-table">
                             <thead>
@@ -236,7 +244,7 @@
         <div class="pos-panel">
             <section class="pos-section pos-left">
                 <div class="mini-buttons">
-                    <button type="button" class="mini-btn mini-dark" data-value="責任者解除">機能</button>
+                    <button type="button" class="mini-btn mini-dark" data-value="売価変更">売価変更</button>
                     <button type="button" class="mini-btn mini-gold" data-value="管理">管理</button>
                     <button type="button" class="mini-btn mini-pink" id="delete" data-value="取り消し">取消</button>
                 </div>
@@ -291,7 +299,7 @@
                     <button type="button" class="touch-btn" data-value="">スキャン入力</button>
                     <button type="button" class="touch-btn touch-btn-responsible" data-value="責任者解除">責任者解除</button>
                     <button type="button" class="touch-btn" data-value="">ポイント</button>
-                    <button type="button" class="touch-btn" data-value="">機能</button>
+                    <button type="button" class="touch-btn" data-value="売価変更">売価変更</button>
                 </div>
             </section>
         </div>
