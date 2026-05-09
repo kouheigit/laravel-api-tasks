@@ -14,7 +14,27 @@ class SevenController extends Controller
      */
     public function index()
     {
-        $sevenProducts = SevenProduct::orderBy('id')->get();
+        $sevenProducts = SevenProduct::where(function ($query) {
+            $query->whereNull('category')
+                ->orWhere(function ($query) {
+                    $query->where('category', 'not like', '%セブンカフェ%')
+                        ->where('category', 'not like', '%カフェ%');
+                });
+        })
+            ->where(function ($query) {
+                $query->whereNull('description')
+                    ->orWhere('description', 'not like', '%セブンカフェ%');
+            })
+            ->where(function ($query) {
+                $query->whereNull('category')
+                    ->orWhere('category', 'not like', '%ホットスナック%');
+            })
+            ->where(function ($query) {
+                $query->whereNull('description')
+                    ->orWhere('description', 'not like', '%ホットスナック%');
+            })
+            ->orderBy('id')
+            ->get();
         $nikumanProducts = SevenProduct::where('description', 'like', '%肉まん%')->orderBy('id')->get();
         $hotSnackProducts = SevenProduct::where('description', 'like', '%ホットスナック%')->orderBy('id')->get();
         $cafeProducts = SevenProduct::where(function ($query) {
