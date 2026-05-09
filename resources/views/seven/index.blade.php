@@ -123,11 +123,21 @@
                     <div class="nikuman-panel-buttons" id="hotSnackPanelButtons">
                         @if(isset($hotSnackProducts))
                             @foreach($hotSnackProducts as $product)
+                                @php
+                                    $raw = trim((string) $product->image_path, " \t\n\r\"'\/");
+                                    $imgPath = $raw !== '' ? $raw : 'gazou1.png';
+                                    $imgPath = str_starts_with($imgPath, 'http://') || str_starts_with($imgPath, 'https://')
+                                        ? $imgPath
+                                        : 'sevenimg/' . ltrim($imgPath, '/');
+                                @endphp
                                 <button type="button" class="hotSnack-product-btn"
                                     data-product-id="{{ $product->id }}"
                                     data-product-name="{{ e($product->name) }}"
-                                    data-product-price="{{ $product->price }}">
-                                    {{ $product->name }} <span class="price">{{ $product->price }}円</span>
+                                    data-product-price="{{ $product->price }}"
+                                    aria-label="{{ $product->name }}を選択">
+                                    <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="hotSnack-product-img">
+                                    <span class="hotSnack-product-name">{{ $product->name }}</span>
+                                    <span class="price">{{ $product->price }}円</span>
                                 </button>
                             @endforeach
                         @endif

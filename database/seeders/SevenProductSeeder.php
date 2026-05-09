@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\SevenProduct;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SevenProductSeeder extends Seeder
 {
@@ -12,25 +13,46 @@ class SevenProductSeeder extends Seeder
      */
     public function run(): void
     {
+        $at = now()->setDateTime(2026, 5, 9, 10, 0, 0);
+
+        $hotSnackRows = [
+            ['name' => '北海道産じゃがいもの牛肉コロッケ', 'price' => 100, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150587-croquette.jpg', 'description' => 'ホットスナック。添付写真の商品。224kcal'],
+            ['name' => '揚げ鶏', 'price' => 232, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150089-age-dori.jpg', 'description' => 'ホットスナック。添付写真の商品。175kcal'],
+            ['name' => 'ななチキ', 'price' => 232, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150398-nana-chiki.jpg', 'description' => 'ホットスナック。添付写真の商品。174kcal'],
+            ['name' => 'ＢＩＧポークフランク', 'price' => 198, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150473-big-pork-frank.jpg', 'description' => 'ホットスナック。添付写真の商品。358kcal'],
+            ['name' => 'ＢＩＧポークフランク', 'price' => 198, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150472-big-pork-frank.jpg', 'description' => 'ホットスナック。添付写真の商品。293kcal'],
+            ['name' => 'アメリカンドッグ', 'price' => 139, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150302-american-dog.jpg', 'description' => 'ホットスナック。添付写真の商品。337kcal'],
+            ['name' => 'からあげ棒', 'price' => 184, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150176-karaagebo.jpg', 'description' => 'ホットスナック。添付写真の商品。190kcal'],
+            ['name' => 'ご愛顧からあげ棒（５個刺し）', 'price' => 184, 'category' => 'ホットスナック', 'image_path' => 'hotsnack/150793-goaiko-karaagebo-5.jpg', 'description' => 'ホットスナック。添付写真の商品。245kcal'],
+        ];
+
+        $oldHotSnackIds = DB::table('seven_products')
+            ->where(function ($query) {
+                $query->where('category', 'like', '%ホットスナック%')
+                    ->orWhere('category', 'like', '%揚げ物惣菜%')
+                    ->orWhere('description', 'like', '%ホットスナック%');
+            })
+            ->pluck('id');
+
+        if ($oldHotSnackIds->isNotEmpty()) {
+            DB::table('seven_register_items')->whereIn('product_id', $oldHotSnackIds)->delete();
+            DB::table('seven_products')->whereIn('id', $oldHotSnackIds)->delete();
+        }
+
+        foreach ($hotSnackRows as $row) {
+            SevenProduct::create($row + [
+                'created_at' => $at,
+                'updated_at' => $at,
+            ]);
+        }
+
         $rows = [
-            ['name' => '山賊焼', 'price' => 278, 'category' => '揚げ物惣菜', 'image_path' => null, 'description' => '山梨・長野名物の鶏肉の唐揚げ。ジューシーな味付け。284kcal'],
-            ['name' => '８８コロッケ', 'price' => 82, 'category' => '揚げ物惣菜', 'image_path' => null, 'description' => '大阪限定販売のコロッケ。サクサク食感。174kcal'],
-            ['name' => 'でかい揚げ鶏', 'price' => 232, 'category' => 'ホットスナック', 'image_path' => null, 'description' => 'ホットスナック 大型サイズの揚げ鶏。全国販売。262kcal'],
-            ['name' => 'ほくじゃが牛肉コロッケ（塩胡椒）', 'price' => 128, 'category' => '揚げ物惣菜', 'image_path' => null, 'description' => '塩胡椒味の牛肉コロッケ。大阪販売。252kcal'],
-            ['name' => '北海道産じゃがいもの牛肉コロッケ', 'price' => 100, 'category' => '揚げ物惣菜', 'image_path' => null, 'description' => '北海道産じゃがいも使用のコロッケ。224kcal'],
-            ['name' => '【盛盛】若鶏のからあげ（むね）２０個', 'price' => 1120, 'category' => '揚げ物惣菜', 'image_path' => null, 'description' => '若鶏むね肉のからあげ20個入り大容量パック。1243kcal'],
-            ['name' => 'ＢＩＧポークフランク', 'price' => 198, 'category' => 'ホットスナック', 'image_path' => null, 'description' => 'ホットスナック 大きめサイズのポークフランク。288kcal'],
-            ['name' => 'ジューシー粗挽きソーセージ', 'price' => 150, 'category' => 'ホットスナック', 'image_path' => null, 'description' => 'ホットスナック 粗挽き肉のジューシーソーセージ。191kcal'],
             ['name' => '炭火焼き鳥（塩）', 'price' => 176, 'category' => '焼き鳥', 'image_path' => null, 'description' => '炭火で焼いた塩味の焼き鳥。66kcal'],
             ['name' => '炭火焼き鳥（タレ）', 'price' => 176, 'category' => '焼き鳥', 'image_path' => null, 'description' => '炭火で焼いたタレ味の焼き鳥。73kcal'],
-            ['name' => 'スパイスチキン', 'price' => 232, 'category' => 'ホットスナック', 'image_path' => null, 'description' => 'ホットスナック スパイスを効かせたチキン。200kcal'],
-            ['name' => 'スパイスチキンレッド', 'price' => 232, 'category' => 'ホットスナック', 'image_path' => null, 'description' => 'ホットスナック 辛味スパイスを効かせたチキン。'],
             ['name' => 'ふんわり×ごろっと 肉まん', 'price' => 156, 'category' => '中華まん', 'image_path' => null, 'description' => '肉まん。全国販売。212kcal。セブン-イレブン公式の中華まん掲載商品。'],
             ['name' => 'もちもち×ずっしり 大入り豚まん', 'price' => 232, 'category' => '中華まん', 'image_path' => null, 'description' => '肉まん。北海道、東北、関東、甲信越、北陸、東海、中国、四国、九州、沖縄で販売。340kcal。セブン-イレブン公式の中華まん掲載商品。'],
             ['name' => 'もっちり×ジューシー 特製豚まん', 'price' => 195, 'category' => '中華まん', 'image_path' => null, 'description' => '肉まん。近畿限定販売。358kcal。セブン-イレブン公式の中華まん掲載商品。'],
         ];
-
-        $at = now()->setDateTime(2026, 3, 8, 10, 0, 0);
 
         foreach ($rows as $row) {
             SevenProduct::updateOrCreate(
