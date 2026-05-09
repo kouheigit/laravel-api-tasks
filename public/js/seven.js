@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let isMultiplyInputMode = false; // ✖️押下後に次の数字入力を待機しているかどうか
     let isPaymentMode = false; // 客層選択後の支払い方法入力モードかどうか
     let isCancelMode = false; // 取り消しボタン押下後、商品欄クリックで1個取り消すモード
+    let selectedDiscountAmount = null; // 売価変更で選択中の値引き額
+    let registerMessageTimer = null;
 
     // ボタン押下時のポチッという音
     function playClickSound() {
@@ -78,6 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var paypaySmartphoneWrap = document.getElementById('paypaySmartphoneWrap');
     var sevenProductsWrap = document.querySelector('.seven-products-wrap');
     var productsWithImage = document.getElementById('sevenProductsWithImage');
+    var priceChangePanel = document.getElementById('priceChangePanel');
+    var priceChangeBackBtn = document.getElementById('priceChangeBackBtn');
+    var registerMessage = document.getElementById('registerMessage');
     var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
     var cafeRandomWrap = document.getElementById('sevenCafeRandomWrap');
     var utilityStampModal = document.getElementById('utilityStampModal');
@@ -325,23 +330,115 @@ document.addEventListener('DOMContentLoaded', function () {
         window.__seven_last_total_amount = total; // 支払い時に参照するため
     }
 
+    function showRegisterMessage(message, type, duration) {
+        if (!registerMessage) return;
+        if (registerMessageTimer) {
+            clearTimeout(registerMessageTimer);
+            registerMessageTimer = null;
+        }
+        registerMessage.textContent = message;
+        registerMessage.classList.toggle('is-discount', type === 'discount');
+        registerMessage.style.display = 'block';
+        if (duration && duration > 0) {
+            registerMessageTimer = setTimeout(function () {
+                registerMessage.style.display = 'none';
+                registerMessage.textContent = '';
+                registerMessage.classList.remove('is-discount');
+                registerMessageTimer = null;
+            }, duration);
+        }
+    }
+
+    function hideRegisterMessage() {
+        if (!registerMessage) return;
+        if (registerMessageTimer) {
+            clearTimeout(registerMessageTimer);
+            registerMessageTimer = null;
+        }
+        registerMessage.style.display = 'none';
+        registerMessage.textContent = '';
+        registerMessage.classList.remove('is-discount');
+    }
+
+    function getGeneralProductItems() {
+        return Array.prototype.slice.call(document.querySelectorAll('.seven-product-item'));
+    }
+
+    function resetPriceChangeState(keepMessage) {
+        selectedDiscountAmount = null;
+        if (productsWithImage) {
+            productsWithImage.classList.remove('is-price-change-selecting');
+        }
+        document.querySelectorAll('.price-change-btn').forEach(function (btn) {
+            btn.classList.remove('is-selected');
+        });
+        if (!keepMessage) hideRegisterMessage();
+    }
+
+    function showProductList() {
+        if (productsWithImage) productsWithImage.style.display = 'flex';
+        if (priceChangePanel) priceChangePanel.style.display = 'none';
+        if (utilityBillsWrap) utilityBillsWrap.style.display = 'none';
+        if (cafeRandomWrap) {
+            cafeRandomWrap.style.display = 'none';
+            cafeRandomWrap.innerHTML = '';
+        }
+    }
+
+    function showPriceChangePanel() {
+        if (isUnlockMode || isPaymentMode || utilityPaymentLocked || isUtilityMode) return;
+        if (getGeneralProductItems().length === 0) {
+            resetPriceChangeState(true);
+            showProductList();
+            showRegisterMessage('登録商品がありません', 'warning', 2500);
+            return;
+        }
+        resetPriceChangeState();
+        if (displayMain) displayMain.style.display = 'flex';
+        if (typeof displayNikumanPanel !== 'undefined' && displayNikumanPanel) displayNikumanPanel.style.display = 'none';
+        if (typeof displayHotSnackPanel !== 'undefined' && displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
+        if (typeof displayDrinkPanel !== 'undefined' && displayDrinkPanel) displayDrinkPanel.style.display = 'none';
+        if (productsWithImage) productsWithImage.style.display = 'none';
+        if (priceChangePanel) priceChangePanel.style.display = 'grid';
+        if (utilityBillsWrap) utilityBillsWrap.style.display = 'none';
+        if (cafeRandomWrap) cafeRandomWrap.style.display = 'none';
+    }
+
+    function selectDiscountAmount(amount, button) {
+        selectedDiscountAmount = amount;
+        document.querySelectorAll('.price-change-btn').forEach(function (btn) {
+            btn.classList.toggle('is-selected', btn === button);
+        });
+        showProductList();
+        if (productsWithImage) productsWithImage.classList.add('is-price-change-selecting');
+        showRegisterMessage(amount + '円引き商品を選択中', 'discount', 0);
+    }
+
     function escapeHtml(str) {
         var div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
     }
 
-    function addProductToRegister(productId, productName, productPrice) {
+    function addProductToRegister(productId, productName, productPrice, discountAmount) {
         if (isUnlockMode) return;
-        var pid = String(productId);
-        var price = parseInt(productPrice, 10);
+        var sourceProductId = parseInt(productId, 10);
+        var discount = parseInt(discountAmount || 0, 10);
+        if (isNaN(discount) || discount < 0) discount = 0;
+        var originalPrice = parseInt(productPrice, 10);
+        if (isNaN(originalPrice)) return;
+        var price = Math.max(originalPrice - discount, 0);
+        var pid = discount > 0 ? String(productId) + '-discount-' + String(discount) : String(productId);
+        var displayName = discount > 0 ? productName + '（' + discount + '円引き）' : productName;
         if (registerItems[pid]) {
             registerItems[pid].quantity += 1;
         } else {
             registerItems[pid] = {
-                product_name: productName,
+                product_id: sourceProductId,
+                product_name: displayName,
                 price: price,
-                quantity: 1
+                quantity: 1,
+                discount_amount: discount
             };
         }
         isCancelMode = false;
@@ -400,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function () {
         Object.keys(registerItems).forEach(function (productId) {
             var item = registerItems[productId];
             items.push({
-                product_id: parseInt(productId, 10),
+                product_id: item.product_id ? parseInt(item.product_id, 10) : parseInt(productId, 10),
                 product_name: item.product_name,
                 price: item.price,
                 quantity: item.quantity
@@ -582,8 +679,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // 左パネル：キーパッド + 機能/管理/取消（取消は#deleteで別処理）
-    document.querySelectorAll('.keypad-grid .key-btn, .mini-buttons .mini-btn, .touch-btn[data-value="責任者解除"]').forEach(function (btn) {
+    // 左パネル：キーパッド + 売価変更/管理/取消（取消は#deleteで別処理）
+    document.querySelectorAll('.keypad-grid .key-btn, .mini-buttons .mini-btn, .touch-btn[data-value="責任者解除"], .touch-btn[data-value="売価変更"]').forEach(function (btn) {
         btn.addEventListener('click', function () {
             var val = this.getAttribute('data-value');
             if (val === '取り消し') return;
@@ -636,6 +733,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     isMultiplyInputMode = false;
                     isCancelMode = false;
                     lastClickedProduct = null;
+                    resetPriceChangeState();
                     if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
                     updateDisplayFromRegisterItems();
                     updateDisplay();
@@ -649,6 +747,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             playClickSound();
             var value = val;
+
+            if (value === '売価変更') {
+                showPriceChangePanel();
+                return;
+            }
 
             // 公共料金モード中：数字とCは公共料金枚数入力欄に反映させる
             if (isUtilityMode && utilityCountInput) {
@@ -715,6 +818,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     registerItems = {};
                     isCancelMode = false;
+                    resetPriceChangeState();
                     if (deleteBtn) deleteBtn.classList.remove('is-cancel-mode');
                     selectedAge = null;
                     current = '';
@@ -826,6 +930,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (value === 'C') {
                 current = '';
                 registerItems = {};
+                resetPriceChangeState();
                 updateDisplayFromRegisterItems();
                 return;
             }
@@ -872,11 +977,39 @@ document.addEventListener('DOMContentLoaded', function () {
             var productPrice = this.getAttribute('data-product-price');
             if (!productId || !productName || productPrice === null || productPrice === undefined) return;
 
-            lastClickedProduct = { product_id: productId, product_name: productName, price: productPrice };
+            var discount = selectedDiscountAmount || 0;
+            var originalPrice = parseInt(productPrice, 10);
+            if (isNaN(originalPrice)) return;
+            var discountedPrice = Math.max(originalPrice - discount, 0);
+            lastClickedProduct = {
+                product_id: discount > 0 ? productId + '-discount-' + discount : productId,
+                product_name: discount > 0 ? productName + '（' + discount + '円引き）' : productName,
+                price: discountedPrice
+            };
             playProductClickSound();
-            addProductToRegister(productId, productName, productPrice);
+            addProductToRegister(productId, productName, productPrice, discount);
+            if (discount > 0) {
+                resetPriceChangeState();
+            }
         });
     });
+
+    document.querySelectorAll('.price-change-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var amount = parseInt(this.getAttribute('data-discount-amount'), 10);
+            if (isNaN(amount)) return;
+            playClickSound();
+            selectDiscountAmount(amount, this);
+        });
+    });
+
+    if (priceChangeBackBtn) {
+        priceChangeBackBtn.addEventListener('click', function () {
+            playClickSound();
+            resetPriceChangeState();
+            showProductList();
+        });
+    }
 
     // 登録/リピートボタン：最後に押されたメニューをもう1つ（または ✖️個数ぶん）追加
     document.querySelectorAll('[data-value="リピート"]').forEach(function (repeatBtn) {
@@ -1029,6 +1162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             nikumanBtn.addEventListener('click', function () {
                 if (isUnlockMode || isPaymentMode) return;
                 playClickSound();
+                resetPriceChangeState();
                 nikumanItems = {};
                 updateNikumanPanelDisplay();
                 if (displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
@@ -1145,6 +1279,7 @@ document.addEventListener('DOMContentLoaded', function () {
         hotSnackBtn.addEventListener('click', function () {
             if (isUnlockMode || isPaymentMode) return;
             playClickSound();
+            resetPriceChangeState();
             hotSnackItems = {};
             updateHotSnackPanelDisplay();
             if (displayNikumanPanel) displayNikumanPanel.style.display = 'none';
@@ -1233,6 +1368,7 @@ document.addEventListener('DOMContentLoaded', function () {
         drinkBtn.addEventListener('click', function () {
             if (isUnlockMode || isPaymentMode) return;
             playClickSound();
+            resetPriceChangeState();
             drinkItems = {};
             updateDrinkPanelDisplay();
             if (displayNikumanPanel) displayNikumanPanel.style.display = 'none';
