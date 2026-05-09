@@ -27,7 +27,7 @@
 }
 .mini-btn {
     position: relative;
-    min-width: 44px;
+    min-width: 54px;
     height: 26px;
     border: none;
     border-radius: 8px;
@@ -679,6 +679,43 @@
     width: 100%;
     align-content: flex-start;
 }
+.price-change-panel {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    width: 100%;
+}
+.price-change-btn,
+.price-change-back-btn {
+    min-height: 48px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: linear-gradient(180deg, #ffffff, #e2e8f0);
+    color: #0f172a;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+}
+.price-change-btn:hover,
+.price-change-back-btn:hover {
+    filter: brightness(1.03);
+    transform: translateY(-1px);
+}
+.price-change-btn.is-selected {
+    border-color: #16a34a;
+    background: linear-gradient(180deg, #dcfce7, #86efac);
+    color: #14532d;
+}
+.price-change-back-btn {
+    grid-column: 1 / -1;
+}
+.seven-products-with-image.is-price-change-selecting .seven-product-item {
+    border: 2px solid #16a34a;
+    border-radius: 8px;
+    background: #f0fdf4;
+    padding: 0.25rem;
+}
 .seven-utility-bills-wrap {
     display: none;
     display: grid;
@@ -764,6 +801,20 @@
     font-size: 0.76rem;
     font-weight: 700;
     color: #b91c1c;
+}
+.register-message {
+    margin-bottom: 0.4rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.92rem;
+    font-weight: 800;
+    text-align: center;
+}
+.register-message.is-discount {
+    background: #dcfce7;
+    color: #14532d;
 }
 
 /* PayPay支払い：画面右に表示するスマホ画像（やや左寄せ） */
