@@ -85,23 +85,34 @@
                         </div>
                     </div>
                 </div>
-                <!-- 肉まん一覧パネル（中華まん押下で表示） -->
+                <!-- 中華まん一覧パネル（中華まん押下で表示） -->
                 <div class="display-nikuman-panel" id="displayNikumanPanel" style="display: none;">
-                    <div class="nikuman-panel-title">肉まん一覧</div>
+                    <div class="nikuman-panel-title">中華まん一覧</div>
                     <div class="nikuman-panel-buttons" id="nikumanPanelButtons">
                         @if(isset($nikumanProducts))
                             @foreach($nikumanProducts as $product)
+                                @php
+                                    $raw = trim((string) $product->image_path, " \t\n\r\"'\/");
+                                    $imgPath = str_starts_with($raw, 'sevenimg/')
+                                        ? $raw
+                                        : 'sevenimg/' . $raw;
+                                @endphp
                                 <button type="button" class="nikuman-product-btn"
                                     data-product-id="{{ $product->id }}"
                                     data-product-name="{{ e($product->name) }}"
-                                    data-product-price="{{ $product->price }}">
-                                    {{ $product->name }} <span class="price">{{ $product->price }}円</span>
+                                    data-product-price="{{ $product->price }}"
+                                    aria-label="{{ $product->name }}を選択">
+                                    @if($product->image_path)
+                                        <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="nikuman-product-img">
+                                    @endif
+                                    <span class="nikuman-product-name">{{ $product->name }}</span>
+                                    <span class="price">{{ $product->price }}円</span>
                                 </button>
                             @endforeach
                         @endif
                     </div>
                     <div class="nikuman-panel-subtotal">
-                        <div class="nikuman-panel-subtotal-title">肉まんだけの別会計</div>
+                        <div class="nikuman-panel-subtotal-title">中華まんだけの別会計</div>
                         <table class="nikuman-panel-table">
                             <thead>
                                 <tr>
