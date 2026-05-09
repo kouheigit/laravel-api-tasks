@@ -21,6 +21,8 @@
                             @endphp
                             <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
                                 <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
+                                <span class="seven-product-name">{{ $product->name }}</span>
+                                <span class="seven-product-price">{{ $product->price }}円</span>
                             </div>
                         @endif
                     @endforeach

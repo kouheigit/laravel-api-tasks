@@ -733,7 +733,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.2rem;
+    width: 140px;
+    min-height: 176px;
+    color: #1f2937;
 }
 .seven-product-img {
     max-width: 130px;
@@ -746,9 +749,21 @@
 .seven-product-img:hover {
     transform: scale(1.1);
 }
-.seven-product-item span {
-    font-size: 0.8rem;
+.seven-product-name,
+.seven-product-price {
     text-align: center;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+.seven-product-name {
+    min-height: 2.5em;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+.seven-product-price {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #b91c1c;
 }
 
 /* PayPay支払い：画面右に表示するスマホ画像（やや左寄せ） */
