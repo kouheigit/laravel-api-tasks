@@ -49,9 +49,6 @@ class SevenProductSeeder extends Seeder
         $rows = [
             ['name' => '炭火焼き鳥（塩）', 'price' => 176, 'category' => '焼き鳥', 'image_path' => null, 'description' => '炭火で焼いた塩味の焼き鳥。66kcal'],
             ['name' => '炭火焼き鳥（タレ）', 'price' => 176, 'category' => '焼き鳥', 'image_path' => null, 'description' => '炭火で焼いたタレ味の焼き鳥。73kcal'],
-            ['name' => 'ふんわり×ごろっと 肉まん', 'price' => 156, 'category' => '中華まん', 'image_path' => null, 'description' => '肉まん。全国販売。212kcal。セブン-イレブン公式の中華まん掲載商品。'],
-            ['name' => 'もちもち×ずっしり 大入り豚まん', 'price' => 232, 'category' => '中華まん', 'image_path' => null, 'description' => '肉まん。北海道、東北、関東、甲信越、北陸、東海、中国、四国、九州、沖縄で販売。340kcal。セブン-イレブン公式の中華まん掲載商品。'],
-            ['name' => 'もっちり×ジューシー 特製豚まん', 'price' => 195, 'category' => '中華まん', 'image_path' => null, 'description' => '肉まん。近畿限定販売。358kcal。セブン-イレブン公式の中華まん掲載商品。'],
         ];
 
         foreach ($rows as $row) {
@@ -69,6 +66,33 @@ class SevenProductSeeder extends Seeder
                         : ['created_at' => $at]
                 )
             );
+        }
+
+        $nikumanRows = [
+            ['name' => 'ふんわり×ごろっと 肉まん', 'price' => 156, 'category' => '中華まん', 'image_path' => 'nikuman/150092-nikuman.jpg', 'description' => '中華まん。全国販売。212kcal。セブン-イレブン公式の中華まん掲載商品。'],
+            ['name' => 'もちふわ×とろ～り ピザまん', 'price' => 158, 'category' => '中華まん', 'image_path' => 'nikuman/150129-pizza-man.jpg', 'description' => '中華まん。全国販売。194kcal。セブン-イレブン公式の中華まん掲載商品。'],
+            ['name' => 'もちもち×ずっしり 大入り豚まん', 'price' => 232, 'category' => '中華まん', 'image_path' => 'nikuman/150312-ooiri-butaman.jpg', 'description' => '中華まん。北海道、東北、関東、甲信越、北陸、東海、中国、四国、九州、沖縄で販売。340kcal。セブン-イレブン公式の中華まん掲載商品。'],
+            ['name' => 'もっちり×ジューシー 特製豚まん', 'price' => 195, 'category' => '中華まん', 'image_path' => 'nikuman/150581-tokusei-butaman.jpg', 'description' => '中華まん。近畿限定販売。358kcal。セブン-イレブン公式の中華まん掲載商品。'],
+        ];
+
+        $oldNikumanIds = DB::table('seven_products')
+            ->where(function ($query) {
+                $query->where('category', '中華まん')
+                    ->orWhere('description', 'like', '%肉まん%')
+                    ->orWhere('description', 'like', '%中華まん%');
+            })
+            ->pluck('id');
+
+        if ($oldNikumanIds->isNotEmpty()) {
+            DB::table('seven_register_items')->whereIn('product_id', $oldNikumanIds)->delete();
+            DB::table('seven_products')->whereIn('id', $oldNikumanIds)->delete();
+        }
+
+        foreach ($nikumanRows as $row) {
+            SevenProduct::create($row + [
+                'created_at' => $at,
+                'updated_at' => $at,
+            ]);
         }
     }
 }
