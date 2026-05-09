@@ -33,9 +33,13 @@ class SevenController extends Controller
                 $query->whereNull('description')
                     ->orWhere('description', 'not like', '%ホットスナック%');
             })
+            ->where(function ($query) {
+                $query->whereNull('category')
+                    ->orWhere('category', 'not like', '%中華まん%');
+            })
             ->orderBy('id')
             ->get();
-        $nikumanProducts = SevenProduct::where('description', 'like', '%肉まん%')->orderBy('id')->get();
+        $nikumanProducts = SevenProduct::where('category', '中華まん')->orderBy('id')->get();
         $hotSnackProducts = SevenProduct::where('description', 'like', '%ホットスナック%')->orderBy('id')->get();
         $cafeProducts = SevenProduct::where(function ($query) {
             $query->where('category', 'like', '%セブンカフェ%')
@@ -47,11 +51,11 @@ class SevenController extends Controller
     }
 
     /**
-     * description に「肉まん」を含む商品一覧を別ウィンドウで表示。
+     * 中華まんカテゴリの商品一覧を別ウィンドウで表示。
      */
     public function nikuman()
     {
-        $nikumanProducts = SevenProduct::where('description', 'like', '%肉まん%')->orderBy('id')->get();
+        $nikumanProducts = SevenProduct::where('category', '中華まん')->orderBy('id')->get();
         return view('Seven.nikuman', compact('nikumanProducts'));
     }
 
