@@ -68,6 +68,21 @@ class SevenProductSeeder extends Seeder
             );
         }
 
+        SevenProduct::updateOrCreate(
+            ['name' => 'つくねおむすび'],
+            [
+                'price' => 125,
+                'category' => 'コンビニおにぎり・コンビニ手巻寿司',
+                'image_path' => 'onigiri/tsukune-omusubi-20yen-discount.png',
+                'description' => '食感の良い軟骨入りつくねをのせたボリュームのあるおむすび。内容量・参考価格 1個・125円。発売日 2021/11/30。',
+                'updated_at' => $at,
+            ] + (
+                SevenProduct::where('name', 'つくねおむすび')->exists()
+                    ? []
+                    : ['created_at' => $at]
+            )
+        );
+
         $nikumanRows = [
             ['name' => 'ふんわり×ごろっと 肉まん', 'price' => 156, 'category' => '中華まん', 'image_path' => 'nikuman/150092-nikuman.jpg', 'description' => '中華まん。全国販売。212kcal。セブン-イレブン公式の中華まん掲載商品。'],
             ['name' => 'もちふわ×とろ～り ピザまん', 'price' => 158, 'category' => '中華まん', 'image_path' => 'nikuman/150129-pizza-man.jpg', 'description' => '中華まん。全国販売。194kcal。セブン-イレブン公式の中華まん掲載商品。'],
