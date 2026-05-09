@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>肉まん選択</title>
+    <title>中華まん選択</title>
     <link rel="stylesheet" href="{{ asset('css/seven.css') }}">
     <style>
         .nikuman-window {
@@ -20,6 +20,10 @@
             gap: 0.5rem;
         }
         .nikuman-buttons button {
+            display: grid;
+            grid-template-columns: 64px 1fr auto;
+            align-items: center;
+            gap: 10px;
             padding: 12px 16px;
             font-size: 1rem;
             text-align: left;
@@ -29,7 +33,16 @@
             cursor: pointer;
         }
         .nikuman-buttons button:hover { background: #f0f0f0; }
-        .nikuman-buttons button .price { float: right; color: #666; }
+        .nikuman-buttons button .price { color: #666; white-space: nowrap; }
+        .nikuman-window-product-img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+        .nikuman-window-product-name {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
         .nikuman-subtotal {
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -82,14 +95,25 @@
 <body>
     <div class="nikuman-window">
         <div>
-            <div class="nikuman-title">肉まん一覧</div>
+            <div class="nikuman-title">中華まん一覧</div>
             <div class="nikuman-buttons">
                 @foreach($nikumanProducts as $product)
+                    @php
+                        $raw = trim((string) $product->image_path, " \t\n\r\"'\/");
+                        $imgPath = str_starts_with($raw, 'sevenimg/')
+                            ? $raw
+                            : 'sevenimg/' . $raw;
+                    @endphp
                     <button type="button" class="nikuman-product-btn"
                         data-product-id="{{ $product->id }}"
                         data-product-name="{{ e($product->name) }}"
-                        data-product-price="{{ $product->price }}">
-                        {{ $product->name }} <span class="price">{{ $product->price }}円</span>
+                        data-product-price="{{ $product->price }}"
+                        aria-label="{{ $product->name }}を選択">
+                        @if($product->image_path)
+                            <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="nikuman-window-product-img">
+                        @endif
+                        <span class="nikuman-window-product-name">{{ $product->name }}</span>
+                        <span class="price">{{ $product->price }}円</span>
                     </button>
                 @endforeach
             </div>
@@ -98,7 +122,7 @@
             @endif
         </div>
         <div class="nikuman-subtotal">
-            <div class="nikuman-subtotal-title">肉まんだけの別会計</div>
+            <div class="nikuman-subtotal-title">中華まんだけの別会計</div>
             <table class="nikuman-subtotal-table">
                 <thead>
                     <tr>
