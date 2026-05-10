@@ -24,12 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::table('seven_products')
-            ->where('name', 'つくねおむすび')
-            ->where('image_path', 'onigiri/tsukune-omusubi-original.png')
-            ->update([
-                'image_path' => 'onigiri/tsukune-omusubi-20yen-discount.png',
-                'updated_at' => now(),
-            ]);
+        //
     }
 };

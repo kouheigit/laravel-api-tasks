@@ -813,23 +813,15 @@
 }
 .seven-discount-sticker {
     position: absolute;
-    right: -6px;
-    bottom: 4px;
-    display: grid;
-    place-items: center;
-    width: 58px;
-    height: 58px;
-    border: 3px solid #fff;
-    border-radius: 50%;
-    background: #dc2626;
-    color: #fff;
-    font-size: 0.82rem;
-    font-weight: 900;
-    line-height: 1.05;
-    text-align: center;
-    box-shadow: 0 3px 9px rgba(127, 29, 29, 0.38);
+    right: -18px;
+    bottom: 0;
+    width: 104px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 7px rgba(12, 76, 31, 0.35));
     pointer-events: none;
-    transform: rotate(-10deg);
+    transform: rotate(-4deg);
+    transform-origin: center;
 }
 .seven-product-name,
 .seven-product-price {

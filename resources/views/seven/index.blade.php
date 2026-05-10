@@ -21,16 +21,22 @@
                     @foreach($displaySevenProducts as $product)
                         @php
                             $raw = trim($product->image_path, " \t\n\r\"'\/");
+                            if ($product->name === 'つくねおむすび' || $raw === 'onigiri/tsukune-omusubi-20yen-discount.png') {
+                                $raw = 'onigiri/tsukune-omusubi-original.png';
+                            }
                             $imgPath = str_starts_with($raw, 'http://') || str_starts_with($raw, 'https://')
                                 ? $raw
                                 : 'sevenimg/' . ltrim($raw, '/');
                             $discountStickerAmountForProduct = $loop->index === $discountStickerIndex ? $discountStickerAmount : null;
+                            $discountStickerPath = $discountStickerAmountForProduct !== null
+                                ? 'sevenimg/onigiri/eco-' . $discountStickerAmountForProduct . 'yen-discount-sticker.png'
+                                : null;
                         @endphp
                             <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}" @if($discountStickerAmountForProduct !== null) data-auto-discount-amount="{{ $discountStickerAmountForProduct }}" @endif>
                                 <span class="seven-product-img-wrap">
                                 <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
                                     @if($discountStickerAmountForProduct !== null)
-                                        <span class="seven-discount-sticker">{{ $discountStickerAmountForProduct }}円引き</span>
+                                        <img src="{{ asset($discountStickerPath) }}" alt="{{ $discountStickerAmountForProduct }}円引き" class="seven-discount-sticker">
                                     @endif
                                 </span>
                                 <span class="seven-product-name">{{ $product->name }}</span>
