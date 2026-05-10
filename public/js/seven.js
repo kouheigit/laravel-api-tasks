@@ -1047,20 +1047,17 @@ document.addEventListener('DOMContentLoaded', function () {
             var productId = this.getAttribute('data-product-id');
             var productName = this.getAttribute('data-product-name');
             var productPrice = this.getAttribute('data-product-price');
-            var autoDiscountAmount = parseInt(this.getAttribute('data-auto-discount-amount') || '0', 10);
-            if (isNaN(autoDiscountAmount) || autoDiscountAmount < 0) autoDiscountAmount = 0;
             if (!productId || !productName || productPrice === null || productPrice === undefined) return;
 
             var originalPrice = parseInt(productPrice, 10);
             if (isNaN(originalPrice)) return;
-            var discountedPrice = Math.max(originalPrice - autoDiscountAmount, 0);
             lastClickedProduct = {
-                product_id: autoDiscountAmount > 0 ? productId + '-discount-' + autoDiscountAmount : productId,
-                product_name: autoDiscountAmount > 0 ? productName + '（' + autoDiscountAmount + '円引き）' : productName,
-                price: discountedPrice
+                product_id: productId,
+                product_name: productName,
+                price: originalPrice
             };
             playProductClickSound();
-            addProductToRegister(productId, productName, productPrice, autoDiscountAmount);
+            addProductToRegister(productId, productName, productPrice);
         });
     });
 

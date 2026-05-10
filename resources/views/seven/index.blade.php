@@ -32,7 +32,7 @@
                                 ? 'sevenimg/onigiri/eco-' . $discountStickerAmountForProduct . 'yen-discount-sticker.png'
                                 : null;
                         @endphp
-                            <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}" @if($discountStickerAmountForProduct !== null) data-auto-discount-amount="{{ $discountStickerAmountForProduct }}" @endif>
+                            <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
                                 <span class="seven-product-img-wrap">
                                 <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
                                     @if($discountStickerAmountForProduct !== null)
