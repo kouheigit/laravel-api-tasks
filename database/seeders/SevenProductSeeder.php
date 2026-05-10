@@ -73,7 +73,7 @@ class SevenProductSeeder extends Seeder
             [
                 'price' => 125,
                 'category' => 'コンビニおにぎり・コンビニ手巻寿司',
-                'image_path' => 'onigiri/tsukune-omusubi-20yen-discount.png',
+                'image_path' => 'onigiri/tsukune-omusubi-original.png',
                 'description' => '食感の良い軟骨入りつくねをのせたボリュームのあるおむすび。内容量・参考価格 1個・125円。発売日 2021/11/30。',
                 'updated_at' => $at,
             ] + (

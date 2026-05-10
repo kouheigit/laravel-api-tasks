@@ -10,29 +10,33 @@
     <div class="seven-layout">
         @if(isset($sevenProducts))
             <aside class="seven-products-wrap">
+                @php
+                    $displaySevenProducts = $sevenProducts->filter(function ($product) {
+                        return $product->image_path !== null && $product->image_path !== '';
+                    })->values();
+                    $discountStickerIndex = $displaySevenProducts->isNotEmpty() ? random_int(0, $displaySevenProducts->count() - 1) : null;
+                    $discountStickerAmount = [20, 30, 40, 50][random_int(0, 3)];
+                @endphp
                 <div class="seven-products-with-image" id="sevenProductsWithImage">
-                    @foreach($sevenProducts as $product)
-                        @if($product->image_path !== null && $product->image_path !== '')
-                            @php
-                                $raw = trim($product->image_path, " \t\n\r\"'\/");
-                                $imgPath = str_starts_with($raw, 'http://') || str_starts_with($raw, 'https://')
-                                    ? $raw
-                                    : 'sevenimg/' . ltrim($raw, '/');
-                            @endphp
-                            <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}">
+                    @foreach($displaySevenProducts as $product)
+                        @php
+                            $raw = trim($product->image_path, " \t\n\r\"'\/");
+                            $imgPath = str_starts_with($raw, 'http://') || str_starts_with($raw, 'https://')
+                                ? $raw
+                                : 'sevenimg/' . ltrim($raw, '/');
+                            $discountStickerAmountForProduct = $loop->index === $discountStickerIndex ? $discountStickerAmount : null;
+                        @endphp
+                            <div class="seven-product-item" data-product-id="{{ $product->id }}" data-product-name="{{ e($product->name) }}" data-product-price="{{ $product->price }}" @if($discountStickerAmountForProduct !== null) data-auto-discount-amount="{{ $discountStickerAmountForProduct }}" @endif>
+                                <span class="seven-product-img-wrap">
                                 <img src="{{ asset($imgPath) }}" alt="{{ $product->name }}" class="seven-product-img">
+                                    @if($discountStickerAmountForProduct !== null)
+                                        <span class="seven-discount-sticker">{{ $discountStickerAmountForProduct }}円引き</span>
+                                    @endif
+                                </span>
                                 <span class="seven-product-name">{{ $product->name }}</span>
                                 <span class="seven-product-price">{{ $product->price }}円</span>
                             </div>
-                        @endif
                     @endforeach
-                </div>
-                <div class="price-change-panel" id="priceChangePanel" style="display: none;">
-                    <button type="button" class="price-change-btn" data-discount-amount="50">50円引き</button>
-                    <button type="button" class="price-change-btn" data-discount-amount="40">40円引き</button>
-                    <button type="button" class="price-change-btn" data-discount-amount="30">30円引き</button>
-                    <button type="button" class="price-change-btn" data-discount-amount="20">20円引き</button>
-                    <button type="button" class="price-change-back-btn" id="priceChangeBackBtn">戻る</button>
                 </div>
                 <div class="seven-utility-bills-wrap" id="sevenUtilityBillsWrap"></div>
                 <div class="seven-cafe-random-wrap" id="sevenCafeRandomWrap" style="display: none;"></div>
@@ -53,7 +57,14 @@
                 <!-- 通常のレジ画面 -->
                 <div class="display-main" id="displayMain">
                     <div class="register-message" id="registerMessage" aria-live="polite" style="display: none;"></div>
-                    <div class="display-table-wrap">
+                    <div class="price-change-panel" id="priceChangePanel" style="display: none;">
+                        <button type="button" class="price-change-btn" data-discount-amount="50">50円引き</button>
+                        <button type="button" class="price-change-btn" data-discount-amount="40">40円引き</button>
+                        <button type="button" class="price-change-btn" data-discount-amount="30">30円引き</button>
+                        <button type="button" class="price-change-btn" data-discount-amount="20">20円引き</button>
+                        <button type="button" class="price-change-back-btn" id="priceChangeBackBtn">戻る</button>
+                    </div>
+                    <div class="display-table-wrap" id="displayTableWrap">
                         <table class="display-table">
                             <thead>
                                 <tr>

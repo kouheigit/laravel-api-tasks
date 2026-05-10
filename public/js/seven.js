@@ -83,6 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var priceChangePanel = document.getElementById('priceChangePanel');
     var priceChangeBackBtn = document.getElementById('priceChangeBackBtn');
     var registerMessage = document.getElementById('registerMessage');
+    var displayTableWrap = document.getElementById('displayTableWrap');
+    var displayTotal = document.getElementById('displayTotal');
     var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
     var cafeRandomWrap = document.getElementById('sevenCafeRandomWrap');
     var utilityStampModal = document.getElementById('utilityStampModal');
@@ -316,6 +318,9 @@ document.addEventListener('DOMContentLoaded', function () {
             total += item.price * item.quantity;
             var tr = document.createElement('tr');
             tr.setAttribute('data-product-id', String(productId));
+            if (selectedDiscountAmount && registerItems[productId]) {
+                tr.classList.add('is-price-change-target');
+            }
             if (isCancelMode && registerItems[productId]) {
                 tr.classList.add('is-cancel-target');
             }
@@ -366,8 +371,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function resetPriceChangeState(keepMessage) {
         selectedDiscountAmount = null;
+        if (displayMain) displayMain.classList.remove('is-price-change-menu');
+        if (displayTableWrap) displayTableWrap.style.display = '';
+        if (displayTotal) displayTotal.style.display = '';
+        if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
         if (productsWithImage) {
             productsWithImage.classList.remove('is-price-change-selecting');
+        }
+        if (displayTableWrap) {
+            displayTableWrap.classList.remove('is-price-change-selecting');
         }
         document.querySelectorAll('.price-change-btn').forEach(function (btn) {
             btn.classList.remove('is-selected');
@@ -376,9 +388,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showProductList() {
+        if (displayMain) displayMain.classList.remove('is-price-change-menu');
+        if (displayTableWrap) displayTableWrap.style.display = '';
+        if (displayTotal) displayTotal.style.display = '';
+        if (displayBottomButtons) displayBottomButtons.style.display = 'flex';
         if (productsWithImage) productsWithImage.style.display = 'flex';
         if (priceChangePanel) priceChangePanel.style.display = 'none';
-        if (utilityBillsWrap) utilityBillsWrap.style.display = 'none';
         if (cafeRandomWrap) {
             cafeRandomWrap.style.display = 'none';
             cafeRandomWrap.innerHTML = '';
@@ -387,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function showPriceChangePanel() {
         if (isUnlockMode || isPaymentMode || utilityPaymentLocked || isUtilityMode) return;
-        if (getGeneralProductItems().length === 0) {
+        if (Object.keys(registerItems).length === 0) {
             resetPriceChangeState(true);
             showProductList();
             showRegisterMessage('登録商品がありません', 'warning', 2500);
@@ -398,7 +413,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (typeof displayNikumanPanel !== 'undefined' && displayNikumanPanel) displayNikumanPanel.style.display = 'none';
         if (typeof displayHotSnackPanel !== 'undefined' && displayHotSnackPanel) displayHotSnackPanel.style.display = 'none';
         if (typeof displayDrinkPanel !== 'undefined' && displayDrinkPanel) displayDrinkPanel.style.display = 'none';
-        if (productsWithImage) productsWithImage.style.display = 'none';
+        if (displayTableWrap) displayTableWrap.style.display = 'none';
+        if (displayTotal) displayTotal.style.display = 'none';
+        if (displayBottomButtons) displayBottomButtons.style.display = 'none';
+        if (displayMain) displayMain.classList.add('is-price-change-menu');
+        if (productsWithImage) productsWithImage.style.display = 'flex';
         if (priceChangePanel) priceChangePanel.style.display = 'grid';
         if (utilityBillsWrap) utilityBillsWrap.style.display = 'none';
         if (cafeRandomWrap) cafeRandomWrap.style.display = 'none';
@@ -410,8 +429,9 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.classList.toggle('is-selected', btn === button);
         });
         showProductList();
-        if (productsWithImage) productsWithImage.classList.add('is-price-change-selecting');
+        if (displayTableWrap) displayTableWrap.classList.add('is-price-change-selecting');
         showRegisterMessage(amount + '円引き商品を選択中', 'discount', 0);
+        updateDisplayFromRegisterItems();
     }
 
     function escapeHtml(str) {
@@ -446,7 +466,51 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDisplayFromRegisterItems();
     }
 
-    // ディスプレイ行クリック：取り消しモード時のみ、クリックした商品を1個取り消し
+    function stripDiscountLabel(productName) {
+        return String(productName || '').replace(/（\d+円引き）$/, '');
+    }
+
+    function applyDiscountToRegisterItem(productKey) {
+        if (!selectedDiscountAmount || !registerItems[productKey]) return;
+        var sourceItem = registerItems[productKey];
+        var discount = parseInt(selectedDiscountAmount, 10);
+        if (isNaN(discount) || discount <= 0) return;
+
+        var sourceProductId = sourceItem.product_id ? parseInt(sourceItem.product_id, 10) : parseInt(productKey, 10);
+        if (isNaN(sourceProductId)) sourceProductId = parseInt(String(productKey).split('-')[0], 10);
+        var baseName = stripDiscountLabel(sourceItem.product_name);
+        var discountedPrice = Math.max(parseInt(sourceItem.price, 10) - discount, 0);
+        var discountedKey = String(sourceProductId) + '-discount-' + String(discount) + '-' + String(discountedPrice);
+
+        if (sourceItem.quantity > 1) {
+            sourceItem.quantity -= 1;
+        } else {
+            delete registerItems[productKey];
+        }
+
+        if (registerItems[discountedKey]) {
+            registerItems[discountedKey].quantity += 1;
+        } else {
+            registerItems[discountedKey] = {
+                product_id: sourceProductId,
+                product_name: baseName + '（' + discount + '円引き）',
+                price: discountedPrice,
+                quantity: 1,
+                discount_amount: discount
+            };
+        }
+
+        lastClickedProduct = {
+            product_id: discountedKey,
+            product_name: baseName + '（' + discount + '円引き）',
+            price: discountedPrice
+        };
+        playProductClickSound();
+        resetPriceChangeState();
+        updateDisplayFromRegisterItems();
+    }
+
+    // ディスプレイ行クリック：売価変更中は値引き適用、取り消しモード時は1個取り消し
     var displayTbody = document.getElementById('displayTableBody');
     if (displayTbody) {
         displayTbody.addEventListener('click', function (e) {
@@ -454,6 +518,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!tr) return;
             var pid = tr.getAttribute('data-product-id');
             if (!pid) return;
+            if (selectedDiscountAmount) {
+                applyDiscountToRegisterItem(pid);
+                return;
+            }
             if (!isCancelMode) return;
 
             if (!registerItems[pid]) return;
@@ -972,25 +1040,27 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.seven-product-item').forEach(function (el) {
         el.addEventListener('click', function () {
             if (isUnlockMode || isPaymentMode) return;
+            if (selectedDiscountAmount) {
+                showRegisterMessage(selectedDiscountAmount + '円引き商品を一覧から選択してください', 'discount', 1800);
+                return;
+            }
             var productId = this.getAttribute('data-product-id');
             var productName = this.getAttribute('data-product-name');
             var productPrice = this.getAttribute('data-product-price');
+            var autoDiscountAmount = parseInt(this.getAttribute('data-auto-discount-amount') || '0', 10);
+            if (isNaN(autoDiscountAmount) || autoDiscountAmount < 0) autoDiscountAmount = 0;
             if (!productId || !productName || productPrice === null || productPrice === undefined) return;
 
-            var discount = selectedDiscountAmount || 0;
             var originalPrice = parseInt(productPrice, 10);
             if (isNaN(originalPrice)) return;
-            var discountedPrice = Math.max(originalPrice - discount, 0);
+            var discountedPrice = Math.max(originalPrice - autoDiscountAmount, 0);
             lastClickedProduct = {
-                product_id: discount > 0 ? productId + '-discount-' + discount : productId,
-                product_name: discount > 0 ? productName + '（' + discount + '円引き）' : productName,
+                product_id: autoDiscountAmount > 0 ? productId + '-discount-' + autoDiscountAmount : productId,
+                product_name: autoDiscountAmount > 0 ? productName + '（' + autoDiscountAmount + '円引き）' : productName,
                 price: discountedPrice
             };
             playProductClickSound();
-            addProductToRegister(productId, productName, productPrice, discount);
-            if (discount > 0) {
-                resetPriceChangeState();
-            }
+            addProductToRegister(productId, productName, productPrice, autoDiscountAmount);
         });
     });
 

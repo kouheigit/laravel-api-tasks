@@ -10,17 +10,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::table('seven_products')->updateOrInsert(
-            ['name' => 'つくねおむすび'],
-            [
-                'price' => 125,
-                'category' => 'コンビニおにぎり・コンビニ手巻寿司',
+        DB::table('seven_products')
+            ->where('name', 'つくねおむすび')
+            ->where('image_path', 'onigiri/tsukune-omusubi-20yen-discount.png')
+            ->update([
                 'image_path' => 'onigiri/tsukune-omusubi-original.png',
-                'description' => '食感の良い軟骨入りつくねをのせたボリュームのあるおむすび。内容量・参考価格 1個・125円。発売日 2021/11/30。',
-                'created_at' => now(),
                 'updated_at' => now(),
-            ]
-        );
+            ]);
     }
 
     /**
@@ -31,6 +27,9 @@ return new class extends Migration
         DB::table('seven_products')
             ->where('name', 'つくねおむすび')
             ->where('image_path', 'onigiri/tsukune-omusubi-original.png')
-            ->delete();
+            ->update([
+                'image_path' => 'onigiri/tsukune-omusubi-20yen-discount.png',
+                'updated_at' => now(),
+            ]);
     }
 };
