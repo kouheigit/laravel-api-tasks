@@ -813,15 +813,13 @@
 }
 .seven-discount-sticker {
     position: absolute;
-    right: -6px;
-    bottom: 10px;
-    width: 78px;
+    right: 4px;
+    bottom: 16px;
+    width: 60px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 3px 7px rgba(12, 76, 31, 0.35));
     pointer-events: none;
-    transform: rotate(-4deg);
-    transform-origin: center;
 }
 .seven-product-name,
 .seven-product-price {
