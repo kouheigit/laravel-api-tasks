@@ -813,9 +813,9 @@
 }
 .seven-discount-sticker {
     position: absolute;
-    right: -18px;
-    bottom: 0;
-    width: 104px;
+    right: -6px;
+    bottom: 10px;
+    width: 78px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 3px 7px rgba(12, 76, 31, 0.35));
