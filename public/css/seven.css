@@ -238,8 +238,10 @@
     text-align: center;
 }
 .utility-register-open-msg {
+    margin-top: 10px;
     color: #1a7c2a;
     font-weight: bold;
+    font-size: 15px;
 }
 
 .calculator .display {
