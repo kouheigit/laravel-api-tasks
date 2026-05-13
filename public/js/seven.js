@@ -72,6 +72,17 @@ document.addEventListener('DOMContentLoaded', function () {
             noise.connect(noiseGain);
             noiseGain.connect(ctx.destination);
             noise.start(t);
+            var osc = ctx.createOscillator();
+            var oscGain = ctx.createGain();
+            osc.connect(oscGain);
+            oscGain.connect(ctx.destination);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(160, t + 0.01);
+            osc.frequency.exponentialRampToValueAtTime(70, t + 0.18);
+            oscGain.gain.setValueAtTime(0.28, t + 0.01);
+            oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+            osc.start(t + 0.01);
+            osc.stop(t + 0.22);
         } catch (e) {}
     }
 
