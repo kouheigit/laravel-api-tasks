@@ -641,15 +641,27 @@ document.addEventListener('DOMContentLoaded', function () {
             // 公共料金フロー：現金支払いを選んだら、受領印が全部押されるまで操作をロックする
             if (forceCashOnlyPayment && method === 'cash') {
                 utilityPaymentLocked = true;
-                // 暗い画面は維持し、他の操作を無効化（スタンプのみ許可）
+                // 暗い画面は維持し、他の操作を無効化
                 if (paymentOverlay) paymentOverlay.style.display = 'block';
                 if (utilityStampModal) utilityStampModal.style.display = 'flex';
-                // スタンプモードを開始（票を元の状態に戻してクリック可能に）
+                // 「レジが開きました」は最初は非表示
+                if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                // スタンプ準備（票をリセット＋ポインターはまだ無効）
                 utilityStampMode = true;
                 utilityStampsCompleted = false;
                 utilityStampTargetCount = utilityBillsWrap ? utilityBillsWrap.querySelectorAll('img').length : 0;
                 utilityStampClickedCount = 0;
                 resetUtilityBillsForStamp();
+                if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'none';
+                // レジが開く音を鳴らし、その後「レジが開きました」を表示してスタンプを解禁
+                playRegisterOpenSound();
+                setTimeout(function () {
+                    if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
+                    if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
+                    setTimeout(function () {
+                        if (utilityStampModal) utilityStampModal.style.display = 'none';
+                    }, 800);
+                }, 400);
                 return;
             }
             // 公共料金モード中に支払い方法が選ばれたら終了
