@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             osc.connect(oscGain);
             oscGain.connect(ctx.destination);
             osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(160, t + 0.01);
+            osc.frequency.setValueAtTime(180, t + 0.01);
             osc.frequency.exponentialRampToValueAtTime(70, t + 0.18);
             oscGain.gain.setValueAtTime(0.28, t + 0.01);
             oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
