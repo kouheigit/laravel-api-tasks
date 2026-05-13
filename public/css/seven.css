@@ -242,6 +242,7 @@
     color: #1a7c2a;
     font-weight: bold;
     font-size: 15px;
+    letter-spacing: 0.04em;
     animation: fadeInMsg 0.3s ease;
 }
 
