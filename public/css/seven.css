@@ -237,6 +237,10 @@
     line-height: 1.5;
     text-align: center;
 }
+.utility-register-open-msg {
+    color: #1a7c2a;
+    font-weight: bold;
+}
 
 .calculator .display {
     width: 100%;
