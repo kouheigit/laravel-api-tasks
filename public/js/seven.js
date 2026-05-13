@@ -54,6 +54,27 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {}
     }
 
+    // レジの引き出しが開く音
+    function playRegisterOpenSound() {
+        try {
+            var ctx = new (window.AudioContext || window.webkitAudioContext)();
+            var t = ctx.currentTime;
+            var bufSize = Math.floor(ctx.sampleRate * 0.07);
+            var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+            var data = buf.getChannelData(0);
+            for (var i = 0; i < bufSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.015));
+            }
+            var noise = ctx.createBufferSource();
+            noise.buffer = buf;
+            var noiseGain = ctx.createGain();
+            noiseGain.gain.setValueAtTime(0.55, t);
+            noise.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+            noise.start(t);
+        } catch (e) {}
+    }
+
     // ボンッという効果音（公共料金スタンプ用）
     function playBonSound() {
         try {
