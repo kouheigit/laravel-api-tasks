@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var noise = ctx.createBufferSource();
             noise.buffer = buf;
             var noiseGain = ctx.createGain();
-            noiseGain.gain.setValueAtTime(0.55, t);
+            noiseGain.gain.setValueAtTime(0.6, t);
             noise.connect(noiseGain);
             noiseGain.connect(ctx.destination);
             noise.start(t);
