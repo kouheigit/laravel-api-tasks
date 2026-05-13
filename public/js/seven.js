@@ -661,7 +661,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     setTimeout(function () {
                         if (utilityStampModal) utilityStampModal.style.display = 'none';
                     }, 800);
-                }, 400);
+                }, 380);
                 return;
             }
             // 公共料金モード中に支払い方法が選ばれたら終了
