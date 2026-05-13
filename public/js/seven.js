@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
                     setTimeout(function () {
                         if (utilityStampModal) utilityStampModal.style.display = 'none';
-                    }, 800);
+                    }, 1000);
                 }, 380);
                 return;
             }
