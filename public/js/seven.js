@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityBillsWrap = document.getElementById('sevenUtilityBillsWrap');
     var cafeRandomWrap = document.getElementById('sevenCafeRandomWrap');
     var utilityStampModal = document.getElementById('utilityStampModal');
+    var utilityRegisterOpenMsg = document.getElementById('utilityRegisterOpenMsg');
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
     var utilityConfirmBtn = document.getElementById('utilityConfirmBtn');
