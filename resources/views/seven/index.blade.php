@@ -109,6 +109,7 @@
                     <div class="utility-stamp-modal" id="utilityStampModal" style="display: none;">
                         <div class="utility-stamp-modal-inner">
                             <p>支払い票にスタンプを押してください。<br>右側を切り取ってお客様に渡してください。</p>
+                            <p class="utility-register-open-msg" id="utilityRegisterOpenMsg" style="display: none;">レジが開きました</p>
                         </div>
                     </div>
                 </div>
