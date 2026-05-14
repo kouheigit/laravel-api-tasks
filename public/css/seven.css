@@ -238,12 +238,11 @@
     text-align: center;
 }
 .utility-register-open-msg {
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid #d0e8d4;
+    margin: 0;
+    padding: 0;
     color: #1a7c2a;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     letter-spacing: 0.04em;
     animation: fadeInMsg 0.25s ease;
 }
