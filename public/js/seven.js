@@ -890,6 +890,18 @@ document.addEventListener('DOMContentLoaded', function () {
                             utilityStampTargetCount = utilityBillsWrap.querySelectorAll('img').length;
                             utilityStampClickedCount = 0;
                             resetUtilityBillsForStamp();
+                            if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'none';
+                            // モーダルを表示し、レジ音終了後に「レジが開きました」→スタンプ説明を表示
+                            if (utilityStampModal) utilityStampModal.style.display = 'flex';
+                            if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                            if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
+                            setTimeout(function () {
+                                playRegisterOpenSound(function () {
+                                    if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
+                                    if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'block';
+                                    if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
+                                });
+                            }, 1500);
                             // 商品欄の公共料金入力行は出さない
                             if (utilityCountRow) utilityCountRow.style.display = 'none';
                             return;
