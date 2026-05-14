@@ -637,15 +637,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityStampClickedCount = 0;
                 resetUtilityBillsForStamp();
                 if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'none';
-                // レジが開く音を鳴らし、その後「レジが開きました」を表示してスタンプを解禁
-                playRegisterOpenSound();
+                // 数秒ラグ後にレジ開閉音を再生し、再生終了後にスタンプを解禁
                 setTimeout(function () {
-                    if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
-                    if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
-                    setTimeout(function () {
-                        if (utilityStampModal) utilityStampModal.style.display = 'none';
-                    }, 1000);
-                }, 380);
+                    playRegisterOpenSound(function () {
+                        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
+                        if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
+                    });
+                }, 1500);
                 return;
             }
             // 公共料金モード中に支払い方法が選ばれたら終了
