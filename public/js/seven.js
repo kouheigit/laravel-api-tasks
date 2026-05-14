@@ -807,6 +807,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     selectedAge = null;
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
                     if (utilityStampModal) utilityStampModal.style.display = 'none';
+                    if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                    if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
+                    if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'none';
                     if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
                     if (paymentSelect) {
                         paymentSelect.disabled = true;
