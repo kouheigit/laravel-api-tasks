@@ -780,6 +780,11 @@
     opacity: 1;
     filter: none;
 }
+.utility-stamp-complete-msg {
+    margin-top: 10px;
+    font-weight: bold;
+    animation: fadeInMsg 0.25s ease;
+}
 .seven-cafe-random-wrap {
     width: 100%;
 }
