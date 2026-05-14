@@ -704,6 +704,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     utilityBillsWrap.style.pointerEvents = 'none';
                     // 全票完了：is-clicked の半透明を解除して右青部分を復元
                     utilityBillsWrap.classList.add('is-stamp-complete');
+                    // レジ画面に「切り取って渡してください」を表示
+                    if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'block';
                 }
             } else {
                 playProductClickSound();
