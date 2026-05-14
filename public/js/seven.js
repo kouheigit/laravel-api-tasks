@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var cafeRandomWrap = document.getElementById('sevenCafeRandomWrap');
     var utilityStampModal = document.getElementById('utilityStampModal');
     var utilityRegisterOpenMsg = document.getElementById('utilityRegisterOpenMsg');
+    var utilityStampInstructMsg = document.getElementById('utilityStampInstructMsg');
     var utilityStampCompleteMsg = document.getElementById('utilityStampCompleteMsg');
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
