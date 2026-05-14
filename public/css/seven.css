@@ -246,6 +246,14 @@
     letter-spacing: 0.04em;
     animation: fadeInMsg 0.25s ease;
 }
+#utilityStampInstructMsg {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #d0e8d4;
+    font-size: 14px;
+    line-height: 1.6;
+    animation: fadeInMsg 0.25s ease;
+}
 
 .calculator .display {
     width: 100%;
