@@ -646,6 +646,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 数秒ラグ後にレジ開閉音を再生し、再生終了後にスタンプ説明を表示してスタンプを解禁
                 setTimeout(function () {
                     playRegisterOpenSound(function () {
+                        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
                         if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'block';
                         if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
                     });
