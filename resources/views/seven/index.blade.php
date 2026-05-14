@@ -112,6 +112,7 @@
                             <p class="utility-register-wait-msg" id="utilityRegisterWaitMsg" style="display: none;">レジが開くまでスタンプを押さないでください</p>
                             <p id="utilityStampInstructMsg" style="display: none;">支払い票にスタンプを押してください。</p>
                             <p class="utility-stamp-complete-msg" id="utilityStampCompleteMsg" style="display: none;">右側を切り取ってお客様に渡してください</p>
+                            <p class="utility-payment-done-msg" id="utilityPaymentDoneMsg" style="display: none;">公共料金の支払いが完了しました<br>Cボタンを押して下さい</p>
                         </div>
                     </div>
                 </div>

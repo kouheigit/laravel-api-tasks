@@ -818,6 +818,15 @@
     letter-spacing: 0.04em;
     animation: fadeInMsg 0.25s ease;
 }
+.utility-payment-done-msg {
+    margin: 0;
+    color: #15803d;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    animation: fadeInMsg 0.25s ease;
+}
 .seven-cafe-random-wrap {
     width: 100%;
 }

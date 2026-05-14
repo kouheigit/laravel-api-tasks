@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityRegisterWaitMsg = document.getElementById('utilityRegisterWaitMsg');
     var utilityStampInstructMsg = document.getElementById('utilityStampInstructMsg');
     var utilityStampCompleteMsg = document.getElementById('utilityStampCompleteMsg');
+    var utilityPaymentDoneMsg = document.getElementById('utilityPaymentDoneMsg');
     var utilityCountRow = document.getElementById('utilityCountRow');
     var utilityCountInput = document.getElementById('utilityCountInput');
     var utilityConfirmBtn = document.getElementById('utilityConfirmBtn');
@@ -711,6 +712,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         billImg.src = utilityReceiptImgUrl;
                         billImg.classList.add('utility-bill-main');
                     }
+                }
+                var allItems = utilityBillsWrap.querySelectorAll('.utility-bill-item');
+                var hagasuItems = utilityBillsWrap.querySelectorAll('.utility-bill-item.is-hagasu');
+                if (hagasuItems.length >= allItems.length && utilityStampModal) {
+                    utilityStampModal.style.display = 'none';
+                    setTimeout(function () {
+                        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                        if (utilityRegisterWaitMsg) utilityRegisterWaitMsg.style.display = 'none';
+                        if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
+                        if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'none';
+                        if (utilityPaymentDoneMsg) utilityPaymentDoneMsg.style.display = 'block';
+                        utilityStampModal.style.display = 'flex';
+                    }, 400);
                 }
                 return;
             }
