@@ -178,7 +178,9 @@ document.addEventListener('DOMContentLoaded', function () {
             img.dataset.clicked = '0';
             img.classList.remove('is-clicked');
         });
+        utilityBillsWrap.classList.remove('is-stamp-complete');
         utilityBillsWrap.style.pointerEvents = 'auto';
+        if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'none';
     }
 
     // 公共料金モード：開始・終了ヘルパー
