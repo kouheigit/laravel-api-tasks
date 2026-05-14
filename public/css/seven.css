@@ -782,7 +782,11 @@
 }
 .utility-stamp-complete-msg {
     margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #bfdbfe;
+    color: #1d4ed8;
     font-weight: bold;
+    font-size: 15px;
     animation: fadeInMsg 0.25s ease;
 }
 .seven-cafe-random-wrap {
