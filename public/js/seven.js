@@ -183,7 +183,6 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityBillsWrap.style.pointerEvents = 'auto';
         if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'none';
         if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
-        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
     }
 
     // 公共料金モード：開始・終了ヘルパー
@@ -647,7 +646,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 数秒ラグ後にレジ開閉音を再生し、再生終了後にスタンプ説明を表示してスタンプを解禁
                 setTimeout(function () {
                     playRegisterOpenSound(function () {
-                        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
                         if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'block';
                         if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
                     });
