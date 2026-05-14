@@ -776,6 +776,9 @@
     filter: grayscale(0.4);
     cursor: default;
 }
+.seven-utility-bills-wrap.is-stamp-complete img.is-clicked {
+    opacity: 1;
+}
 .seven-cafe-random-wrap {
     width: 100%;
 }
