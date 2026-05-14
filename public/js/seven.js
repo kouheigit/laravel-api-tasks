@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var cafeRandomWrap = document.getElementById('sevenCafeRandomWrap');
     var utilityStampModal = document.getElementById('utilityStampModal');
     var utilityRegisterOpenMsg = document.getElementById('utilityRegisterOpenMsg');
+    var utilityRegisterWaitMsg = document.getElementById('utilityRegisterWaitMsg');
     var utilityStampInstructMsg = document.getElementById('utilityStampInstructMsg');
     var utilityStampCompleteMsg = document.getElementById('utilityStampCompleteMsg');
     var utilityCountRow = document.getElementById('utilityCountRow');
@@ -633,8 +634,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 暗い画面は維持し、他の操作を無効化
                 if (paymentOverlay) paymentOverlay.style.display = 'block';
                 if (utilityStampModal) utilityStampModal.style.display = 'flex';
-                // レジ音が鳴るまで両メッセージを非表示
+                // レジ音が鳴るまで両メッセージを非表示、待機案内のみ表示
                 if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                if (utilityRegisterWaitMsg) utilityRegisterWaitMsg.style.display = 'block';
                 if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
                 // スタンプ準備（票をリセット＋ポインターはまだ無効）
                 utilityStampMode = true;
@@ -807,6 +809,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (paymentOverlay) paymentOverlay.style.display = 'none';
                     if (utilityStampModal) utilityStampModal.style.display = 'none';
                     if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                    if (utilityRegisterWaitMsg) utilityRegisterWaitMsg.style.display = 'none';
                     if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
                     if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'none';
                     if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
@@ -894,6 +897,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             // モーダルを表示し、レジ音終了後に「レジが開きました」→スタンプ説明を表示
                             if (utilityStampModal) utilityStampModal.style.display = 'flex';
                             if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                            if (utilityRegisterWaitMsg) utilityRegisterWaitMsg.style.display = 'block';
                             if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
                             setTimeout(function () {
                                 playRegisterOpenSound(function () {

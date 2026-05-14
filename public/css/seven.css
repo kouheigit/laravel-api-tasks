@@ -246,6 +246,13 @@
     letter-spacing: 0.06em;
     animation: fadeInMsg 0.25s ease;
 }
+.utility-register-wait-msg {
+    margin-top: 4px;
+    color: #000000;
+    font-size: 12px;
+    font-weight: normal;
+    animation: fadeInMsg 0.25s ease;
+}
 #utilityStampInstructMsg {
     margin-top: 10px;
     padding-top: 8px;
