@@ -787,6 +787,7 @@
     color: #1d4ed8;
     font-weight: bold;
     font-size: 15px;
+    letter-spacing: 0.04em;
     animation: fadeInMsg 0.25s ease;
 }
 .seven-cafe-random-wrap {
