@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var registerOpenSoundUrl = document.body.getAttribute('data-register-open-sound') || '';
+    var hagasuSoundUrl = document.body.getAttribute('data-hagasu-sound') || '';
 
     // レジの引き出しが開く音（MP3再生、再生終了後に onEnded を呼ぶ）
     function playRegisterOpenSound(onEnded) {
@@ -68,6 +69,16 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (e) {}
         }
         if (onEnded) onEnded();
+    }
+
+    function playHagasuSound() {
+        if (hagasuSoundUrl) {
+            try {
+                var audio = new Audio(hagasuSoundUrl);
+                audio.volume = 1;
+                audio.play().catch(function () {});
+            } catch (e) {}
+        }
     }
 
     // ボンッという効果音（公共料金スタンプ用）
@@ -123,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var utilityStampClickedCount = 0;
     var utilityStampsCompleted = false;
     var utilityPaymentLocked = false; // 現金支払い選択後、受領印が全部押されるまで操作ロック
+    var utilityHagasuMode = false; // スタンプ完了後、支払い票をクリックして右側を剥がすモード
     var forceCashOnlyPayment = false; // 公共料金フロー中（確定/確認後も含む）は現金のみ
     var paymentOptionsBackupHtml = null;
 
@@ -686,6 +698,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // - 現金決済後にCを押した「スタンプモード」では、クリックでボン音＋スタンプ（合計は増やさない）
     if (utilityBillsWrap) {
         utilityBillsWrap.addEventListener('click', function (e) {
+            // 剥がしモード：支払い票をクリックすると音声再生＋右側の青い部分だけ表示
+            if (utilityHagasuMode) {
+                var item = e.target && e.target.closest ? e.target.closest('.utility-bill-item') : null;
+                if (!item || item.classList.contains('is-hagasu')) return;
+                item.classList.add('is-hagasu');
+                playHagasuSound();
+                return;
+            }
             if (!isUtilityMode && !utilityStampMode) return;
             if (isUtilityMode && !isUtilityCountConfirmed) return; // 枚数が正しく確定するまでクリック不可
             var img = e.target && e.target.closest ? e.target.closest('img') : null;
@@ -712,8 +732,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     utilityBillsWrap.style.pointerEvents = 'none';
                     // 全票完了：is-clicked の半透明を解除して右青部分を復元
                     utilityBillsWrap.classList.add('is-stamp-complete');
-                    // レジ画面に「切り取って渡してください」を表示
+                    // レジ画面に「切り取って渡してください」を表示し、剥がしモードを有効化
                     if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'block';
+                    utilityHagasuMode = true;
+                    utilityBillsWrap.style.pointerEvents = 'auto';
                 }
             } else {
                 playProductClickSound();
@@ -798,6 +820,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // スタンプ完了後のみ、公共料金の合計・商品を完全に消して元のレジモードへ戻す
                     utilityPaymentLocked = false;
                     utilityStampMode = false;
+                    utilityHagasuMode = false;
                     utilityStampsCompleted = false;
                     utilityStampTargetCount = 0;
                     utilityStampClickedCount = 0;
@@ -916,6 +939,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                         // スタンプ完了後のみ、支払いモード解除して通常操作に戻す
                         utilityStampMode = false;
+                        utilityHagasuMode = false;
                         isPaymentMode = false;
                         if (paymentOverlay) paymentOverlay.style.display = 'none';
                         if (paypaySmartphoneWrap) paypaySmartphoneWrap.style.display = 'none';
