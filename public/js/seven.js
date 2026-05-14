@@ -701,8 +701,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityStampClickedCount += 1;
                 if (utilityStampTargetCount > 0 && utilityStampClickedCount >= utilityStampTargetCount) {
                     utilityStampsCompleted = true;
-                    // もう触らせない
                     utilityBillsWrap.style.pointerEvents = 'none';
+                    // 全票完了：is-clicked の半透明を解除して右青部分を復元
+                    utilityBillsWrap.classList.add('is-stamp-complete');
                 }
             } else {
                 playProductClickSound();
