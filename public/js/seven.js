@@ -633,8 +633,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 暗い画面は維持し、他の操作を無効化
                 if (paymentOverlay) paymentOverlay.style.display = 'block';
                 if (utilityStampModal) utilityStampModal.style.display = 'flex';
-                // 最初に「レジが開きました」を表示、スタンプ説明は非表示
-                if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
+                // レジ音が鳴るまで両メッセージを非表示
+                if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
                 if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
                 // スタンプ準備（票をリセット＋ポインターはまだ無効）
                 utilityStampMode = true;
