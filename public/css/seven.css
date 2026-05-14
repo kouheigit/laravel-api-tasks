@@ -790,29 +790,20 @@
     filter: grayscale(0.4);
     cursor: default;
 }
-.seven-utility-bills-wrap.is-stamp-complete .utility-bill-item {
-    overflow: hidden;
-    aspect-ratio: 2 / 3;
-}
-.seven-utility-bills-wrap.is-stamp-complete .utility-bill-item img.is-clicked {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: right center;
-    opacity: 1;
-    filter: none;
-    cursor: default;
-}
-.seven-utility-bills-wrap.is-stamp-complete .utility-bill-stamp {
-    display: none;
-}
+
 .seven-utility-bills-wrap .utility-bill-item.is-hagasu {
     cursor: default;
+    overflow: visible;
+    aspect-ratio: auto;
 }
 .seven-utility-bills-wrap .utility-bill-item.is-hagasu > img.utility-bill-main {
     object-fit: contain;
-    width: 100%;
+    width: 60%;
     height: auto;
+    display: block;
+    margin: 0 auto;
+    opacity: 1;
+    filter: none;
 }
 .seven-utility-bills-wrap .utility-bill-item.is-hagasu .utility-bill-stamp {
     display: none;
