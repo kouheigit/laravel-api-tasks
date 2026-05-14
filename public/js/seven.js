@@ -182,6 +182,8 @@ document.addEventListener('DOMContentLoaded', function () {
         utilityBillsWrap.classList.remove('is-stamp-complete');
         utilityBillsWrap.style.pointerEvents = 'auto';
         if (utilityStampCompleteMsg) utilityStampCompleteMsg.style.display = 'none';
+        if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'none';
+        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
     }
 
     // 公共料金モード：開始・終了ヘルパー
