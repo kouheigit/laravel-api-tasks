@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityStampClickedCount = 0;
                 resetUtilityBillsForStamp();
                 if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'none';
-                // 数秒ラグ後にレジ開閉音を再生し、再生終了後にスタンプ説明を表示してスタンプを解禁
+                // 数秒ラグ後にレジ開閉音を再生し、再生終了後に「レジが開きました」→スタンプ説明を表示してスタンプを解禁
                 setTimeout(function () {
                     playRegisterOpenSound(function () {
                         if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
