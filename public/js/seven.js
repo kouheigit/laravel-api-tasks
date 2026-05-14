@@ -54,36 +54,20 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {}
     }
 
-    // レジの引き出しが開く音
-    function playRegisterOpenSound() {
-        try {
-            var ctx = new (window.AudioContext || window.webkitAudioContext)();
-            var t = ctx.currentTime;
-            var bufSize = Math.floor(ctx.sampleRate * 0.07);
-            var buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-            var data = buf.getChannelData(0);
-            for (var i = 0; i < bufSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.015));
-            }
-            var noise = ctx.createBufferSource();
-            noise.buffer = buf;
-            var noiseGain = ctx.createGain();
-            noiseGain.gain.setValueAtTime(0.6, t);
-            noise.connect(noiseGain);
-            noiseGain.connect(ctx.destination);
-            noise.start(t);
-            var osc = ctx.createOscillator();
-            var oscGain = ctx.createGain();
-            osc.connect(oscGain);
-            oscGain.connect(ctx.destination);
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(180, t + 0.01);
-            osc.frequency.exponentialRampToValueAtTime(55, t + 0.18);
-            oscGain.gain.setValueAtTime(0.32, t + 0.01);
-            oscGain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
-            osc.start(t + 0.01);
-            osc.stop(t + 0.22);
-        } catch (e) {}
+    var registerOpenSoundUrl = document.body.getAttribute('data-register-open-sound') || '';
+
+    // レジの引き出しが開く音（MP3再生、再生終了後に onEnded を呼ぶ）
+    function playRegisterOpenSound(onEnded) {
+        if (registerOpenSoundUrl) {
+            try {
+                var audio = new Audio(registerOpenSoundUrl);
+                audio.volume = 1;
+                audio.addEventListener('ended', function () { if (onEnded) onEnded(); });
+                audio.play().catch(function () { if (onEnded) onEnded(); });
+                return;
+            } catch (e) {}
+        }
+        if (onEnded) onEnded();
     }
 
     // ボンッという効果音（公共料金スタンプ用）
