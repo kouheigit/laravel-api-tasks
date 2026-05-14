@@ -642,10 +642,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 utilityStampClickedCount = 0;
                 resetUtilityBillsForStamp();
                 if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'none';
-                // 数秒ラグ後にレジ開閉音を再生し、再生終了後にスタンプを解禁
+                // 数秒ラグ後にレジ開閉音を再生し、再生終了後にスタンプ説明を表示してスタンプを解禁
                 setTimeout(function () {
                     playRegisterOpenSound(function () {
-                        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'block';
+                        if (utilityRegisterOpenMsg) utilityRegisterOpenMsg.style.display = 'none';
+                        if (utilityStampInstructMsg) utilityStampInstructMsg.style.display = 'block';
                         if (utilityBillsWrap) utilityBillsWrap.style.pointerEvents = 'auto';
                     });
                 }, 1500);
