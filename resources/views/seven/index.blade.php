@@ -109,7 +109,7 @@
                     <div class="utility-stamp-modal" id="utilityStampModal" style="display: none;">
                         <div class="utility-stamp-modal-inner">
                             <p class="utility-register-open-msg" id="utilityRegisterOpenMsg" style="display: none;">レジが開きました</p>
-                            <p class="utility-register-wait-msg" id="utilityRegisterWaitMsg" style="display: none;">(レジが開くまでスタンプを押さないでください)</p>
+                            <p class="utility-register-wait-msg" id="utilityRegisterWaitMsg" style="display: none;">レジが開くまでスタンプを押さないでください</p>
                             <p id="utilityStampInstructMsg" style="display: none;">支払い票にスタンプを押してください。<br>右側を切り取ってお客様に渡してください。</p>
                             <p class="utility-stamp-complete-msg" id="utilityStampCompleteMsg" style="display: none;">右側を切り取ってお客様に渡してください</p>
                         </div>
