@@ -6,7 +6,7 @@
     <title>Seven / Hello</title>
     <link rel="stylesheet" href="{{ asset('css/seven.css') }}">
 </head>
-<body data-product-click-sound="{{ asset('audio/レジ音.mp3') }}" data-utility-bill-img="{{ asset('sevenimg/utilitybills.png') }}" data-utility-stamp-img="{{ asset('sevenimg/stamp.png') }}" data-register-open-sound="{{ asset('audio/register-open.mp3') }}" data-hagasu-sound="{{ asset('audio/hagasu02.mp3') }}">
+<body data-product-click-sound="{{ asset('audio/レジ音.mp3') }}" data-utility-bill-img="{{ asset('sevenimg/utilitybills.png') }}" data-utility-stamp-img="{{ asset('sevenimg/stamp.png') }}" data-register-open-sound="{{ asset('audio/register-open.mp3') }}" data-hagasu-sound="{{ asset('audio/hagasu02.mp3') }}" data-utility-receipt-img="{{ asset('sevenimg/utility-receipt.png') }}">
     <div class="seven-layout">
         @if(isset($sevenProducts))
             <aside class="seven-products-wrap">

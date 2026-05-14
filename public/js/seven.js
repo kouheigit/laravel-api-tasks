@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var registerOpenSoundUrl = document.body.getAttribute('data-register-open-sound') || '';
     var hagasuSoundUrl = document.body.getAttribute('data-hagasu-sound') || '';
+    var utilityReceiptImgUrl = document.body.getAttribute('data-utility-receipt-img') || '';
 
     // レジの引き出しが開く音（MP3再生、再生終了後に onEnded を呼ぶ）
     function playRegisterOpenSound(onEnded) {
@@ -698,12 +699,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // - 現金決済後にCを押した「スタンプモード」では、クリックでボン音＋スタンプ（合計は増やさない）
     if (utilityBillsWrap) {
         utilityBillsWrap.addEventListener('click', function (e) {
-            // 剥がしモード：支払い票をクリックすると音声再生＋右側の青い部分だけ表示
+            // 剥がしモード：支払い票をクリックすると音声再生＋受領証画像に差し替え
             if (utilityHagasuMode) {
                 var item = e.target && e.target.closest ? e.target.closest('.utility-bill-item') : null;
                 if (!item || item.classList.contains('is-hagasu')) return;
                 item.classList.add('is-hagasu');
                 playHagasuSound();
+                if (utilityReceiptImgUrl) {
+                    var billImg = item.querySelector('img:not(.utility-bill-stamp)');
+                    if (billImg) {
+                        billImg.src = utilityReceiptImgUrl;
+                        billImg.classList.add('utility-bill-main');
+                    }
+                }
                 return;
             }
             if (!isUtilityMode && !utilityStampMode) return;

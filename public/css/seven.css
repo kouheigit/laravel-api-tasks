@@ -807,8 +807,12 @@
     display: none;
 }
 .seven-utility-bills-wrap .utility-bill-item.is-hagasu {
-    clip-path: inset(0 0 0 62%);
     cursor: default;
+}
+.seven-utility-bills-wrap .utility-bill-item.is-hagasu > img.utility-bill-main {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
 }
 .seven-utility-bills-wrap .utility-bill-item.is-hagasu .utility-bill-stamp {
     display: none;
