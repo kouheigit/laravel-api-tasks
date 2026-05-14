@@ -238,12 +238,12 @@
     text-align: center;
 }
 .utility-register-open-msg {
-    margin: 0;
+    margin: 0 0 4px 0;
     padding: 0;
     color: #1a7c2a;
     font-weight: bold;
-    font-size: 18px;
-    letter-spacing: 0.04em;
+    font-size: 20px;
+    letter-spacing: 0.06em;
     animation: fadeInMsg 0.25s ease;
 }
 #utilityStampInstructMsg {
